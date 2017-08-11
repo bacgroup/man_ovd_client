@@ -1,0 +1,23 @@
+{
+  "name": "man_ovd_client",
+  "version": "1.0.0",
+  "description": "MAN OVD Client",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "repository": "https://github.com/bacgroup/man_ovd_client",
+  "keywords": [
+    "MAN",
+    "OVD",
+    "RDP",
+    "LINUX",
+    "OSX",
+    "WINDOWS"
+  ],
+  "author": "salvatore.trimarchi@gmail.com",
+  "license": "",
+  "devDependencies": {
+    "electron": "~1.6.2"
+  }
+}
