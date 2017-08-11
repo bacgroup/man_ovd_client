@@ -16,31 +16,63 @@
 
     <!-- Latest compiled JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-
-
-
   </head>
+  <style>
+html, body { 
+    background-image: url("ovdbg.jpg");
+    overflow-x: hidden;
+    height: 100%; 
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.logo {
+width: 140px;
+}
+.footer {
+  color: black;
+}
+
+.form {
+  background-color: grey;
+  opacity: 0.95;
+}
+
+//without opacity
+.wo {
+  opacity: 1.0;
+}
+  </style>
   <body>
-
-
 <div class="container">
-  <h2>MAN Consulting OVD Client</h2>
+   <div class="col-xs-12">
+      <img class="logo" src="manlogoinverted.png"/>
+    </div>
+  <div class="jumbotron form col-xs-6 col-xs-offset-3">
   <form action="/action_page.php">
-    <div class="form-group">
-      <label for="email">Login:</label>
-      <input type="email" class="form-control" id="email" placeholder="Enter email" name="email">
+    <div class="wo form-group">
+      <label class="wo"  for="email">Login:</label>
+      <input id="login" type="email" class="wo form-control" id="login" placeholder="Login" name="login">
     </div>
     <div class="form-group">
       <label for="pwd">Password:</label>
-      <input type="password" class="form-control" id="pwd" placeholder="Enter password" name="pwd">
+      <input id="pwd" type="password" class="form-control"  placeholder="Enter password" name="pwd">
+    </div>
+    <div class="form-group">
+      <label for="sm">Session Manager:</label>
+      <input id="sm" type="url" class="form-control" placeholder="Sesion Manager" name="sm">
     </div>
     <div class="checkbox">
       <label><input type="checkbox" name="remember"> Remember me</label>
     </div>
-    <button type="submit" class="btn btn-default">Submit</button>
   </form>
+    <button id="connect" type="submit" class="btn btn-default">Connect</button>
+<div>
 </div>
-
+</div>
+<div class="footer col-xs-12" align="center" >
+© Copyright 2008 - 2017 MAN Consulting All rights reserved.
+</div>
 
 
   </body>
