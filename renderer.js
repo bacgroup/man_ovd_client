@@ -1,6 +1,6 @@
 // This is an empty file
 //    x = requests.post("", headers=custom_headers, data='')
-window.$ = window.jQuery = require('jquery');
+   window.$ = window.jQuery = require('jquery');
 
     $( "#connect" ).click(function() {
 
@@ -34,11 +34,19 @@ window.$ = window.jQuery = require('jquery');
             port = $(this).attr("port");
             password = $(this).attr("password");
 
-           alert(login+fqdn+port+password)
+           // alert(login+fqdn+port+password)
 
         });
 
+       var child = require('child_process').execFile;
+       var executablePath = "/usr/bin/rdesktop";
+       var opt = "-u "+login+" -p "+password+" "+fqdn+":"+port
+       alert(opt)
+       var parameters = [opt];
 
+child(executablePath, parameters, function(err, data) {
+     //data.toString();
+});
 
       },
       error:function(data){
