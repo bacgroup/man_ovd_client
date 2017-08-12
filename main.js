@@ -13,13 +13,17 @@ let mainWindow
 
 function createWindow () {
   // Create the browser window.
-  mainWindow = new BrowserWindow({width: 800, height: 584})
+  mainWindow = new BrowserWindow({titleBarStyle: 'hidden',
+     width: 300,
+     height: 485,
+     resizable: false,
+     backgroundColor: '#2e31a2'})
 
   // and load the index.html of the app.
   mainWindow.loadURL(url.format({
     pathname: path.join(__dirname, 'index.html'),
     protocol: 'file:',
-    slashes: true
+    slashes: false
   }))
 
   // Open the DevTools.

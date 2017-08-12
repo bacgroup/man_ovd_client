@@ -40,15 +40,23 @@
 
        var child = require('child_process').execFile;
 
+     if (process.platform = "Linux") {
+      alert("Estas en Linux")
+      var executablePath = "/usr/bin/rdesktop";
+      var opt = "-u "+login+" -p '"+password+"' "+fqdn+":"+port+" &";
+         alert(executablePath+" "+opt)
+      }
+      else {
       var executablePath = "/usr/bin/open";
-      var opt = "rdp://"+login+":"+password+"@"+fqdn+":"+port+"?forwardDisks###yes\&forwardPrinters###yes"
+          var opt = "rdp://"+login+":"+password+"@"+fqdn+":"+port+"?forwardDisks###yes\&forwardPrinters###yes"
+      }
       // RDESKTOP
       //  var opt = "-u "+login+" -p "+password+" "+fqdn+":"+port
        //alert(opt)
        var parameters = [opt];
 
 child(executablePath, parameters, function(err, data) {
-     //data.toString();
+     alert(data.toString())
 });
 
       },

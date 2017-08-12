@@ -16,10 +16,14 @@
 
     <!-- Latest compiled JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css" integrity="sha384-OHBBOqpYHNsIqQy8hL1U+8OXf9hH6QRxi0+EODezv82DfnZoV7qoHAZDwMwEJvSw" crossorigin="anonymous">
+
   </head>
   <style>
 html, body { 
     background-image: url("ovdbg.jpg");
+    background-color: #2e31a2;
     overflow-x: hidden;
     height: 100%; 
     background-position: center;
@@ -30,47 +34,56 @@ html, body {
 width: 140px;
 }
 .footer {
-  color: black;
+  color: white;
+  font-size: 70%;
+  -webkit-animation-delay: 0.5s;
+
 }
 
 .form {
-  background-color: grey;
+  color: white;
+  background-color: transparent;
   opacity: 0.95;
+  -webkit-animation-delay: 0.9s;
+  boder-color: transparent;
 }
-
+.img {
+  -webkit-animation-delay: 0.2s;
+}
 //without opacity
 .wo {
-  opacity: 1.0;
+//  opacity: 1.0;
 }
   </style>
   <body>
 <div class="container">
    <div class="col-xs-12">
-      <img class="logo" src="manlogoinverted.png"/>
+      <img class="animated fadeInLeft logo" src="manlogoinverted.png"/>
     </div>
-  <div class="jumbotron form col-xs-6 col-xs-offset-3">
+  <div class="animated fadeIn jumbotron form col-xs-10 col-xs-offset-1">
   <form action="/action_page.php">
-    <div class="wo form-group">
-      <label class="wo"  for="email">Login:</label>
-      <input id="login" type="email" class="wo form-control" id="login" placeholder="Login" name="login" value="trimarchi">
+    <div class="wo form-group form-group-sm">
+      <label class="wo"  for="login">Login:</label>
+      <input id="login" type="email" class="wo form-control " id="login" placeholder="Login" name="login" value="trimarchi">
     </div>
     <div class="form-group">
       <label for="pwd">Password:</label>
-      <input id="pwd" type="password" class="form-control"  placeholder="Enter password" name="pwd" value="holasalva2017">
+      <input id="pwd" type="password" class="form-control "  placeholder="Enter password" name="pwd" value="holasalva2017">
     </div>
     <div class="form-group">
       <label for="sm">Session Manager:</label>
-      <input id="sm" type="url" class="form-control" placeholder="Sesion Manager" name="sm" value="manportal001.manconsulting.co.uk">
+      <input id="sm" type="url" class="form-control " placeholder="Sesion Manager" name="sm" value="manportal001.manconsulting.co.uk">
     </div>
     <div class="checkbox">
-      <label><input type="checkbox" name="remember"> Remember me</label>
+      <label><input class="" type="checkbox" name="remember"> Remember me</label>
     </div>
   </form>
-    <button id="connect" type="submit" class="btn btn-default">Connect</button>
-<div>
+    <button id="connect" type="submit" class="btn btn-default ">Connect</button>
 </div>
 </div>
-<div class="footer col-xs-12" align="center" >
+
+
+<div class="animated fadeIn footer row navbar navbar-fixed-bottom" align="center" >
 © Copyright 2008 - 2017 MAN Consulting All rights reserved.
 </div>
 
@@ -78,7 +91,6 @@ width: 140px;
   </body>
 
   <script>
-    // You can also require other files to run in this process
     require('./renderer.js')
   </script>
 
