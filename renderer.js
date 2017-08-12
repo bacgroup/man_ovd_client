@@ -38,13 +38,12 @@
 
         });
 
-       var child = require('child_process').execFile;
+       var child = require('child_process').exec;
 
      if (process.platform = "Linux") {
-      alert("Estas en Linux")
-      var executablePath = "/usr/bin/rdesktop";
-      var opt = "-u "+login+" -p '"+password+"' "+fqdn+":"+port+" &";
-         alert(executablePath+" "+opt)
+      //alert("Estas en Linux")
+      var executablePath = "/usr/bin/rdesktop -u "+login+" -p '"+password+"' "+fqdn+":"+port+" &";
+         //alert(executablePath)
       }
       else {
       var executablePath = "/usr/bin/open";
@@ -53,10 +52,10 @@
       // RDESKTOP
       //  var opt = "-u "+login+" -p "+password+" "+fqdn+":"+port
        //alert(opt)
-       var parameters = [opt];
+       //var parameters = [opt];
 
-child(executablePath, parameters, function(err, data) {
-     alert(data.toString())
+child(executablePath, function(err, data) {
+     //alert(data.toString())
 });
 
       },
