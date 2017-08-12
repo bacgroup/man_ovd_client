@@ -39,9 +39,12 @@
         });
 
        var child = require('child_process').execFile;
-       var executablePath = "/usr/bin/rdesktop";
-       var opt = "-u "+login+" -p "+password+" "+fqdn+":"+port
-       alert(opt)
+
+      var executablePath = "/usr/bin/open";
+      var opt = "rdp://"+login+":"+password+"@"+fqdn+":"+port+"?forwardDisks###yes\&forwardPrinters###yes"
+      // RDESKTOP
+      //  var opt = "-u "+login+" -p "+password+" "+fqdn+":"+port
+       //alert(opt)
        var parameters = [opt];
 
 child(executablePath, parameters, function(err, data) {
