@@ -4,7 +4,7 @@
     pwd = $( "#pwd" ).val()
     sm = $( "#sm" ).val()
     $.ajax({
-      url:"https://"+sm+"/ovd/proxy.php",
+      url:sm+"/ovd/proxy.php",
       type:"POST",
       headers: {
           "x-ovd-service": "start"
