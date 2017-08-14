@@ -26,7 +26,7 @@
      var executablePath;
      if (process.platform == "linux") {
       var child = require('child_process').exec;
-      executablePath = "/usr/bin/rdesktop -u "+login+" -p '"+password+"' "+fqdn+":"+port;
+      executablePath = "/usr/bin/rdesktop -u "+login+" -p '"+password+"' "+fqdn+":"+port+" -f -r printer:`lpstat -d|cut -d' ' -f4`=\"Ulteo TS Printer Driver\"";
       //alert(executablePath);
       child(executablePath, function(error, stdout, stderr) {
         //alert('stdout: ' + stdout);
@@ -55,7 +55,7 @@
 
       },
       error:function(data){
-       alert("failure");
+       //alert("failure");
       },
     })
 });
