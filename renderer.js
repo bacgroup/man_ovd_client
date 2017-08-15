@@ -33,7 +33,7 @@
      var executablePath;
      if (process.platform == "linux") {
       var child = require('child_process').exec;
-      executablePath = "/usr/bin/rdesktop -u "+login+" -p '"+password+"' "+fqdn+":"+port+" -g 90% -r printer:`lpstat -d | cut -d':' -f2 | cut -d' ' -f2`=\"Ulteo TS Printer Driver\"";
+      executablePath = "/usr/bin/rdesktop -u "+login+" -p '"+password+"' "+fqdn+":"+port+" -f -r printer:`lpstat -d | cut -d':' -f2 | cut -d' ' -f2`=\"Ulteo TS Printer Driver\"";
       //alert(executablePath);
       child(executablePath, function(error, stdout, stderr) {
         //alert('stdout: ' + stdout);
