@@ -1,8 +1,13 @@
+   child_process = require('child_process')
    window.$ = window.jQuery = require('jquery');
     $( "#connect" ).click(function() {
     login = $( "#login" ).val()
     pwd = $( "#pwd" ).val()
     sm = $( "#sm" ).val()
+
+    $( "#connect" ).prop("disabled",true);
+    
+
     $.ajax({
       url:sm+"/ovd/proxy.php",
       type:"POST",
@@ -12,6 +17,9 @@
       data: '<session mode="desktop" language="es" timezone="America/Guatemala"><user login="'+login+'" password="'+pwd+'"/></session>',
       dataType: "text",
       success:function(response){
+
+      child_process.execSync("sleep 10");
+
         var xml = response,
         xmlDoc = $.parseXML(xml),
         $xml = $(xmlDoc);
@@ -22,11 +30,10 @@
             port = $(this).attr("port");
             password = $(this).attr("password");
         });
-
      var executablePath;
      if (process.platform == "linux") {
       var child = require('child_process').exec;
-      executablePath = "/usr/bin/rdesktop -u "+login+" -p '"+password+"' "+fqdn+":"+port+" -f -r printer:`lpstat -d|cut -d' ' -f4`=\"Ulteo TS Printer Driver\"";
+      executablePath = "/usr/bin/rdesktop -u "+login+" -p '"+password+"' "+fqdn+":"+port+" -g 90% -r printer:`lpstat -d | cut -d':' -f2 | cut -d' ' -f2`=\"Ulteo TS Printer Driver\"";
       //alert(executablePath);
       child(executablePath, function(error, stdout, stderr) {
         //alert('stdout: ' + stdout);
@@ -44,15 +51,16 @@
     child(executablePath, options, function(error, stdout, stderr) {
         console.log('stdout: ' + stdout);
         console.log('stderr: ' + stderr);
+        $( "#connect" ).prop("disabled",false);
+
         if (error !== null) {
             console.log('exec error: ' + error);
+            $( "#connect" ).prop("disabled",false);
+
         }
     });
 
     }
-
-
-
       },
       error:function(data){
        //alert("failure");
