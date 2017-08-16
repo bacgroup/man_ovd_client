@@ -5,7 +5,7 @@
     pwd = $( "#pwd" ).val()
     sm = $( "#sm" ).val()
 
-    $( "#connect" ).prop("disabled",true);
+    $( "#connect" ).prop("disabled",false);
     
 
     $.ajax({
@@ -18,7 +18,7 @@
       dataType: "text",
       success:function(response){
 
-      child_process.execSync("sleep 10");
+      child_process.execSync("sleep 3");
 
         var xml = response,
         xmlDoc = $.parseXML(xml),
@@ -33,8 +33,9 @@
      var executablePath;
      if (process.platform == "linux") {
       var child = require('child_process').exec;
-      executablePath = "/usr/bin/rdesktop -u "+login+" -p '"+password+"' "+fqdn+":"+port+" -f -r printer:`lpstat -d | cut -d':' -f2 | cut -d' ' -f2`=\"Ulteo TS Printer Driver\"";
-      //alert(executablePath);
+      executablePath = "/usr/bin/xfreerdp /v:"+fqdn+":"+port+" /u:"+login+" /p:'"+password+"' /sec:rdp /drive:home,$HOME /printer /t:\"MAN OVD Client\" /size:1900x950 /jpeg"
+      //executablePath = "/usr/bin/rdesktop -u "+login+" -p '"+password+"' "+fqdn+":"+port+" -f -r printer:`lpstat -d | cut -d':' -f2 | cut -d' ' -f2`=\"Ulteo TS Printer Driver\"";
+      alert(executablePath);
       child(executablePath, function(error, stdout, stderr) {
         //alert('stdout: ' + stdout);
         //alert('stderr: ' + stderr);
