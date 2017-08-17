@@ -73,13 +73,13 @@ html, body {
   left:50%;
   transform:translate(-50%,-50%);
   padding:35px;
-  text-align:center;
+  text-align:left;
 }
 .grid12-6 .inner_box h2{
   font-family:arial;
-  text-align:center;
+  text-align:left;
   font-size:26px;
-  font-weight:normal;
+  font-weight:center;
   color:#777;
 }
 .grid12-6 .inner_box button{
@@ -103,6 +103,10 @@ $('#progress').hide();
 $('#connect' ).click(function() {
  $('#inner_box').hide();
  $('#progress').show();
+ setTimeout(function() {
+  $('#inner_box').show();
+  $('#progress').hide();
+ }, 10000);
  
  db.put({
   _id: '34',
@@ -170,9 +174,6 @@ $('#connect' ).click(function() {
     <button id="connect" type="submit" class="btn btn-default ">Connect</button>
   </div>
  </div>
- </div>
- <div id=progress class="inner_box">
-  Session Running...
  </div>
 </div>
 
