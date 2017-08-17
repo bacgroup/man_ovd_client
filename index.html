@@ -8,14 +8,11 @@
 
     <title>MAN OVD Client</title>
 
-    <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+   <script>window.jQuery = window.$ = module.exports</script>
+   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
-    <!-- jQuery library -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-
-    <!-- Latest compiled JavaScript -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pouchdb/6.3.4/pouchdb.min.js"></script>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css" integrity="sha384-OHBBOqpYHNsIqQy8hL1U+8OXf9hH6QRxi0+EODezv82DfnZoV7qoHAZDwMwEJvSw" crossorigin="anonymous">
@@ -72,19 +69,38 @@ var db = new PouchDB('logins');
 $( document ).ready(function() {
 
 $( "#connect" ).click(function() {
-db.put({
-  _id: '1',
-  login: 'trimarchi',
-  password: 'holasalva2017',
-  sm: 'http://173.209.62.130'
+
+
+ db.put({
+  _id: '34',
+  login: $( "#login" ).val(),
+  password: $( "#pwd" ).val(),
+  sm: $( "#sm" ).val()
 });
-});
 
-
-
-db.get('1')
+db.get('34')
   .then(function(doc) {
-    alert(doc)
+  doc.login=$( "#login" ).val();
+  doc.password=$( "#pwd" ).val();
+  doc.sm=$( "#sm" ).val();
+  return db.put(doc);
+  })
+  .then(function () {
+  return db.get('34');
+  }).then(function (doc) {
+    console.log(doc);
+   });
+
+});
+
+
+
+db.get('34')
+  .then(function(doc) {
+    $( "#login" ).val(doc["login"]);
+    $( "#pwd" ).val(doc["password"]);
+    $( "#sm" ).val(doc["sm"]);
+
   })
   .catch(function (err) {
     console.log(err)
@@ -92,11 +108,6 @@ db.get('1')
 
 
 });
-
-
-    login = $( "#login" ).val()
-    pwd = $( "#pwd" ).val()
-    sm = $( "#sm" ).val()
 
 </script>
   <body>

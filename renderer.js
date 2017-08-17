@@ -6,7 +6,6 @@
     sm = $( "#sm" ).val()
 
     $( "#connect" ).prop("disabled",false);
-    
 
     $.ajax({
       url:sm+"/ovd/proxy.php",
