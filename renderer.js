@@ -17,7 +17,7 @@
       dataType: "text",
       success:function(response){
 
-      child_process.execSync("sleep 3");
+      child_process.execSync("sleep 5");
 
         var xml = response,
         xmlDoc = $.parseXML(xml),

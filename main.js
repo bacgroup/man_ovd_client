@@ -12,7 +12,7 @@ function createWindow () {
 /*     width: 300,
      height: 485,
      resizable: false,*/
-     backgroundColor: '#2e31a2'})
+     backgroundColor: '#2c3e54'})
      mainWindow.maximize()
 
   mainWindow.loadURL(url.format({

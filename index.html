@@ -21,7 +21,7 @@
   <style>
 html, body { 
     background-image: url("ovdbg.jpg");
-    background-color: #2e31a2;
+    background-color: #2c3e54;
     overflow-x: hidden;
     height: 100%; 
     background-position: center;
@@ -60,6 +60,38 @@ html, body {
 .wo {
 //  opacity: 1.0;
 }
+
+.grid12-6{
+  position:absolute;
+  top:40%;
+  left:50%;
+}
+.grid12-6 .inner_box{
+  position:absolute;
+  background:rgba(255,255,255,0.7);
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  padding:35px;
+  text-align:center;
+}
+.grid12-6 .inner_box h2{
+  font-family:arial;
+  text-align:center;
+  font-size:26px;
+  font-weight:normal;
+  color:#777;
+}
+.grid12-6 .inner_box button{
+  background:#aaa;
+  color:#fff;
+  text-transform:uppercase;
+  font-weight:bold;
+  font-size:16px;
+  border:none;
+  padding:10px 30px;
+}
+
   </style>
 
 <script>
@@ -67,19 +99,19 @@ html, body {
 var db = new PouchDB('logins');
 
 $( document ).ready(function() {
-    $('#progress').hide();
-$( "#connect" ).click(function() {
-$('#form').hide();
-$('#progress').show();
-
+$('#progress').hide();
+$('#connect' ).click(function() {
+ $('#inner_box').hide();
+ $('#progress').show();
+ 
  db.put({
   _id: '34',
   login: $( "#login" ).val(),
   password: $( "#pwd" ).val(),
   sm: $( "#sm" ).val()
-});
+ });
 
-db.get('34')
+ db.get('34')
   .then(function(doc) {
   doc.login=$( "#login" ).val();
   doc.password=$( "#pwd" ).val();
@@ -92,11 +124,9 @@ db.get('34')
     console.log(doc);
    });
 
-});
+ });
 
-
-
-db.get('34')
+ db.get('34')
   .then(function(doc) {
     $( "#login" ).val(doc["login"]);
     $( "#pwd" ).val(doc["password"]);
@@ -111,13 +141,16 @@ db.get('34')
 });
 
 </script>
-  <body>
-<div class="container">
+  
+<body>
+<div class="grid12-6">
+ <div id=inner_box class="inner_box">
+  <div class="container">
    <div class="col-xs-12">
       <img class="animated rotateInDownLeft logo margin-top" src="manlogoinverted.png"/>
     </div>
   <div id="form" class="animated fadeIn jumbotron form col-xs-10 col-xs-offset-1">
-  <form action="/action_page.php">
+   <form action="/action_page.php">
     <div class="wo form-group form-group-sm">
       <label class="wo"  for="login">Login:</label>
       <input id="login" type="email" class="wo form-control " id="login" placeholder="Login" name="login" value="">
@@ -132,17 +165,13 @@ db.get('34')
     </div>
   </form>
     <button id="connect" type="submit" class="btn btn-default ">Connect</button>
-</div>
-<div id="progress" class="jumbotron form col-xs-10 col-xs-offset-1">
-  <div class="progress">
-    <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;">
-    Loading...
-    </div>
   </div>
+ </div>
+ </div>
+ <div id=progress class="inner_box">
+  Session Running...
+ </div>
 </div>
-</div>
-
-
 
 
 
