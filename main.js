@@ -13,6 +13,7 @@ function createWindow () {
      height: 485,
      resizable: false,*/
      backgroundColor: '#2e31a2'})
+     mainWindow.maximize()
 
   mainWindow.loadURL(url.format({
     pathname: path.join(__dirname, 'index.html'),

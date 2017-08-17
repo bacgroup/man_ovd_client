@@ -5,7 +5,7 @@
     pwd = $( "#pwd" ).val()
     sm = $( "#sm" ).val()
 
-    $( "#connect" ).prop("disabled",false);
+    //$( "#connect" ).prop("disabled",false);
 
     $.ajax({
       url:sm+"/ovd/proxy.php",
@@ -13,7 +13,7 @@
       headers: {
           "x-ovd-service": "start"
       },
-      data: '<session mode="desktop" language="es" timezone="America/Guatemala"><user login="'+login+'" password="'+pwd+'"/></session>',
+      data: '<session mode="desktop" language="es" timezone="America/Tegucigalpa"><user login="'+login+'" password="'+pwd+'"/></session>',
       dataType: "text",
       success:function(response){
 
@@ -32,9 +32,10 @@
      var executablePath;
      if (process.platform == "linux") {
       var child = require('child_process').exec;
-      executablePath = "/usr/bin/xfreerdp /v:"+fqdn+":"+port+" /u:"+login+" /p:'"+password+"' /sec:rdp /drive:home,$HOME /printer /t:\"MAN OVD Client\" /size:1900x950 /jpeg"
+      if (port == null) {port = 3389};
+      executablePath = "xfreerdp /v:"+fqdn+":"+port+" /u:"+login+" /p:'"+password+"' /sec:rdp /drive:home,$HOME /printer /jpeg /parent-window:`xwininfo -name 'MAN OVD Client' | grep 'Window id' | cut -d' ' -f4` /size:`xwininfo -name 'MAN OVD Client' | grep 'Width' | tr -s ' '|cut -d' ' -f3`x`xwininfo -name 'MAN OVD Client' | grep 'Height' | tr -s ' '|cut -d' ' -f3`"
       //executablePath = "/usr/bin/rdesktop -u "+login+" -p '"+password+"' "+fqdn+":"+port+" -f -r printer:`lpstat -d | cut -d':' -f2 | cut -d' ' -f2`=\"Ulteo TS Printer Driver\"";
-      alert(executablePath);
+      //alert(executablePath);
       child(executablePath, function(error, stdout, stderr) {
         //alert('stdout: ' + stdout);
         //alert('stderr: ' + stderr);
