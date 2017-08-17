@@ -9,9 +9,9 @@ let mainWindow
 
 function createWindow () {
   mainWindow = new BrowserWindow({titleBarStyle: 'hidden',
-     width: 300,
+/*     width: 300,
      height: 485,
-     resizable: false,
+     resizable: false,*/
      backgroundColor: '#2e31a2'})
 
   mainWindow.loadURL(url.format({
