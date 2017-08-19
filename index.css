@@ -1,0 +1,47 @@
+html, body { 
+    background-image: url("ovdbg.jpg");
+    background-color: #2c3e54;
+    overflow-x: hidden;
+    height: 100%; 
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.logo {
+     width: 140px;
+     -webkit-animation-delay: 0.5s;
+}
+
+.margin-top { margin-top: 1.0em; }
+
+.footer {
+    color: white;
+    font-size: 70%;
+    -webkit-animation-delay: 1.9s;
+    margin-bottom: 0em;
+    height:18px !important;
+    min-height:18px !important;
+}
+
+.container {
+    padding: 40px !important;	
+}
+
+.form {
+    color: white;
+    background-color: transparent;
+    opacity: 0.95;
+    -webkit-animation-delay: 1.3s;
+    boder-color: transparent;
+}
+
+.panel{
+    background:rgba(255,255,255,0.7);
+    margin-top: 120px !important;
+    padding: 40px !importan;
+}
+
+#connect {
+    margin-bottom: 40px;	
+}
