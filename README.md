@@ -1,6 +1,6 @@
 # MAN OVD Client
 
-![picture alt](https://www.manconsulting.co.uk/logo.png "MAN Consulting")
+![Man Consulting Logo](https://www.manconsulting.co.uk/logo.png)
 
 ## Main Features
 
