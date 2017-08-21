@@ -13,7 +13,7 @@ function createWindow() {
         /*     width: 300,
              height: 485,
              resizable: false,*/
-        backgroundColor: '#122642'
+        backgroundColor: '#000511'
     })
     mainWindow.maximize()
 
