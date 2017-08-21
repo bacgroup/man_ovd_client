@@ -39,7 +39,7 @@
                    executablePath = "/usr/bin/open";
                    opt = "rdp://" + login + ":" + password + "@" + fqdn + ":" + port + "?forwardDisks###yes\&forwardPrinters###yes";
                    options = [opt];
-                   setTimeout(() => child(executablePath), 5000);
+                   setTimeout(() => child(executablePath, options), 5000);
                }
                //else if (process.platform == "win32"){
                else {
