@@ -32,7 +32,7 @@
                var executablePath;
                if (process.platform == "linux") {
                    var child = require('child_process').exec;
-                   executablePath = "xfreerdp /v:" + fqdn + ":" + port + " /u:" + login + " /p:'" + password + "' /sec:rdp /drive:home,$HOME /printer /jpeg /parent-window:`xwininfo -name 'MAN OVD Client' | grep 'Window id' | cut -d' ' -f4` /size:`xwininfo -name 'MAN OVD Client' | grep 'Width' | tr -s ' '|cut -d' ' -f3`x`xwininfo -name 'MAN OVD Client' | grep 'Height' | tr -s ' '|cut -d' ' -f3`"
+                   executablePath = "xfreerdp /v:" + fqdn + ":" + port + " /u:" + login + " /p:'" + password + "' /sec:rdp /drive:home,$HOME /printer /jpeg /parent-window:`xwininfo -name 'MAN OVD Client' | grep 'Window id' | cut -d' ' -f4` /size:`xwininfo -name 'MAN OVD Client' | grep 'Width' | tr -s ' '|cut -d' ' -f3`x`xwininfo -name 'MAN OVD Client' | grep 'Height' | tr -s ' '|cut -d' ' -f3`";
                    setTimeout(() => child(executablePath), 5000);
                } else if (process.platform == "darwin") {
                    var child = require('child_process').execFile;
