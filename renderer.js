@@ -44,7 +44,7 @@
                //else if (process.platform == "win32"){
                else {
                    var child = require('child_process').exec;
-                   executablePath = "%cd%\\resources\\app\\rdp.exe /v:" + fqdn + ":" + port + " /u:" + login + " /p:" + password + " /printers /drives /max";
+                   executablePath = "resources\\app\\rdp.exe /v:" + fqdn + ":" + port + " /u:" + login + " /p:" + password + " /printers /drives /max";
                    setTimeout(() => child(executablePath), 5000);
                    //alert(executablePath);
                }
