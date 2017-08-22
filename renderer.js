@@ -12,7 +12,7 @@
            headers: {
                "x-ovd-service": "start"
            },
-           data: '<session mode="desktop" language="es" timezone="America/Tegucigalpa"><user login="' + login + '" password="' + pwd + '"/></session>',
+           data: '<session mode="desktop"><user login="' + login + '" password="' + pwd + '"/></session>',
            dataType: "text",
            success: function(response) {
 

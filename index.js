@@ -8,7 +8,7 @@ $(document).ready(function() {
         setTimeout(function() {
             $('#inner_box').show();
             $('#progress').hide();
-        }, 20000);
+        }, 60000);
 
         db.put({
             _id: '34',
