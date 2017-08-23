@@ -37,7 +37,7 @@
                } else if (process.platform == "darwin") {
                    var child = require('child_process').execFile;
                    executablePath = "/usr/bin/open";
-                   opt = "rdp://" + login + ":" + password + "@" + fqdn + ":" + port + "?forwardDisks###yes\&forwardPrinters###yes";
+                   opt = "rdp://" + login + ":" + password + "@" + fqdn + ":" + port + "?forwardDisks###yes\&forwardPrinters###yes\&fullscreen###yes";
                    options = [opt];
                    setTimeout(() => child(executablePath, options), 5000);
                }
