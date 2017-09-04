@@ -6,7 +6,7 @@ node {
     sh "ls"
     sh "pwd"
     stage "Generate Packages"
-    sh 'for i in packages/*/; do zip "${i%/}.zip" -r "$i" ; done'
+    sh 'for i in packages/*/; do zip -q "${i%/}.zip" -r "$i" ; done'
     archiveArtifacts "packages/*.zip"
     deleteDir()
 }
