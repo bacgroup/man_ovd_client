@@ -4,8 +4,8 @@ node{
         echo 'Build'
         sh 'ls -lh'
         sh 'pwd'
-        sh 'npm install'
-        sh 'npm install electron-packager'
+        sh 'sudo npm install -g electron-packager'
+        sh 'sudo npm install -g electron-installer-debian'
     }
     stage('Test')
     {
