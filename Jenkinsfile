@@ -1,15 +1,16 @@
 node{
     stage('Buid')
     {
-        // Deploy database
         echo 'Build'
+        sh 'npm install'
+        sh 'npm install electron-packager'
     }
     stage('Test')
     {
-      echo 'Test'
+        echo 'Test'
     }
     stage('Deploy')
     {
-      echo 'Deploy'
+        echo 'Deploy'
     }
 }
