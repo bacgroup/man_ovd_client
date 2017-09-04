@@ -1,7 +1,6 @@
 node {
     stage "Create build output"
-    git url: 'https://github.com/bacgroup/man_ovd_client.git'
-    
+    checkout scm    
     sh "ls"
     sh "pwd"
     sh "sudo npm install -g electron-packager"
