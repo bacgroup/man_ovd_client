@@ -1,6 +1,6 @@
 node {
     stage "Create build output"
-    //git url: 'https://github.com/bacgroup/man_ovd_client.git'
+    git url: 'https://github.com/bacgroup/man_ovd_client.git'
     
     sh "ls"
     sh "pwd"
