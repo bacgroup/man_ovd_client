@@ -39,7 +39,10 @@
                    executablePath = "/usr/bin/open";
                    opt = "rdp://" + login + ":" + password + "@" + fqdn + ":" + port + "?forwardDisks###yes\&forwardPrinters###yes\&fullscreen###yes";
                    options = [opt];
-                   setTimeout(() => child(executablePath, options), 5000);
+                   child("brew", "install freerdp", function(err, result){
+                       if (err) { console.log(err) }
+                       setTimeout(() => child(executablePath, options), 5000);
+                   });
                }
                //else if (process.platform == "win32"){
                else {
