@@ -4,10 +4,10 @@ node {
     sh "sudo npm install -g electron-installer-debian"
     checkout scm
     sh "npm install"
+    sh "electron-packager . --overwrite --out packages --ignore packages --build-version ${BUILD_NUMBER} --all"
     sh "ls"
     sh "pwd"
     stage "Generate Packages"
-    
-    // Archive the build output artifacts.
-    //archiveArtifacts artifacts: 'output/*''
+    archiveArtifacts artifacts: "packages/*"
+    deleteDir()
 }
