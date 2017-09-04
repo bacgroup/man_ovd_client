@@ -7,37 +7,38 @@ const url = require('url')
 
 let mainWindow
 
-function createWindow () {
-  mainWindow = new BrowserWindow({titleBarStyle: 'hidden',
-/*     width: 300,
-     height: 485,
-     resizable: false,*/
-     backgroundColor: '#2c3e54'})
-     mainWindow.maximize()
+function createWindow() {
+    mainWindow = new BrowserWindow({
+        titleBarStyle: 'hidden',
+        /*     width: 300,
+             height: 485,
+             resizable: false,*/
+        backgroundColor: '#000511'
+    })
+    mainWindow.maximize()
 
-  mainWindow.loadURL(url.format({
-    pathname: path.join(__dirname, 'index.html'),
-    protocol: 'file:',
-    slashes: false
-  }))
+    mainWindow.loadURL(url.format({
+        pathname: path.join(__dirname, 'index.html'),
+        protocol: 'file:',
+        slashes: false
+    }))
 
 
-  mainWindow.on('closed', function () {
-    mainWindow = null
-  })
+    mainWindow.on('closed', function() {
+        mainWindow = null
+    })
 }
 
 app.on('ready', createWindow)
 
-app.on('window-all-closed', function () {
-  if (process.platform !== 'darwin') {
-    app.quit()
-  }
+app.on('window-all-closed', function() {
+    if (process.platform !== 'darwin') {
+        app.quit()
+    }
 })
 
-app.on('activate', function () {
-  if (mainWindow === null) {
-    createWindow()
-  }
+app.on('activate', function() {
+    if (mainWindow === null) {
+        createWindow()
+    }
 })
-

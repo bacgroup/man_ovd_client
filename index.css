@@ -1,0 +1,68 @@
+html, body { 
+    background-color: #000511;
+    width:100%;
+    height:100%;
+}
+.loading {
+    width: 100px;
+    heigh:100px;
+    opacity: 0.80;
+}
+div.background {
+    background-image: url("ovdbg.jpg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    position:absolute;
+    width:100%;
+    height:100%;
+    margin:0px;
+    -webkit-animation-delay: 1.0s;
+}
+
+.logo {
+     width: 140px;
+     -webkit-animation-delay: 0.5s;
+}
+
+.margin-top { margin-top: 1.0em; }
+
+.footer {
+    color: white;
+    font-size: 70%;
+    -webkit-animation-delay: 1.9s;
+    margin-bottom: 0em;
+    height:18px !important;
+    min-height:18px !important;
+}
+
+.form {
+    color: white;
+    text-shadow: 0px 0px 8px #2c2c2c;
+    background-color: transparent;
+    -webkit-animation-delay: 1.0s;
+    boder: none;
+}
+
+.panel{
+    padding-top: 20px !important;    
+    background:rgba(255,255,255,0.8);
+    margin-top: 10% !important;
+    -webkit-animation-delay: 0.5s;
+}
+
+.form-control {
+    background-color : rgba(255,255,255,0.5) !important; 
+    border: node;
+}
+
+.loading {
+  margin-top: 21%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+
+#connect {
+    margin-bottom: 35px;	
+}
