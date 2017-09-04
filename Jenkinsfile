@@ -13,6 +13,6 @@ node {
     for i in */; do zip "${i%/}.zip" -r "$i" ; done
     cd ..
     """
-    archiveArtifacts artifacts: 'packages/*.zip'
+    archiveArtifacts "packages/*.zip"
     deleteDir()
 }
