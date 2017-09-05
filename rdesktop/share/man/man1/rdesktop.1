@@ -66,7 +66,7 @@ so its use is discouraged.
 Desktop geometry (WxH). If geometry is the special word "workarea", the geometry
 will be fetched from the extended window manager hints property _NET_WORKAREA, from
 the root window. The geometry can also be specified as a percentage of the whole
-screen, e.g. "-g 80%", "-g 80%x70%". 
+screen, e.g. "-g 80%". 
 
 If the specified geometry depends on the screen size, and the screen
 size is changed, rdesktop will automatically reconnect using the new
@@ -231,10 +231,6 @@ Linux/Unix enviroment, <Alias Name> - device name shown in Windows enviroment
 <Vendor Name> - optional device vendor name. For list of examples run
 rdesktop without parameters.
 .TP
-.BR "-r clipboard:[off|PRIMARYCLIPBOARD|CLIPBOARD]"
-Enable clipboard redirectino. 'PRIMARYCLIPBOARD' looks at both PRIMARY and
-CLIPBOARD when sending data to server. 'CLIPBOARD' looks at only 'CLIPBOARD'.
-.TP
 .BR "-0"
 Attach to the console of the server (requires Windows Server 2003
 or newer).
@@ -244,9 +240,6 @@ Use RDP version 4.
 .TP
 .BR "-5"
 Use RDP version 5 (default).
-.TP
-.BR "-v"
-Enable verbose output
 .PP
 
 .SH "CredSSP Smartcard options"
