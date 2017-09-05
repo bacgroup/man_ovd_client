@@ -1,8 +1,8 @@
 node {
     stage "Build Packages"
+    deleteDir()
     checkout scm
     sh "npm install"
-    deleteDir()
     stage "Archive Packages"
         if (env.BRANCH_NAME == 'master') {
         sh "electron-packager . --overwrite --out packages --ignore packages --build-version ${BUILD_NUMBER} --all  --icon=icon.icns"
