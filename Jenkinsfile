@@ -1,12 +1,23 @@
 node {
-    stage "Build"
+    stage "Build Packages"
+    deleteDir()
     checkout scm
     sh "npm install"
-    sh "electron-packager . --overwrite --out packages --ignore packages --build-version ${BUILD_NUMBER} --all"
-    sh "ls"
-    sh "pwd"
-    stage "Generate Packages"
-    sh 'for i in packages/*/; do zip -q "${i%/}.zip" -r "$i" ; done'
-    archiveArtifacts "packages/*.zip"
+    stage "Archive Packages"
+        if (env.BRANCH_NAME == 'master') {
+        sh "electron-packager . --overwrite --out packages --ignore packages --build-version ${BUILD_NUMBER} --all  --icon=icon.icns"
+        dir ('packages') {
+            sh 'for i in */; do mv "$i" "${i%/}_build-${BUILD_NUMBER}_STABLE" ; done'
+        }
+        } else {
+        sh "electron-packager . --overwrite --out packages --ignore packages --build-version ${BUILD_NUMBER} --all  --icon=icon_beta.icns"
+        dir ('packages') {
+            sh 'for i in */; do mv "$i" "${i%/}_build-${BUILD_NUMBER}_BETA" ; done'
+        }
+        }
+    dir ('packages') {
+        sh 'for i in */; do zip -q "${i%/}.zip" -r "$i" ; done'
+        archiveArtifacts "*.zip"
+    }
     deleteDir()
 }
