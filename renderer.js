@@ -35,7 +35,7 @@
                    setTimeout(() => child(executablePath), 5000);
                } else if (process.platform == "darwin") {
                    var child = require('child_process').execSync;
-                   executablePath = process.cwd()+"/rdesktop/bin/rdesktop -u "+login+" -p '"+password+"' -f -r printer:`lpstat -d | cut -d':' -f2 | cut -d' ' -f2`=\"Ulteo TS Printer Driver\" -r disk:share=$HOME "+fqdn+":"+port;
+                   executablePath = __dirname+"/rdesktop/bin/rdesktop -u "+login+" -p '"+password+"' -f -r printer:`lpstat -d | cut -d':' -f2 | cut -d' ' -f2`=\"Ulteo TS Printer Driver\" -r disk:share=$HOME "+fqdn+":"+port;
                    var child2 = require('child_process').execSync;
                    //child2("brew install rdesktop")
                    setTimeout(() => child(executablePath), 5000);
