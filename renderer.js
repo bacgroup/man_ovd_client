@@ -37,8 +37,12 @@
                    var child = require('child_process').execSync;
                    executablePath = __dirname+"/rdesktop/bin/rdesktop -u "+login+" -p '"+password+"' -f -r printer:`lpstat -d | cut -d':' -f2 | cut -d' ' -f2`=\"Ulteo TS Printer Driver\" -r disk:share=$HOME "+fqdn+":"+port;
                    var child2 = require('child_process').execSync;
-                   //child2("brew install rdesktop")
-                   setTimeout(() => child(executablePath), 5000);
+                   if (child2("which Xquartz")) {
+                       child(executablePath);
+                   }
+                   else {
+                      alert("You need to install Xquartz!\nPlease Donwload at: https://www.xquartz.org/");
+                   }
                }
                //else if (process.platform == "win32"){
                else {
