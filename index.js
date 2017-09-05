@@ -1,5 +1,4 @@
 var db = new PouchDB('logins');
-
 $(document).ready(function() {
     $('#progress').hide();
     $('#connect').click(function() {
