@@ -2,7 +2,7 @@ node {
     stage "Build Packages"
     checkout scm
     sh "npm install"
-    sh "electron-packager . --overwrite --out packages --ignore packages --build-version ${BUILD_NUMBER} --all"
+    sh "electron-packager . --overwrite --out packages --ignore packages --build-version ${BUILD_NUMBER} --all  --icon=icon.icns"
     sh "ls"
     sh "pwd"
     stage "Archive Packages"
