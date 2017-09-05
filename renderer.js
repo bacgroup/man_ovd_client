@@ -1,4 +1,3 @@
-   //alert(process.platform);
    child_process = require('child_process')
    window.$ = window.jQuery = require('jquery');
    $("#connect").click(function() {
