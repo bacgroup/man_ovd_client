@@ -7,9 +7,9 @@ node {
     sh "pwd"
     stage "Generate Packages"
     if (env.BRANCH_NAME == 'master') {
-    sh 'for i in packages/*/; do mv "$i" "${i%/}_Build-${BUILD_NUMBER}_STABLE_Release" ; done'
+    sh 'for i in packages/*/; do mv "$i" "${i%/}_build-${BUILD_NUMBER}_STABLE" ; done'
     } else {
-    sh 'for i in packages/*/; do mv "$i" "${i%/}_Build-${BUILD_NUMBER}_BETA_Release" ; done'
+    sh 'for i in packages/*/; do mv "$i" "${i%/}_build-${BUILD_NUMBER}_BETA" ; done'
     }
     sh 'for i in packages/*/; do zip -q "${i%/}.zip" -r "$i" ; done'
     archiveArtifacts "packages/*.zip"
