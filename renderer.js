@@ -4,7 +4,6 @@
        login = $("#login").val()
        pwd = $("#pwd").val()
        sm = $("#sm").val()
-
        $.ajax({
            url: sm + "/ovd/proxy.php",
            type: "POST",
