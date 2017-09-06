@@ -1,6 +1,8 @@
 node {
     stage "Build Packages"
+    
     deleteDir()
+    
     checkout scm
     sh "npm install"
     stage "Archive Packages"
