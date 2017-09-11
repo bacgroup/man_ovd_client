@@ -8,6 +8,7 @@ node {
         sh 'sudo lxc-attach -n ${JOB_BASE_NAME}-${BUILD_NUMBER} -- apt-get install curl'
         sh 'sudo lxc-attach -n ${JOB_BASE_NAME}-${BUILD_NUMBER} -- curl -sL https://deb.nodesource.com/setup_6.x | bash -'
         sh 'sudo lxc-attach -n ${JOB_BASE_NAME}-${BUILD_NUMBER} -- apt-get install -y nodejs'
+        sh 'sudo lxc-attach -n ${JOB_BASE_NAME}-${BUILD_NUMBER} -- apt-get install -y npm'
     }
     stage("Generate Electon App") {
 
