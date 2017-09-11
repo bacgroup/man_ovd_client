@@ -17,24 +17,23 @@ node {
         
      sh 'sudo mkdir -p /var/lib/lxc/${JOB_BASE_NAME}-${BUILD_NUMBER}/rootfs/home/cust'
      sh "ls -l && pwd"
-     sh 'sudo rsync -avP man_ovd_client /var/lib/lxc/${JOB_BASE_NAME}-${BUILD_NUMBER}/rootfs/home/cust/'
-     sh 'sudo lxc-attach -n ${JOB_BASE_NAME}-${BUILD_NUMBER} -- chown root:root /home/cust -R'
+     sh 'sudo rsync -avP man_ovd_client /var/lib/lxc/${JOB_BASE_NAME}-${BUILD_NUMBER}/rootfs/home/pkg/'
+     sh 'sudo lxc-attach -n ${JOB_BASE_NAME}-${BUILD_NUMBER} -- chown root:root /home/pkg -R'
      sh 'sudo lxc-attach -n ${JOB_BASE_NAME}-${BUILD_NUMBER} -- apt-get install -y zip unzip'
-     sh "sudo lxc-attach -n ${JOB_BASE_NAME}-${BUILD_NUMBER} -- su -c \"cd /home/cust/ &&  npm install && npm install -g electron-packager \""
+     sh "sudo lxc-attach -n ${JOB_BASE_NAME}-${BUILD_NUMBER} -- su -c \"cd /home/pkg/ &&  npm install && npm install -g electron-packager \""
 
     }
     stage ("Archive Packages")
     {
         if (env.BRANCH_NAME == 'master') {
-        sh 'sudo lxc-attach -n ${JOB_BASE_NAME}-${BUILD_NUMBER} -- su -c " cd /home/cust/man_ovd_client &&  electron-packager . --overwrite --out packages --ignore packages --build-version ${BUILD_NUMBER} --all  --icon=icon.icns " '
-        sh 'sudo lxc-attach -n ${JOB_BASE_NAME}-${BUILD_NUMBER} -- su -c " cd /home/cust/man_ovd_client/packages &&  for i in */; do mv "$i" "${i%/}_build-${BUILD_NUMBER}_STABLE" ; done"'
+        sh 'sudo lxc-attach -n ${JOB_BASE_NAME}-${BUILD_NUMBER} -- su -c " cd /home/pkg &&  electron-packager . --overwrite --out packages --ignore packages --build-version ${BUILD_NUMBER} --all  --icon=icon.icns " '
+        sh 'sudo lxc-attach -n ${JOB_BASE_NAME}-${BUILD_NUMBER} -- su -c " cd /home/pkg/packages &&  for i in */; do mv "$i" "${i%/}_build-${BUILD_NUMBER}_STABLE" ; done"'
         } else {
-        sh 'sudo lxc-attach -n ${JOB_BASE_NAME}-${BUILD_NUMBER} -- su -c " cd /home/cust/man_ovd_client &&  electron-packager . --overwrite --out packages --ignore packages --build-version ${BUILD_NUMBER} --all  --icon=icon_beta.icns"'
-        sh 'sudo lxc-attach -n ${JOB_BASE_NAME}-${BUILD_NUMBER} -- su -c "cd /home/cust/man_ovd_client/packages &&  for i in */; do mv "$i" "${i%/}_build-${BUILD_NUMBER}_BETA" ; done" '
-        sh 'electron-packager . --overwrite --out packages --ignore packages --build-version ${BUILD_NUMBER} --all  --icon=icon_beta.icns'
+        sh 'sudo lxc-attach -n ${JOB_BASE_NAME}-${BUILD_NUMBER} -- su -c " cd /home/pkg &&  electron-packager . --overwrite --out packages --ignore packages --build-version ${BUILD_NUMBER} --all  --icon=icon_beta.icns"'
+        sh 'sudo lxc-attach -n ${JOB_BASE_NAME}-${BUILD_NUMBER} -- su -c "cd /home/pkg/packages &&  for i in */; do mv "$i" "${i%/}_build-${BUILD_NUMBER}_BETA" ; done" '
         }
         deleteDir()
-        sh 'sudo rsync -avP /var/lib/lxc/${JOB_BASE_NAME}-${BUILD_NUMBER}/rootfs/home/cust/man_ovd_client/packages .'
+        sh 'sudo rsync -avP /var/lib/lxc/${JOB_BASE_NAME}-${BUILD_NUMBER}/rootfs/home/pkg/packages .'
         sh 'for i in */; do zip -q "${i%/}.zip" -r "$i" ; done'
         archiveArtifacts "*.zip"
 
