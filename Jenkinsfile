@@ -25,11 +25,11 @@ node {
     stage ("Archive Packages")
     {
         if (env.BRANCH_NAME == 'master') {
-        sh "sudo lxc-attach -n ${JOB_BASE_NAME}-${BUILD_NUMBER} -- su -c \"cd /home/cust/man_ovd_client &&  electron-packager . --overwrite --out packages --ignore packages --build-version ${BUILD_NUMBER} --all  --icon=icon.icns \""
-        sh "sudo lxc-attach -n ${JOB_BASE_NAME}-${BUILD_NUMBER} -- su -c \"cd /home/cust/man_ovd_client/packages &&  for i in */; do mv $i ${i%/}_build-${BUILD_NUMBER}_STABLE ; done \""
+        sh "sudo lxc-attach -n ${JOB_BASE_NAME}-${BUILD_NUMBER} -- su -c \" cd /home/cust/man_ovd_client &&  electron-packager . --overwrite --out packages --ignore packages --build-version ${BUILD_NUMBER} --all  --icon=icon.icns \" "
+        sh "sudo lxc-attach -n ${JOB_BASE_NAME}-${BUILD_NUMBER} -- su -c \" cd /home/cust/man_ovd_client/packages &&  for i in */; do mv $i ${i%/}_build-${BUILD_NUMBER}_STABLE ; done \" "
         } else {
-        sh "sudo lxc-attach -n ${JOB_BASE_NAME}-${BUILD_NUMBER} -- su -c \"cd /home/cust/man_ovd_client &&  electron-packager . --overwrite --out packages --ignore packages --build-version ${BUILD_NUMBER} --all  --icon=icon_beta.icns \""
-        sh "sudo lxc-attach -n ${JOB_BASE_NAME}-${BUILD_NUMBER} -- su -c \"cd /home/cust/man_ovd_client/packages &&  for i in */; do mv $i ${i%/}_build-${BUILD_NUMBER}_BETA ; done \""
+        sh "sudo lxc-attach -n ${JOB_BASE_NAME}-${BUILD_NUMBER} -- su -c \" cd /home/cust/man_ovd_client &&  electron-packager . --overwrite --out packages --ignore packages --build-version ${BUILD_NUMBER} --all  --icon=icon_beta.icns \" "
+        sh "sudo lxc-attach -n ${JOB_BASE_NAME}-${BUILD_NUMBER} -- su -c \"cd /home/cust/man_ovd_client/packages &&  for i in */; do mv $i ${i%/}_build-${BUILD_NUMBER}_BETA ; done \" "
         sh "electron-packager . --overwrite --out packages --ignore packages --build-version ${BUILD_NUMBER} --all  --icon=icon_beta.icns"
         }
         deleteDir()
