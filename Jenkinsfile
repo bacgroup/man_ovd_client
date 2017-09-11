@@ -8,7 +8,6 @@ node {
         sh 'sudo lxc-attach -n ${JOB_BASE_NAME}-${BUILD_NUMBER} -- apt-get install curl'
         sh 'sudo lxc-attach -n ${JOB_BASE_NAME}-${BUILD_NUMBER} -- curl -sL https://deb.nodesource.com/setup_6.x | bash -'
         sh 'sudo lxc-attach -n ${JOB_BASE_NAME}-${BUILD_NUMBER} -- apt-get install -y nodejs'
-        sh 'sudo lxc-attach -n ${JOB_BASE_NAME}-${BUILD_NUMBER} -- apt-get install -y npm'
     }
     stage("Generate Electon App") {
 
@@ -21,17 +20,17 @@ node {
      sh 'sudo rsync -avP * /var/lib/lxc/${JOB_BASE_NAME}-${BUILD_NUMBER}/rootfs/home/pkg/'
      sh 'sudo lxc-attach -n ${JOB_BASE_NAME}-${BUILD_NUMBER} -- chown root:root /home/pkg -R'
      sh 'sudo lxc-attach -n ${JOB_BASE_NAME}-${BUILD_NUMBER} -- apt-get install -y zip unzip'
-     sh "sudo lxc-attach -n ${JOB_BASE_NAME}-${BUILD_NUMBER} -- su -c \"cd /home/pkg/ &&  npm install && npm install -g electron-packager \""
+     sh "sudo lxc-attach -n ${JOB_BASE_NAME}-${BUILD_NUMBER} -- bash -c \"cd /home/pkg/ &&  npm install && npm install -g electron-packager \""
 
     }
     stage ("Archive Packages")
     {
         if (env.BRANCH_NAME == 'master') {
-        sh 'sudo lxc-attach -n ${JOB_BASE_NAME}-${BUILD_NUMBER} -- su -c " cd /home/pkg &&  electron-packager . --overwrite --out packages --ignore packages --build-version ${BUILD_NUMBER} --all  --icon=icon.icns " '
-        sh 'sudo lxc-attach -n ${JOB_BASE_NAME}-${BUILD_NUMBER} -- su -c " cd /home/pkg/packages &&  for i in */; do mv "$i" "${i%/}_build-${BUILD_NUMBER}_STABLE" ; done"'
+        sh 'sudo lxc-attach -n ${JOB_BASE_NAME}-${BUILD_NUMBER} -- bash -c " cd /home/pkg &&  electron-packager . --overwrite --out packages --ignore packages --build-version ${BUILD_NUMBER} --all  --icon=icon.icns " '
+        sh 'sudo lxc-attach -n ${JOB_BASE_NAME}-${BUILD_NUMBER} -- bash -c " cd /home/pkg/packages &&  for i in */; do mv "$i" "${i%/}_build-${BUILD_NUMBER}_STABLE" ; done"'
         } else {
-        sh 'sudo lxc-attach -n ${JOB_BASE_NAME}-${BUILD_NUMBER} -- su -c " cd /home/pkg &&  electron-packager . --overwrite --out packages --ignore packages --build-version ${BUILD_NUMBER} --all  --icon=icon_beta.icns"'
-        sh 'sudo lxc-attach -n ${JOB_BASE_NAME}-${BUILD_NUMBER} -- su -c "cd /home/pkg/packages &&  for i in */; do mv "$i" "${i%/}_build-${BUILD_NUMBER}_BETA" ; done" '
+        sh 'sudo lxc-attach -n ${JOB_BASE_NAME}-${BUILD_NUMBER} -- bash -c " cd /home/pkg &&  electron-packager . --overwrite --out packages --ignore packages --build-version ${BUILD_NUMBER} --all  --icon=icon_beta.icns"'
+        sh 'sudo lxc-attach -n ${JOB_BASE_NAME}-${BUILD_NUMBER} -- bash -c "cd /home/pkg/packages &&  for i in */; do mv "$i" "${i%/}_build-${BUILD_NUMBER}_BETA" ; done" '
         }
         deleteDir()
         sh 'sudo rsync -avP /var/lib/lxc/${JOB_BASE_NAME}-${BUILD_NUMBER}/rootfs/home/pkg/packages .'
