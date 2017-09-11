@@ -1,6 +1,6 @@
 node {
     stage("Create Container") {
-        sh "sudo lxc-create -t download -n "${JOB_BASE_NAME}-${BUILD_NUMBER}" -- -d ubuntu -r xenial -a amd64"
+        sh "sudo lxc-create -t download -n ${JOB_BASE_NAME}-${BUILD_NUMBER} -- -d ubuntu -r xenial -a amd64"
         sh "sudo lxc-start -n ${JOB_BASE_NAME}-${BUILD_NUMBER} -d"
         sh "sudo lxc-attach -n ${JOB_BASE_NAME}-${BUILD_NUMBER} -- apt-get update -y"
         sh "sudo lxc-attach -n ${JOB_BASE_NAME}-${BUILD_NUMBER} -- apt-get upgrade -y"
