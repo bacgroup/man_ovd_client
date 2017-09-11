@@ -17,7 +17,7 @@ node {
         
      sh 'sudo mkdir -p /var/lib/lxc/${JOB_BASE_NAME}-${BUILD_NUMBER}/rootfs/home/cust'
      sh "ls -l && pwd"
-     sh 'sudo rsync -avP man_ovd_client /var/lib/lxc/${JOB_BASE_NAME}-${BUILD_NUMBER}/rootfs/home/pkg/'
+     sh 'sudo rsync -avP * /var/lib/lxc/${JOB_BASE_NAME}-${BUILD_NUMBER}/rootfs/home/pkg/'
      sh 'sudo lxc-attach -n ${JOB_BASE_NAME}-${BUILD_NUMBER} -- chown root:root /home/pkg -R'
      sh 'sudo lxc-attach -n ${JOB_BASE_NAME}-${BUILD_NUMBER} -- apt-get install -y zip unzip'
      sh "sudo lxc-attach -n ${JOB_BASE_NAME}-${BUILD_NUMBER} -- su -c \"cd /home/pkg/ &&  npm install && npm install -g electron-packager \""
