@@ -23,7 +23,6 @@ node {
     deleteDir()
         
     checkout scm
-    sh 'npm install'
     sh "sudo rsync -avP * /var/lib/lxc/${PROJECT_NAME}/rootfs/root/"
     sh "sudo lxc-attach -n ${PROJECT_NAME} -- apt-get install -y zip unzip"
     sh "sudo lxc-attach -n ${PROJECT_NAME} -- npm install"
