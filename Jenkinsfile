@@ -12,7 +12,7 @@ node {
         sh "sudo lxc-attach -n \"${PROJECT_NAME}\" -- apt-get update -y"
         sh "sudo lxc-attach -n ${PROJECT_NAME} -- apt-get upgrade -y"
         
-        sh "sudo lxc-attach -n \"${PROJECT_NAME}\" -- apt-get install curl"
+        sh "sudo lxc-attach -n \"${PROJECT_NAME}\" -- apt-get install -y curl wget"
         sh "sudo lxc-attach -n \"${PROJECT_NAME}\" -- wget https://deb.nodesource.com/setup_6.x && bash setup_6.x"
         sh "sudo lxc-attach -n \"${PROJECT_NAME}\" -- apt-get update -y"
         sh "sudo lxc-attach -n \"${PROJECT_NAME}\" -- apt-get install -y nodejs"
