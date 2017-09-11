@@ -25,18 +25,19 @@ node {
     checkout scm
     sh "sudo rsync -avP * /var/lib/lxc/${PROJECT_NAME}/rootfs/root/"
     sh "sudo lxc-attach -n ${PROJECT_NAME} -- apt-get install -y zip unzip"
-    sh "sudo lxc-attach -n ${PROJECT_NAME} -- npm install"
+    sh "sudo lxc-attach -n ${PROJECT_NAME} -- pwd && ls"
+    sh "sudo lxc-attach -n ${PROJECT_NAME} -- su -c \" cd /root && npm install\""
     sh "sudo lxc-attach -n ${PROJECT_NAME} -- npm install -g electron-packager"
 
     }
     stage ("Archive Packages")
     {
         if (env.BRANCH_NAME == 'master') {
-        sh 'sudo lxc-attach -n ${PROJECT_NAME} -- bash -c "electron-packager . --overwrite --out packages --ignore packages --build-version ${BUILD_NUMBER} --all  --icon=icon.icns"'
-        sh 'sudo lxc-attach -n ${PROJECT_NAME} -- bash -c "for i in */; do mv "$i" "${i%/}_build-${BUILD_NUMBER}_STABLE" ; done"'
+        sh 'sudo lxc-attach -n ${PROJECT_NAME} -- su -c "electron-packager . --overwrite --out packages --ignore packages --build-version ${BUILD_NUMBER} --all  --icon=icon.icns"'
+        sh 'sudo lxc-attach -n ${PROJECT_NAME} -- su -c "for i in */; do mv "$i" "${i%/}_build-${BUILD_NUMBER}_STABLE" ; done"'
         } else {
-        sh 'sudo lxc-attach -n ${PROJECT_NAME} -- bash -c "electron-packager . --overwrite --out packages --ignore packages --build-version ${BUILD_NUMBER} --all  --icon=icon_beta.icns"'
-        sh 'sudo lxc-attach -n ${PROJECT_NAME} -- bash -c "for i in */; do mv "$i" "${i%/}_build-${BUILD_NUMBER}_BETA" ; done"'
+        sh 'sudo lxc-attach -n ${PROJECT_NAME} -- su -c "electron-packager . --overwrite --out packages --ignore packages --build-version ${BUILD_NUMBER} --all  --icon=icon_beta.icns"'
+        sh 'sudo lxc-attach -n ${PROJECT_NAME} -- su -c "for i in */; do mv "$i" "${i%/}_build-${BUILD_NUMBER}_BETA" ; done"'
         }
         deleteDir()
         sh 'sudo rsync -avP /var/lib/lxc/${PROJECT_NAME}/rootfs/root/packages .'
