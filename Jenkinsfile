@@ -13,10 +13,10 @@ node {
         sh "sudo lxc-attach -n ${PROJECT_NAME} -- apt-get upgrade -y"
         
         sh "sudo lxc-attach -n \"${PROJECT_NAME}\" -- apt-get install -y curl wget"
-        sh "sudo lxc-attach -n \"${PROJECT_NAME}\" -- curl -o nodejs.sh  https://deb.nodesource.com/setup_6.x"
+        sh "sudo lxc-attach -n \"${PROJECT_NAME}\" -- curl -o nodejs.sh https://deb.nodesource.com/setup_6.x"
         sh "sudo lxc-attach -n \"${PROJECT_NAME}\" -- bash nodejs.sh"
         sh "sudo lxc-attach -n \"${PROJECT_NAME}\" -- apt-get update -y"
-        sh "sudo lxc-attach -n \"${PROJECT_NAME}\" -- apt-get install -y nodejs && sudo dpkg --add-architecture i386 && apt-get update && apt-get install wine"
+        sh "sudo lxc-attach -n \"${PROJECT_NAME}\" -- su -c \"apt-get install -y nodejs && dpkg --add-architecture i386 && apt-get update && apt-get install wine\""
     }
     stage("Generate Electon App") {
 
