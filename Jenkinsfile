@@ -19,7 +19,7 @@ node {
         //sh "sudo lxc-attach -n \"${PROJECT_NAME}\" -- mkdir -p /root/.wine/dosdevices/z:/dev/core"
         sh "sudo lxc-attach -n \"${PROJECT_NAME}\" -- su -c \"mkdir -p /home/ubuntu/.wine/dosdevices/z:/root\""
        
-        sh "sudo lxc-attach -n \"${PROJECT_NAME}\" -- su -c \"apt-get install -y nodejs && dpkg --add-architecture i386 && apt-get -y update && apt-get install -y software-properties-common && echo ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true | sudo debconf-set-selections && wget https://dl.winehq.org/wine-builds/Release.key && apt-key add Release.key && apt-add-repository 'https://dl.winehq.org/wine-builds/ubuntu/' && apt-get update && apt-get -y install wine-stable-i386\""
+        sh "sudo lxc-attach -n \"${PROJECT_NAME}\" -- su -c \"apt-get install -y nodejs && dpkg --add-architecture i386 && apt-get -y update && apt-get install -y software-properties-common && echo ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true | sudo debconf-set-selections && wget https://dl.winehq.org/wine-builds/Release.key && apt-key add Release.key && apt-add-repository 'https://dl.winehq.org/wine-builds/ubuntu/' && apt-get update && apt-get -y install wine:i386\""
     }
     stage("Generate Electon App") {
 
