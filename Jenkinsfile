@@ -25,7 +25,7 @@ node {
     checkout scm
     sh "sudo rsync -avP . /var/lib/lxc/${PROJECT_NAME}/rootfs/root"
     sh "sudo lxc-attach -n ${PROJECT_NAME} -- apt-get install -y zip unzip"
-    sh "sudo lxc-attach -n ${PROJECT_NAME} -- pwd && ls"
+    sh "sudo lxc-attach -n ${PROJECT_NAME} -- chown root:root /root -R"
     sh "sudo lxc-attach -n ${PROJECT_NAME} -- su -c \" cd /root && npm install -g electron-packager && npm install -g electron && npm install\""
     sh "sudo lxc-attach -n ${PROJECT_NAME} -- "
 
