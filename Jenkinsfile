@@ -15,6 +15,7 @@ node {
         
         sh "sudo lxc-attach -n \"${PROJECT_NAME}\" -- apt-get install curl"
         sh "sudo lxc-attach -n \"${PROJECT_NAME}\" -- curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -"
+        sh "sudo lxc-attach -n \"${PROJECT_NAME}\" -- apt-get update -y"
         sh "sudo lxc-attach -n \"${PROJECT_NAME}\" -- apt-get install -y nodejs"
     }
     stage("Generate Electon App") {
@@ -23,7 +24,7 @@ node {
         
     checkout scm
         
-     sh "sudo mkdir -p /var/lib/lxc/\"${PROJECT_NAME}/rootfs/home/cust"
+     sh "sudo mkdir -p /var/lib/lxc/\"${PROJECT_NAME}/rootfs/home/pkg"
      sh "ls -l && pwd"
      sh "sudo rsync -avP * /var/lib/lxc/${PROJECT_NAME}/rootfs/home/pkg/"
      sh "sudo lxc-attach -n ${PROJECT_NAME} -- chown root:root /home/pkg -R"
