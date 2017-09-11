@@ -22,7 +22,7 @@ node {
      sh "sudo lxc-attach -n ${JOB_BASE_NAME}-${BUILD_NUMBER} -- su -c \"cd /home/cust/ &&  npm install && npm install -g electron-packager \""
 
     }
-    stage "Archive Packages"
+    stage ("Archive Packages")
     {
         if (env.BRANCH_NAME == 'master') {
         sh "sudo lxc-attach -n ${JOB_BASE_NAME}-${BUILD_NUMBER} -- su -c \"cd /home/cust/man_ovd_client &&  electron-packager . --overwrite --out packages --ignore packages --build-version ${BUILD_NUMBER} --all  --icon=icon.icns \""
