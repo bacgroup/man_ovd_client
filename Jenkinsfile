@@ -2,7 +2,7 @@ node {
     stage("Create Container") {
         
         PROJECT_NAME=sh (
-        script: "echo "${JOB_NAME}-${BUILD_NUMBER}"|sed 's&/&-&g'",
+        script: "echo \"${JOB_NAME}-${BUILD_NUMBER}\"|sed 's&/&-&g'",
         returnStdout: true
         ).trim()
         
