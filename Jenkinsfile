@@ -8,7 +8,7 @@ node {
         
         sh "sudo lxc-create -t download -n \"${PROJECT_NAME}\" -- -d ubuntu -r xenial -a amd64"
         sh "sudo lxc-start -n \"${PROJECT_NAME}\" -d"
-        sh "sleep 5"
+        sh "sleep 2"
         sh "sudo lxc-attach -n \"${PROJECT_NAME}\" -- apt-get update -y"
         sh "sudo lxc-attach -n ${PROJECT_NAME} -- apt-get upgrade -y"
         
@@ -26,8 +26,9 @@ node {
     checkout scm
     sh "sudo rsync -avP . /var/lib/lxc/${PROJECT_NAME}/rootfs/root"
     sh "sudo lxc-attach -n ${PROJECT_NAME} -- apt-get install -y zip unzip"
-    sh "sudo lxc-attach -n ${PROJECT_NAME} -- chown root:root /root -R"
-    sh "sudo lxc-attach -n ${PROJECT_NAME} -- su -c \" cd /root && npm install -g electron-packager && npm install -g electron && npm install\""
+    sh "sudo lxc-attach -n ${PROJECT_NAME} -- chown ubuntu:ubuntu /home/ubuntu/ -R"
+    sh "sudo lxc-attach -n ${PROJECT_NAME} -- su ubuntu -c \"npm install -g electron-packager && npm install -g electron\""
+    sh "sudo lxc-attach -n ${PROJECT_NAME} -- su ubuntu -c \"cd /home/ubuntu && npm install\""
     sh "sudo lxc-attach -n ${PROJECT_NAME} -- "
 
     }
@@ -38,11 +39,11 @@ node {
         sh "sudo lxc-attach -n ${PROJECT_NAME} -- su -c 'cd /root/packages/ && for i in ; do mv $i ${i%/}_build-${BUILD_NUMBER}_STABLE ; done'"
         } else {*/
         
-        sh "sudo lxc-attach -n ${PROJECT_NAME} -- su -c 'cd /root/ && electron-packager . --overwrite --out packages --ignore packages --build-version ${BUILD_NUMBER} --all  --icon=icon_beta.icns'"
+        sh "sudo lxc-attach -n ${PROJECT_NAME} -- su ubuntu -c 'cd /home/ubuntu && electron-packager . --overwrite --out packages --ignore packages --build-version ${BUILD_NUMBER} --all  --icon=icon_beta.icns'"
         //sh "sudo lxc-attach -n ${PROJECT_NAME} -- su -c 'cd /root/packages/ && for i in */; do mv $i ${i%/}_build-${BUILD_NUMBER}_BETA ; done'"
         
         deleteDir()
-        sh 'sudo rsync -avP /var/lib/lxc/${PROJECT_NAME}/rootfs/root/packages .'
+        sh 'sudo rsync -avP /var/lib/lxc/${PROJECT_NAME}/rootfs/home/ubuntu/packages .'
         sh 'for i in */; do zip -q "${i%/}.zip" -r "$i" ; done'
         archiveArtifacts "*.zip"
 
