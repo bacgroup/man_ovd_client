@@ -1,13 +1,13 @@
 node {
     stage("Create Container") {
-        sh 'sudo lxc-create -t download -n "${JOB_BASE_NAME}-${BUILD_NUMBER}" -- -d ubuntu -r xenial -a amd64'
-        sh 'sudo lxc-start -n ${JOB_BASE_NAME}-${BUILD_NUMBER} -d'
-        sh 'sudo lxc-attach -n ${JOB_BASE_NAME}-${BUILD_NUMBER} -- apt-get update -y'
-        sh 'sudo lxc-attach -n ${JOB_BASE_NAME}-${BUILD_NUMBER} -- apt-get upgrade -y'
+        sh "sudo lxc-create -t download -n "${JOB_BASE_NAME}-${BUILD_NUMBER}" -- -d ubuntu -r xenial -a amd64"
+        sh "sudo lxc-start -n ${JOB_BASE_NAME}-${BUILD_NUMBER} -d"
+        sh "sudo lxc-attach -n ${JOB_BASE_NAME}-${BUILD_NUMBER} -- apt-get update -y"
+        sh "sudo lxc-attach -n ${JOB_BASE_NAME}-${BUILD_NUMBER} -- apt-get upgrade -y"
         
-        sh 'sudo lxc-attach -n ${JOB_BASE_NAME}-${BUILD_NUMBER} -- apt-get install curl'
-        sh 'sudo lxc-attach -n ${JOB_BASE_NAME}-${BUILD_NUMBER} -- curl -sL https://deb.nodesource.com/setup_6.x | bash -'
-        sh 'sudo lxc-attach -n ${JOB_BASE_NAME}-${BUILD_NUMBER} -- apt-get install -y nodejs'
+        sh "sudo lxc-attach -n ${JOB_BASE_NAME}-${BUILD_NUMBER} -- apt-get install curl"
+        sh "sudo lxc-attach -n ${JOB_BASE_NAME}-${BUILD_NUMBER} -- curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -"
+        sh "sudo lxc-attach -n ${JOB_BASE_NAME}-${BUILD_NUMBER} -- apt-get install -y nodejs"
     }
     stage("Generate Electon App") {
 
@@ -15,11 +15,11 @@ node {
         
     checkout scm
         
-     sh 'sudo mkdir -p /var/lib/lxc/${JOB_BASE_NAME}-${BUILD_NUMBER}/rootfs/home/cust'
+     sh "sudo mkdir -p /var/lib/lxc/${JOB_BASE_NAME}-${BUILD_NUMBER}/rootfs/home/cust"
      sh "ls -l && pwd"
-     sh 'sudo rsync -avP * /var/lib/lxc/${JOB_BASE_NAME}-${BUILD_NUMBER}/rootfs/home/pkg/'
-     sh 'sudo lxc-attach -n ${JOB_BASE_NAME}-${BUILD_NUMBER} -- chown root:root /home/pkg -R'
-     sh 'sudo lxc-attach -n ${JOB_BASE_NAME}-${BUILD_NUMBER} -- apt-get install -y zip unzip'
+     sh "sudo rsync -avP * /var/lib/lxc/${JOB_BASE_NAME}-${BUILD_NUMBER}/rootfs/home/pkg/"
+     sh "sudo lxc-attach -n ${JOB_BASE_NAME}-${BUILD_NUMBER} -- chown root:root /home/pkg -R"
+     sh "sudo lxc-attach -n ${JOB_BASE_NAME}-${BUILD_NUMBER} -- apt-get install -y zip unzip"
      sh "sudo lxc-attach -n ${JOB_BASE_NAME}-${BUILD_NUMBER} -- bash -c \"cd /home/pkg/ &&  npm install && npm install -g electron-packager \""
 
     }
