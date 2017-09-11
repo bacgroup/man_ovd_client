@@ -16,6 +16,7 @@ node {
         sh "sudo lxc-attach -n \"${PROJECT_NAME}\" -- curl -o nodejs.sh https://deb.nodesource.com/setup_6.x"
         sh "sudo lxc-attach -n \"${PROJECT_NAME}\" -- bash nodejs.sh"
         sh "sudo lxc-attach -n \"${PROJECT_NAME}\" -- apt-get update -y"
+        sh "sudo lxc-attach -n \"${PROJECT_NAME}\" -- echo ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true | sudo debconf-set-selections"
         sh "sudo lxc-attach -n \"${PROJECT_NAME}\" -- su -c \"apt-get install -y nodejs && dpkg --add-architecture i386 && apt-get -y update && apt-get install -y wine\""
     }
     stage("Generate Electon App") {
