@@ -16,6 +16,7 @@ node {
     checkout scm
         
      sh 'sudo mkdir -p /var/lib/lxc/${JOB_BASE_NAME}-${BUILD_NUMBER}/rootfs/home/cust'
+     sh "ls -l && pwd"
      sh 'sudo rsync -avP man_ovd_client /var/lib/lxc/${JOB_BASE_NAME}-${BUILD_NUMBER}/rootfs/home/cust/'
      sh 'sudo lxc-attach -n ${JOB_BASE_NAME}-${BUILD_NUMBER} -- chown root:root /home/cust -R'
      sh 'sudo lxc-attach -n ${JOB_BASE_NAME}-${BUILD_NUMBER} -- apt-get install -y zip unzip'
