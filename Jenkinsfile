@@ -33,11 +33,11 @@ node {
     stage ("Archive Packages")
     {
         if (env.BRANCH_NAME == 'master') {
-        sh "sudo lxc-attach -n ${PROJECT_NAME} -- su -c \"cd /root/ && electron-packager . --overwrite --out packages --ignore packages --build-version ${BUILD_NUMBER} --all  --icon=icon.icns\""
-        sh "sudo lxc-attach -n ${PROJECT_NAME} -- su -c \"cd /root/packages/ && for i in */; do mv $i ${i%/}_build-${BUILD_NUMBER}_STABLE ; done\""
+        sh "sudo lxc-attach -n ${PROJECT_NAME} -- su -c 'cd /root/ && electron-packager . --overwrite --out packages --ignore packages --build-version ${BUILD_NUMBER} --all  --icon=icon.icns'"
+        sh "sudo lxc-attach -n ${PROJECT_NAME} -- su -c 'cd /root/packages/ && for i in */; do mv $i ${i%/}_build-${BUILD_NUMBER}_STABLE ; done'"
         } else {
-        sh "sudo lxc-attach -n ${PROJECT_NAME} -- su -c \"cd /root/ && electron-packager . --overwrite --out packages --ignore packages --build-version ${BUILD_NUMBER} --all  --icon=icon_beta.icns\""
-        sh "sudo lxc-attach -n ${PROJECT_NAME} -- su -c \"cd /root/packages/ && for i in */; do mv $i ${i%/}_build-${BUILD_NUMBER}_BETA ; done\""
+        sh "sudo lxc-attach -n ${PROJECT_NAME} -- su -c 'cd /root/ && electron-packager . --overwrite --out packages --ignore packages --build-version ${BUILD_NUMBER} --all  --icon=icon_beta.icns'"
+        sh "sudo lxc-attach -n ${PROJECT_NAME} -- su -c 'cd /root/packages/ && for i in */; do mv $i ${i%/}_build-${BUILD_NUMBER}_BETA ; done'"
         }
         deleteDir()
         sh 'sudo rsync -avP /var/lib/lxc/${PROJECT_NAME}/rootfs/root/packages .'
