@@ -24,7 +24,7 @@ node {
     deleteDir()
         
     checkout scm
-    sh "sudo rsync -avP . /var/lib/lxc/${PROJECT_NAME}/rootfs/root"
+    sh "sudo rsync -avP . /var/lib/lxc/${PROJECT_NAME}/rootfs/home/ubuntu/"
     sh "sudo lxc-attach -n ${PROJECT_NAME} -- apt-get install -y zip unzip"
     sh "sudo lxc-attach -n ${PROJECT_NAME} -- chown ubuntu:ubuntu /home/ubuntu/ -R"
     sh "sudo lxc-attach -n ${PROJECT_NAME} -- su -c \"npm install -g electron-packager && npm install -g electron\""
