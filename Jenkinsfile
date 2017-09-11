@@ -6,7 +6,6 @@ node {
         returnStdout: true
         ).trim()
         
-        
         sh "sudo lxc-create -t download -n \"${PROJECT_NAME}\" -- -d ubuntu -r xenial -a amd64"
         sh "sudo lxc-start -n \"${PROJECT_NAME}\" -d"
         sh "sleep 5"
@@ -14,7 +13,7 @@ node {
         sh "sudo lxc-attach -n ${PROJECT_NAME} -- apt-get upgrade -y"
         
         sh "sudo lxc-attach -n \"${PROJECT_NAME}\" -- apt-get install curl"
-        sh "sudo lxc-attach -n \"${PROJECT_NAME}\" -- curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -"
+        sh "sudo lxc-attach -n \"${PROJECT_NAME}\" -- wget https://deb.nodesource.com/setup_6.x && bash setup_6.x"
         sh "sudo lxc-attach -n \"${PROJECT_NAME}\" -- apt-get update -y"
         sh "sudo lxc-attach -n \"${PROJECT_NAME}\" -- apt-get install -y nodejs"
     }
@@ -24,7 +23,7 @@ node {
         
     checkout scm
         
-     sh "sudo mkdir -p /var/lib/lxc/\"${PROJECT_NAME}/rootfs/home/pkg"
+     sh "sudo mkdir -p /var/lib/lxc/${PROJECT_NAME}/rootfs/home/pkg"
      sh "ls -l && pwd"
      sh "sudo rsync -avP * /var/lib/lxc/${PROJECT_NAME}/rootfs/home/pkg/"
      sh "sudo lxc-attach -n ${PROJECT_NAME} -- chown root:root /home/pkg -R"
