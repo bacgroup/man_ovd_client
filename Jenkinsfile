@@ -6,7 +6,7 @@ node {
         returnStdout: true
         ).trim()
         
-        sh "sudo lxc-create -t download -n \"${PROJECT_NAME}\" -- -d ubuntu -r xenial -a amd64"
+        sh "sudo lxc-create -t download -n \"${PROJECT_NAME}\" -- -d debian -r strech -a amd64"
         sh "sudo lxc-start -n \"${PROJECT_NAME}\" -d"
         sh "sleep 2"
         sh "sudo lxc-attach -n \"${PROJECT_NAME}\" -- apt-get update -y"
@@ -16,8 +16,9 @@ node {
         sh "sudo lxc-attach -n \"${PROJECT_NAME}\" -- curl -o nodejs.sh https://deb.nodesource.com/setup_6.x"
         sh "sudo lxc-attach -n \"${PROJECT_NAME}\" -- bash nodejs.sh"
         sh "sudo lxc-attach -n \"${PROJECT_NAME}\" -- apt-get update -y"
+        sh "sudo lxc-attach -n \"${PROJECT_NAME}\" -- useradd -m -p ubuntu -s /bin/bash ubuntu"
         //sh "sudo lxc-attach -n \"${PROJECT_NAME}\" -- mkdir -p /root/.wine/dosdevices/z:/dev/core"
-        sh "sudo lxc-attach -n \"${PROJECT_NAME}\" -- su -c \"mkdir -p /home/ubuntu/.wine/dosdevices/z:/root\""
+        //sh "sudo lxc-attach -n \"${PROJECT_NAME}\" -- su -c \"mkdir -p /home/ubuntu/.wine/dosdevices/z:/root\""
        
         sh "sudo lxc-attach -n \"${PROJECT_NAME}\" -- su -c \"apt-get install -y nodejs && dpkg --add-architecture i386 && apt-get -y update && apt-get install -y software-properties-common && echo ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true | sudo debconf-set-selections && wget https://dl.winehq.org/wine-builds/Release.key && apt-key add Release.key && apt-add-repository 'https://dl.winehq.org/wine-builds/ubuntu/' && apt-get update && apt-get install -y wine:i386 \""
     }
