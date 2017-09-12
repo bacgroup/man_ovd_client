@@ -6,7 +6,7 @@ node {
         returnStdout: true
         ).trim()
         
-        sh "sudo lxc-create -t download -n \"${PROJECT_NAME}\" -- -d debian -r strech -a amd64"
+        sh "sudo lxc-create -t download -n \"${PROJECT_NAME}\" -- -d debian -r stretch -a amd64"
         sh "sudo lxc-start -n \"${PROJECT_NAME}\" -d"
         sh "sleep 2"
         sh "sudo lxc-attach -n \"${PROJECT_NAME}\" -- apt-get update -y"
