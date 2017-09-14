@@ -3,7 +3,7 @@ const app = electron.app
 const BrowserWindow = electron.BrowserWindow
 const path = require('path')
 const url = require('url')
-const {app,Menu} = require('electron');
+const Menu = electron.Menu;
 
 let mainWindow
 
