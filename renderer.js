@@ -34,7 +34,8 @@
                    setTimeout(() => child(executablePath), 5000);
                } else if (process.platform == "darwin") {
                    var child = require('child_process').execSync;
-                   executablePath = __dirname+"/rdesktop/bin/rdesktop -u "+login+" -p '"+password+"' -f -r printer:`lpstat -d | cut -d':' -f2 | cut -d' ' -f2`=\"Ulteo TS Printer Driver\" -r disk:share=$HOME "+fqdn+":"+port;
+                   #executablePath = __dirname+"/rdesktop/bin/rdesktop -u "+login+" -p '"+password+"' -f -r printer:`lpstat -d | cut -d':' -f2 | cut -d' ' -f2`=\"Ulteo TS Printer Driver\" -r disk:share=$HOME "+fqdn+":"+port;
+                   executablePath = "open "+__dirname+"/MacFreeRDP/MacFreeRDP.app --args /v:" + fqdn + ":" + port + " /u:" + login + " /p:'" + password + "' /sec:rdp /drive:home,$HOME /printer +clipboard /jpeg /parent-window:"MAN OVD Client for MAC"
                    var child2 = require('child_process').execSync;
                        child(executablePath);
                }
