@@ -5,6 +5,7 @@ node("master") {
     
     checkout scm
     sh "npm install"
+    sh 'npm install --save-dev electron-winstaller'
     stage "Archive Packages"
         if (env.BRANCH_NAME == 'master') {
         sh "electron-packager . --overwrite --out packages --ignore packages --build-version ${BUILD_NUMBER} --all  --icon=icon.icns"
@@ -17,7 +18,6 @@ node("master") {
            sh "node createwindowsinstaller.js"
         dir ('packages') {
             sh 'for i in */; do mv "$i" "${i%/}_build-${BUILD_NUMBER}_BETA" ; done'
-            sh 'npm install --save-dev electron-winstaller'
         }
         }
     dir ('packages') {
