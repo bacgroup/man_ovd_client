@@ -16,7 +16,7 @@
     "WINDOWS"
   ],
   "author": "salvatore.trimarchi@gmail.com",
-  "license": "",
+  "license": "GNU GPLv3",
   "devDependencies": {
     "electron": "~1.6.2"
   },
