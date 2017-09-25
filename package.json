@@ -7,6 +7,7 @@
     "start": "electron ."
   },
   "repository": "https://github.com/bacgroup/man_ovd_client",
+  "homepage": "https://manconsulting.co.uk",
   "keywords": [
     "MAN",
     "OVD",
