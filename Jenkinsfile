@@ -5,8 +5,8 @@ node("master") {
     
     checkout scm
     sh "npm install"
-    sh 'npm install --save-dev electron-winstaller'
-    sh 'npm install -g electron-installer-windows'
+    //sh 'npm install --save-dev electron-winstaller'
+    //sh 'npm install -g electron-installer-windows'
     stage "Archive Packages"
         if (env.BRANCH_NAME == 'master') {
         sh "electron-packager . --overwrite --out packages --ignore packages --build-version ${BUILD_NUMBER} --all  --icon=icon.icns"
