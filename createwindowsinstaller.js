@@ -5,6 +5,7 @@ resultPromise = electronInstaller.createWindowsInstaller({
     outputDirectory: 'packages/man_ovd_client-win32-ia32_installer',
     authors: 'MAN Consulting',
     //exe: 'man_ovd_client.exe',
+    setupIcon: "icon.ico",
     setupExe: 'Install.exe'
   });
 
@@ -15,6 +16,7 @@ resultPromise1 = electronInstaller.createWindowsInstaller({
     outputDirectory: 'packages/man_ovd_client-win32-x64_installer',
     authors: 'MAN Consulting',
     //exe: 'man_ovd_client.exe',
+    setupIcon: "icon.ico",
     setupExe: 'Install.exe'
   });
 
