@@ -5,6 +5,7 @@ node("master") {
     
     checkout scm
     sh "npm install"
+    sh 'npm install --save-dev electron-installer-windows'
     //sh 'npm install --save-dev electron-winstaller'
     //sh 'npm install -g electron-installer-windows'
     stage "Archive Packages"
