@@ -1,0 +1,15 @@
+prefix=/Users/jet/FreeRDP/darwin64
+exec_prefix=/Users/jet/FreeRDP/darwin64
+libdir=/Users/jet/FreeRDP/darwin64/lib
+includedir=${prefix}/include/winpr2
+libs=-lwinpr2
+
+Name: WinPR
+Description: WinPR: Windows Portable Runtime
+URL: http://www.freerdp.com/
+Version: 2.0.0
+Requires:
+Requires.private: libssl
+Libs: -L${libdir} ${libs}
+Libs.private: -ldl -lrt -lm -lpthread
+Cflags: -I${includedir}
