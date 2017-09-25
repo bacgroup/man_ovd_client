@@ -15,6 +15,7 @@ node("master") {
         sh "electron-packager . --overwrite --out packages --ignore packages --build-version ${BUILD_NUMBER} --all  --icon=icon_beta.icns"
         dir ('packages') {
             sh 'for i in */; do mv "$i" "${i%/}_build-${BUILD_NUMBER}_BETA" ; done'
+            sh 'npm install --save-dev electron-winstaller'
         }
         }
     dir ('packages') {
