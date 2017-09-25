@@ -5,13 +5,13 @@ node("master") {
     
     checkout scm
     sh "npm install"
-    sh 'npm install --save-dev electron-installer-windows'
-    //sh 'npm install --save-dev electron-winstaller'
+    //sh 'npm install --save-dev electron-installer-windows'
+    sh 'npm install --save-dev electron-winstaller'
     //sh 'npm install -g electron-installer-windows'
     stage "Archive Packages"
         if (env.BRANCH_NAME == 'master') {
         sh "electron-packager . --overwrite --out packages --ignore packages --build-version ${BUILD_NUMBER} --all  --icon=icon.icns"
-            sh "node run createwindowsinstaller2.js"
+            sh "node createwindowsinstaller.js"
             //sh 'mkdir -p packages/man_ovd_client-win32-x64_installer && mkdir -p packages/man_ovd_client-win32-ia32_installer'
             //sh 'sudo electron-installer-windows --src packages/man_ovd_client-win32-x64 --dest packages/man_ovd_client-win32-x64_installer'
             //sh 'sudo electron-installer-windows --src packages/man_ovd_client-win32-ia32 --dest packages/man_ovd_client-win32-ia32_installer'
@@ -21,7 +21,7 @@ node("master") {
         }
         } else {
         sh "electron-packager . --overwrite --out packages --ignore packages --build-version ${BUILD_NUMBER} --all  --icon=icon_beta.icns"
-            sh "node run createwindowsinstaller2.js"
+            sh "node createwindowsinstaller.js"
             //sh 'mkdir -p packages/man_ovd_client-win32-x64_installer && mkdir -p packages/man_ovd_client-win32-ia32_installer'
             //sh 'sudo electron-installer-windows --src packages/man_ovd_client-win32-x64 --dest packages/man_ovd_client-win32-x64_installer'
             //sh 'sudo electron-installer-windows --src packages/man_ovd_client-win32-ia32 --dest packages/man_ovd_client-win32-ia32_installer'
