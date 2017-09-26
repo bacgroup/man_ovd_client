@@ -25,36 +25,46 @@ node("master") {
     "Win64": {
         sh "electron-packager . --overwrite --out packages --ignore packages --build-version ${BUILD_NUMBER} --platform=win32 --arch=x64  --icon=icon_beta.ico --tmpdir=false"
     })
-    stage "Archive Packages"
-        if (env.BRANCH_NAME == 'master') {
-        sh "node createwindowsinstaller.js"
-        dir ('packages') {
-            sh 'sudo chown jenkins:jenkins * -R'
-            sh 'for i in */; do mv "$i" "${i%/}_build-${BUILD_NUMBER}_STABLE" ; done'
-        }
-        } else {
-        sh "node createwindowsinstaller.js"
-        dir ('packages') {
-            sh 'sudo chown jenkins:jenkins * -R'
-            sh 'for i in */; do mv "$i" "${i%/}_build-${BUILD_NUMBER}_BETA" ; done'
-        }
-        }
-    dir ('packages') {
-            parallel("Zip Linux32": {
-            sh "zip -q man_ovd_client-linux-ia32_build-${BUILD_NUMBER}_BETA.zip -r man_ovd_client-linux-ia32_build-${BUILD_NUMBER}_BETA"
-    },
-    "Zip Linux64": {
-            sh "zip -q man_ovd_client-linux-x64_build-${BUILD_NUMBER}_BETA.zip -r man_ovd_client-linux-x64_build-${BUILD_NUMBER}_BETA"
-    },
-    "Zip Darwin": {
-            sh "zip -q man_ovd_client-darwin-x64_build-${BUILD_NUMBER}_BETA.zip -r man_ovd_client-darwin-x64_build-${BUILD_NUMBER}_BETA"
-    },
-    "Zip Win32": {
-            sh "zip -q man_ovd_client-win32-ia32_build-${BUILD_NUMBER}_BETA.zip -r man_ovd_client-win32-ia32_build-${BUILD_NUMBER}_BETA"
-    },
-    "Zip Win64": {
-            sh "zip -q man_ovd_client-win32-x64_build-${BUILD_NUMBER}_BETA.zip -r man_ovd_client-win32-x64_build-${BUILD_NUMBER}_BETA"
-    })
+    stage "Create Installers"
+            sh "node createwindowsinstaller.js"
+    stage "Create Installers"
+            dir ('packages') {
+            parallel(
+            "Zip Linux32": {
+                sh "zip -q man_ovd_client-linux-ia32_build-${BUILD_NUMBER}_BETA.zip -r man_ovd_client-linux-ia32_build-${BUILD_NUMBER}_BETA"
+            },
+             "Zip Linux64": {
+                sh "zip -q man_ovd_client-linux-x64_build-${BUILD_NUMBER}_BETA.zip -r man_ovd_client-linux-x64_build-${BUILD_NUMBER}_BETA"
+            },
+            "Zip Darwin": {
+                sh "zip -q man_ovd_client-darwin-x64_build-${BUILD_NUMBER}_BETA.zip -r man_ovd_client-darwin-x64_build-${BUILD_NUMBER}_BETA"
+            },
+            "Zip Win32": {
+                sh "zip -q man_ovd_client-win32-ia32_build-${BUILD_NUMBER}_BETA.zip -r man_ovd_client-win32-ia32_build-${BUILD_NUMBER}_BETA"
+            },
+            "Zip Win64": {
+                sh "zip -q man_ovd_client-win32-x64_build-${BUILD_NUMBER}_BETA.zip -r man_ovd_client-win32-x64_build-${BUILD_NUMBER}_BETA"
+            })
+        archiveArtifacts "*.zip"
+    }
+     stage "Zip Packages"
+            dir ('packages') {
+            parallel(
+            "Zip Linux32": {
+                sh "zip -q man_ovd_client-linux-ia32_build-${BUILD_NUMBER}_BETA.zip -r man_ovd_client-linux-ia32_build-${BUILD_NUMBER}_BETA"
+            },
+             "Zip Linux64": {
+                sh "zip -q man_ovd_client-linux-x64_build-${BUILD_NUMBER}_BETA.zip -r man_ovd_client-linux-x64_build-${BUILD_NUMBER}_BETA"
+            },
+            "Zip Darwin": {
+                sh "zip -q man_ovd_client-darwin-x64_build-${BUILD_NUMBER}_BETA.zip -r man_ovd_client-darwin-x64_build-${BUILD_NUMBER}_BETA"
+            },
+            "Zip Win32": {
+                sh "zip -q man_ovd_client-win32-ia32_build-${BUILD_NUMBER}_BETA.zip -r man_ovd_client-win32-ia32_build-${BUILD_NUMBER}_BETA"
+            },
+            "Zip Win64": {
+                sh "zip -q man_ovd_client-win32-x64_build-${BUILD_NUMBER}_BETA.zip -r man_ovd_client-win32-x64_build-${BUILD_NUMBER}_BETA"
+            })
         archiveArtifacts "*.zip"
     }
     deleteDir()
