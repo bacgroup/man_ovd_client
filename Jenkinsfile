@@ -54,13 +54,13 @@ node("master") {
             "Zip Win32": {
                 sh "zip -q man_ovd_client-win32-ia32_build-${BUILD_NUMBER}_BETA.zip -r man_ovd_client-win32-ia32_build-${BUILD_NUMBER}_BETA"
             },
-             "Win32 Installer": {
+             "Zip Win32 Installer": {
                 sh "zip -q man_ovd_client-win32-ia32_installer_build-${BUILD_NUMBER}_BETA.zip -r man_ovd_client-win32-ia32_installer_build-${BUILD_NUMBER}_BETA"
             },
             "Zip Win64": {
                 sh "zip -q man_ovd_client-win32-x64_build-${BUILD_NUMBER}_BETA.zip -r man_ovd_client-win32-x64_build-${BUILD_NUMBER}_BETA"
             },
-            "Win64 Installer": {
+            "Zip Win64 Installer": {
                 sh "zip -q man_ovd_client-win32-x64_installer_build-${BUILD_NUMBER}_BETA.zip -r man_ovd_client-win32-x64_installer_build-${BUILD_NUMBER}_BETA"
             }
             )
