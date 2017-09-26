@@ -9,7 +9,7 @@ resultPromise = electronInstaller.createWindowsInstaller({
     setupExe: 'Install.exe'
   });
 
-resultPromise.then(() => console.log("It worked!"), (e) => console.log(`No dice: ${e.message}`));
+resultPromise.then(() => console.log("Win32 Installer!"), (e) => console.log(`No dice: ${e.message}`));
 
 resultPromise1 = electronInstaller.createWindowsInstaller({
     appDirectory: 'packages/man_ovd_client-win32-x64',
@@ -20,4 +20,4 @@ resultPromise1 = electronInstaller.createWindowsInstaller({
     setupExe: 'Install.exe'
   });
 
-resultPromise1.then(() => console.log("It worked!"), (e) => console.log(`No dice: ${e.message}`));
+resultPromise1.then(() => console.log("Win64 Installer!"), (e) => console.log(`No dice: ${e.message}`));
