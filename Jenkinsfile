@@ -27,7 +27,7 @@ node("master") {
         sh "electron-packager . --overwrite --out packages --ignore packages --build-version ${BUILD_NUMBER} --platform=darwin  --icon=icon_beta.icns &"
         sh "electron-packager . --overwrite --out packages --ignore packages --build-version ${BUILD_NUMBER} --platform=win32 --arch=x64  --icon=icon_beta.ico &"
         sh "electron-packager . --overwrite --out packages --ignore packages --build-version ${BUILD_NUMBER} --platform=win32 --arch=ia32  --icon=icon_beta.ico &"
-        sh """
+        sh '''
         for job in `jobs -p`
         do
         echo $job
@@ -39,7 +39,7 @@ node("master") {
                 echo "YAY!"
             else
                 echo "FAIL! ($FAIL)"
-            fi """    
+            fi '''   
         sh "node createwindowsinstaller.js"
         dir ('packages') {
             sh 'sudo chown jenkins:jenkins * -R'
