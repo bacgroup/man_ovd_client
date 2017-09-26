@@ -34,6 +34,7 @@ node("master") {
                 sh "node createwindows64installer.js"
             }
             )
+    stage "Tag with Build Number"
         dir ('packages') {
             sh 'sudo chown jenkins:jenkins * -R'
             sh 'for i in */; do mv "$i" "${i%/}_build-${BUILD_NUMBER}_BETA" ; done'
