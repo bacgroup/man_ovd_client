@@ -40,7 +40,21 @@ node("master") {
         }
         }
     dir ('packages') {
-        sh 'for i in */; do zip -q "${i%/}.zip" -r "$i" ; done'
+            parallel("Zip Linux32": {
+            sh "zip -q man_ovd_client-linux-ia32_build-${BUILD_NUMBER}_BETA.zip -r man_ovd_client-linux-ia32_build-${BUILD_NUMBER}_BETA"
+    },
+    "Zip Linux64": {
+            sh "zip -q man_ovd_client-linux-x64_build-${BUILD_NUMBER}_BETA.zip -r man_ovd_client-linux-x64_build-${BUILD_NUMBER}_BETA"
+    },
+    "Zip Darwin": {
+            sh "zip -q man_ovd_client-darwin-x64_build-${BUILD_NUMBER}_BETA.zip -r man_ovd_client-darwin-x64_build-${BUILD_NUMBER}_BETA"
+    },
+    "Zip Win32": {
+            sh "zip -q man_ovd_client-win32-ia32_build-${BUILD_NUMBER}_BETA.zip -r man_ovd_client-win32-ia32_build-${BUILD_NUMBER}_BETA"
+    },
+    "Zip Win64": {
+            sh "zip -q man_ovd_client-win32-x64_build-${BUILD_NUMBER}_BETA.zip -r man_ovd_client-win32-x64_build-${BUILD_NUMBER}_BETA"
+    })
         archiveArtifacts "*.zip"
     }
     deleteDir()
