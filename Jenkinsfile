@@ -1,5 +1,5 @@
 node("master") {
-    stage "Build Packages"
+    stage "Pepare to Build Packages"
     
     deleteDir()
     
@@ -56,7 +56,8 @@ node("master") {
             "Zip Win64": {
                 sh "zip -q man_ovd_client-win32-x64_build-${BUILD_NUMBER}_BETA.zip -r man_ovd_client-win32-x64_build-${BUILD_NUMBER}_BETA"
             })
-        archiveArtifacts "*.zip"
     }
-    deleteDir()
+    stage "Archive Artifacts"
+        archiveArtifacts "*.zip"
+        deleteDir()
 }
