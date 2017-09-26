@@ -26,7 +26,6 @@ node("master") {
         sh "electron-packager . --overwrite --out packages --ignore packages --build-version ${BUILD_NUMBER} --platform=win32 --arch=x64  --icon=icon_beta.ico --tmpdir=false"
     })            
     stage "Create Installers"
-            dir ('packages') {
             parallel(
             "Windows ia32 Installer": {
                 sh "node createwindows32installer.js"
@@ -39,7 +38,6 @@ node("master") {
             sh 'sudo chown jenkins:jenkins * -R'
             sh 'for i in */; do mv "$i" "${i%/}_build-${BUILD_NUMBER}_BETA" ; done'
         }
-    }
      stage "Zip Packages"
             dir ('packages') {
             parallel(
