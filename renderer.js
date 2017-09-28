@@ -32,7 +32,7 @@ function start_session() {
             headers: {
                 "x-ovd-service": "start"
             },
-            data: '<session mode="desktop"><user login="' + login + '" password="d' + pwd + '"/></session>',
+            data: '<session mode="desktop"><user login="' + login + '" password="' + pwd + '"/></session>',
             dataType: "text",
             success: function(response) {
                 res(response);
