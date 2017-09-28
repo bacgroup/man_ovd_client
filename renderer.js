@@ -1,8 +1,6 @@
 child = require('child_process').exec
 window.$ = window.jQuery = require('jquery');
 
-
-
 const notifier = require('node-notifier');
 
 $.fn.extend({
@@ -130,15 +128,11 @@ function run_rdp(command){
     
 }
 
-
-
-
 $("#connect").click(function() {
      start_session()
     .then(xml => validate_xml_response(xml))
     .then(xml => get_ovd_credentials(xml))
     .then(params => create_os_command(params))
     .then(command => run_rdp(command))
-    //.then(request => alert(request))
     .catch(rejection => notify(__dirname+"/warning.png","Please contact your OVD Session Manager", "Reason for Rejection: "+rejection));
 });
