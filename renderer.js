@@ -117,7 +117,7 @@ function create_os_command(params) {
 function run_rdp(command){
     return new Promise (function (res,rej) {
         try {
-            notify(__dirname+"/conecting.png","Conecting to your OVD Session Manager", "Please wait a for a while...");
+            notify(__dirname+"/conecting.png","Conecting to your OVD Session Manager", "Please wait for a while...");
             setTimeout(child(command),5000);
             res('Done');
         }
