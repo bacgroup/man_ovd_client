@@ -2,12 +2,12 @@ var db = new PouchDB('logins');
 $(document).ready(function() {
     $('#progress').hide();
     $('#connect').click(function() {
-        $('#inner_box').hide();
-        $('#progress').show();
-        setTimeout(function() {
-            $('#inner_box').show();
-            $('#progress').hide();
-        }, 30000);
+        //~ $('#inner_box').hide();
+        //~ $('#progress').show();
+        //~ setTimeout(function() {
+            //~ $('#inner_box').show();
+            //~ $('#progress').hide();
+        //~ }, 30000);
 
         db.put({
             _id: '34',

@@ -1,23 +1,72 @@
-   child_process = require('child_process')
-   window.$ = window.jQuery = require('jquery');
-   $("#connect").click(function() {
-       login = $("#login").val()
-       pwd = $("#pwd").val()
-       sm = $("#sm").val()
-       $.ajax({
-           url: sm + "/ovd/proxy.php",
-           type: "POST",
-           headers: {
-               "x-ovd-service": "start"
-           },
-           data: '<session mode="desktop"><user login="' + login + '" password="' + pwd + '"/></session>',
-           dataType: "text",
-           success: function(response) {
+child_process = require('child_process')
+window.$ = window.jQuery = require('jquery');
 
-               var xml = response,
-                   xmlDoc = $.parseXML(xml),
-                   $xml = $(xmlDoc);
+const notifier = require('node-notifier');
 
+$.fn.extend({
+    animateCss: function (animationName) {
+        var animationEnd = 'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend';
+        this.addClass('animated ' + animationName).one(animationEnd, function() {
+            $(this).removeClass('animated ' + animationName);
+        });
+        return this;
+    }
+});
+
+function notify(icon, title, msj) {
+    notifier.notify({
+    'icon': icon,
+    'title': title,
+    'message': msj
+});
+}
+
+function start_session() {
+    	return new Promise (function (res,rej) {
+        login = $("#login").val()
+        pwd = $("#pwd").val()
+        sm = $("#sm").val()
+        $.ajax({
+            url: sm + "/ovd/proxy.php",
+            type: "POST",
+            headers: {
+                "x-ovd-service": "start"
+            },
+            data: '<session mode="desktop"><user login="' + login + '" password="d' + pwd + '"/></session>',
+            dataType: "text",
+            success: function(response) {
+                res(response);
+                },
+            error: function(data) {
+                rej({error : "Can't to Connect"});
+            },
+        });
+});
+}
+
+function validate_xml_response(xml) {
+    return new Promise (function (res,rej) {
+        var xmlDoc = $.parseXML(xml),
+        $xml = $(xmlDoc);
+        try {
+        $.each($xml.find('response'), function() {
+            response = $(this).attr("code");
+        });
+        if(response != undefined && response != 'ReferenceError: response is not defined')
+        {
+            $("#connect").animateCss('wobble');
+            rej(response);
+        }
+        }
+        catch(err)
+        {
+            res("xml");
+        }
+    });
+}
+            
+            
+/*            
                $.each($xml.find('server'), function() {
                    login = $(this).attr("login");
                    fqdn = $(this).attr("fqdn");
@@ -51,5 +100,14 @@
            error: function(data) {
                alert("failure");
            },
-       })
+       }) */
+    
+
+   
+
+   $("#connect").click(function() {
+         start_session()
+        .then(xml => validate_xml_response(xml))
+        //.then(response => alert(response))
+        .catch(rejection => notify(__dirname+"/warning.png","Please contact your OVD Session Manager", "Reason for Rejection: "+rejection));
    });
