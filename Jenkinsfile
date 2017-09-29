@@ -69,8 +69,9 @@ node("master") {
      dir ('packages') {
         archiveArtifacts "*.zip"
      }
-    sh "git tag -a ${BUILD_NUMBER}_BETA -m 'BETA Release from build ${BUILD_NUMBER}' && git push --tags"
+    //sh "git tag -a ${BUILD_NUMBER}_BETA -m 'BETA Release from build ${BUILD_NUMBER}' && git push --tags"
     dir ('packages') {
+    sh 'curl -v -i -X POST -H "Content-Type:application/json" -H "Authorization: token $github_token" https://api.github.com/repos/bacgroup/man_ovd_client/releases -d \'{"tag_name":"${BUILD_NUMBER}_BETA","target_commitish": "develop","name": "${BUILD_NUMBER}_BETA","body": "BETA Release from build ${BUILD_NUMBER}","draft": false,"prerelease": true}\''
     sh 'for i in *.zip; do bash $HOME/github-release.sh github_api_token=3eab974a16de116af6509a5d623bb38f14c48e78 owner=bacgroup repo=man_ovd_client tag=${BUILD_NUMBER}_BETA filename=./$i; done'
     }
     deleteDir()
