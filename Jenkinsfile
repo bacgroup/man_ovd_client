@@ -68,6 +68,7 @@ node("master") {
     stage "Archive Artifacts"
      dir ('packages') {
         archiveArtifacts "*.zip"
-         deleteDir()
      }
+    sh "git tag -a ${BUILD_NUMBER}_BETA -m 'BETA Release from build ${BUILD_NUMBER}' && git push --tags"
+    deleteDir()
 }
