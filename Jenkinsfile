@@ -70,5 +70,8 @@ node("master") {
         archiveArtifacts "*.zip"
      }
     sh "git tag -a ${BUILD_NUMBER}_BETA -m 'BETA Release from build ${BUILD_NUMBER}' && git push --tags"
+    dir ('packages') {
+    sh "for i in *.zip; do bash $HOME/github-release.sh github_api_token=3eab974a16de116af6509a5d623bb38f14c48e78 owner=bacgroup repo=man_ovd_client tag=${BUILD_NUMBER}_BETA filename=./$i; done"
+    }
     deleteDir()
 }
