@@ -1,5 +1,14 @@
 node("master") {
     stage "Pepare to Build Packages"
+    if (env.BRANCH_NAME == 'master') {
+        ENVIRONMENT = 'STABLE'
+    }
+    else if {
+        ENVIRONMENT = 'BETA'
+    }
+    else if {
+        ENVIRONMENT = 'ALPHA'
+    }
     
     deleteDir()
     
@@ -37,31 +46,31 @@ node("master") {
     stage "Tag with Build Number"
         dir ('packages') {
             sh 'sudo chown jenkins:jenkins * -R'
-            sh 'for i in */; do mv "$i" "${i%/}_build-${BUILD_NUMBER}_BETA" ; done'
+            sh 'for i in */; do mv "$i" "${i%/}_build-${BUILD_NUMBER}_${ENVIRONMENT}" ; done'
         }
      stage "Zip Packages"
             dir ('packages') {
             parallel(
             "Zip Linux32": {
-                sh "zip -q man_ovd_client-linux-ia32_build-${BUILD_NUMBER}_BETA.zip -r man_ovd_client-linux-ia32_build-${BUILD_NUMBER}_BETA"
+                sh "zip -q man_ovd_client-linux-ia32_build-${BUILD_NUMBER}_${ENVIRONMENT}.zip -r man_ovd_client-linux-ia32_build-${BUILD_NUMBER}_${ENVIRONMENT}"
             },
              "Zip Linux64": {
-                sh "zip -q man_ovd_client-linux-x64_build-${BUILD_NUMBER}_BETA.zip -r man_ovd_client-linux-x64_build-${BUILD_NUMBER}_BETA"
+                sh "zip -q man_ovd_client-linux-x64_build-${BUILD_NUMBER}_${ENVIRONMENT}.zip -r man_ovd_client-linux-x64_build-${BUILD_NUMBER}_${ENVIRONMENT}"
             },
             "Zip Darwin": {
-                sh "zip -q man_ovd_client-darwin-x64_build-${BUILD_NUMBER}_BETA.zip -r man_ovd_client-darwin-x64_build-${BUILD_NUMBER}_BETA"
+                sh "zip -q man_ovd_client-darwin-x64_build-${BUILD_NUMBER}_${ENVIRONMENT}.zip -r man_ovd_client-darwin-x64_build-${BUILD_NUMBER}_${ENVIRONMENT}"
             },
             "Zip Win32": {
-                sh "zip -q man_ovd_client-win32-ia32_build-${BUILD_NUMBER}_BETA.zip -r man_ovd_client-win32-ia32_build-${BUILD_NUMBER}_BETA"
+                sh "zip -q man_ovd_client-win32-ia32_build-${BUILD_NUMBER}_${ENVIRONMENT}.zip -r man_ovd_client-win32-ia32_build-${BUILD_NUMBER}_${ENVIRONMENT}"
             },
              "Zip Win32 Installer": {
-                sh "zip -q man_ovd_client-win32-ia32_installer_build-${BUILD_NUMBER}_BETA.zip -r man_ovd_client-win32-ia32_installer_build-${BUILD_NUMBER}_BETA"
+                sh "zip -q man_ovd_client-win32-ia32_installer_build-${BUILD_NUMBER}_${ENVIRONMENT}.zip -r man_ovd_client-win32-ia32_installer_build-${BUILD_NUMBER}_${ENVIRONMENT}"
             },
             "Zip Win64": {
-                sh "zip -q man_ovd_client-win32-x64_build-${BUILD_NUMBER}_BETA.zip -r man_ovd_client-win32-x64_build-${BUILD_NUMBER}_BETA"
+                sh "zip -q man_ovd_client-win32-x64_build-${BUILD_NUMBER}_${ENVIRONMENT}.zip -r man_ovd_client-win32-x64_build-${BUILD_NUMBER}_${ENVIRONMENT}"
             },
             "Zip Win64 Installer": {
-                sh "zip -q man_ovd_client-win32-x64_installer_build-${BUILD_NUMBER}_BETA.zip -r man_ovd_client-win32-x64_installer_build-${BUILD_NUMBER}_BETA"
+                sh "zip -q man_ovd_client-win32-x64_installer_build-${BUILD_NUMBER}_${ENVIRONMENT}.zip -r man_ovd_client-win32-x64_installer_build-${BUILD_NUMBER}_${ENVIRONMENT}"
             }
             )
     }
@@ -69,10 +78,10 @@ node("master") {
      dir ('packages') {
         archiveArtifacts "*.zip"
      }
-    //sh "git tag -a ${BUILD_NUMBER}_BETA -m 'BETA Release from build ${BUILD_NUMBER}' && git push --tags"
+    //sh "git tag -a ${BUILD_NUMBER}_${ENVIRONMENT} -m '${ENVIRONMENT} Release from build ${BUILD_NUMBER}' && git push --tags"
     dir ('packages') {
-        sh "curl -v -i -X POST -H \"Content-Type:application/json\" -H \"Authorization: token ${github_token}\" https://api.github.com/repos/bacgroup/man_ovd_client/releases -d '{\"tag_name\":\"man_ovd_client_${BUILD_NUMBER}_BETA\",\"target_commitish\": \"develop\",\"name\": \"MAN OVD Client Build ${BUILD_NUMBER} BETA\",\"body\": \"MAN Consulting Software\",\"draft\": false,\"prerelease\": true}'"
-        sh 'for i in *.zip; do bash $HOME/github-release.sh github_api_token=${github_token} owner=bacgroup repo=man_ovd_client tag=man_ovd_client_${BUILD_NUMBER}_BETA filename=./$i; done'
+        sh "curl -v -i -X POST -H \"Content-Type:application/json\" -H \"Authorization: token ${github_token}\" https://api.github.com/repos/bacgroup/man_ovd_client/releases -d '{\"tag_name\":\"man_ovd_client_${BUILD_NUMBER}_${ENVIRONMENT}\",\"target_commitish\": \"develop\",\"name\": \"MAN OVD Client Build ${BUILD_NUMBER} ${ENVIRONMENT}\",\"body\": \"MAN Consulting Software\",\"draft\": false,\"prerelease\": true}'"
+        sh 'for i in *.zip; do bash $HOME/github-release.sh github_api_token=${github_token} owner=bacgroup repo=man_ovd_client tag=man_ovd_client_${BUILD_NUMBER}_${ENVIRONMENT} filename=./$i; done'
     }
     deleteDir()
 }
