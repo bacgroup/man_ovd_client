@@ -3,13 +3,13 @@ node("master") {
     deleteDir()
     checkout scm
     if (env.BRANCH_NAME == 'master') {
-        ENVIRONMENT='STABLE'
+        def ENVIRONMENT='STABLE'
     }
     else if (env.BRANCH_NAME == 'develop') {
-        ENVIRONMENT='BETA'
+        def ENVIRONMENT='BETA'
     }
     else {
-        ENVIRONMENT='ALPHA'
+        def ENVIRONMENT='ALPHA'
     }
     sh "npm install"
     sh 'npm install electron-squirrel-startup'
@@ -44,7 +44,7 @@ node("master") {
     stage "Tag with Build Number"
         dir ('packages') {
             sh 'sudo chown jenkins:jenkins * -R'
-            sh "for i in */; do mv \"$i\" \"${i%/}_build-${BUILD_NUMBER}_${ENVIRONMENT}\" ; done"
+            sh 'for i in */; do mv "$i" "${i%/}_build-${BUILD_NUMBER}_${ENVIRONMENT}" ; done'
         }
      stage "Zip Packages"
             dir ('packages') {
