@@ -1,12 +1,24 @@
 node("master") {
     if (env.BRANCH_NAME == 'master') {
         STAGE='STABLE'
+        PRERELEASE='false'
+        ICON_STD="icon.png"
+        ICON_DARWIN="icon.icns"
+        ICON_WINDOWS="icon.ico"
     }
     else if (env.BRANCH_NAME == 'develop') {
         STAGE='BETA'
+        PRERELEASE='true'
+        ICON_STD="icon_beta.png"
+        ICON_DARWIN="icon_beta.icns"
+        ICON_WINDOWS="icon_beta.ico"
     }
     else {
         STAGE='ALPHA'
+        PRERELEASE='true'
+        ICON_STD="icon_alpha.png"
+        ICON_DARWIN="icon_alpha.icns"
+        ICON_WINDOWS="icon_alpha.ico"
     }
     stage "Pepare to Build Packages"
     echo "${STAGE}"
@@ -19,19 +31,19 @@ node("master") {
     //sh 'npm install -g electron-installer-windows'
     stage "Create Packages"
     parallel("Linux32": {
-        sh "electron-packager . --overwrite --out packages --ignore packages --build-version ${BUILD_NUMBER} --platform=linux --arch=ia32  --icon=icon_beta.png --tmpdir=false"
+        sh "electron-packager . --overwrite --out packages --ignore packages --build-version ${BUILD_NUMBER} --platform=linux --arch=ia32  --icon=${ICON_STD} --tmpdir=false"
     },
     "Linux64": {
-        sh "electron-packager . --overwrite --out packages --ignore packages --build-version ${BUILD_NUMBER} --platform=linux --arch=x64  --icon=icon_beta.png --tmpdir=false"
+        sh "electron-packager . --overwrite --out packages --ignore packages --build-version ${BUILD_NUMBER} --platform=linux --arch=x64  --icon=${ICON_STD} --tmpdir=false"
     },
     "Darwin": {
-        sh "electron-packager . --overwrite --out packages --ignore packages --build-version ${BUILD_NUMBER} --platform=darwin  --icon=icon_beta.icns --tmpdir=false"
+        sh "electron-packager . --overwrite --out packages --ignore packages --build-version ${BUILD_NUMBER} --platform=darwin  --icon=${ICON_DARWIN} --tmpdir=false"
     },
     "Win32": {
-        sh "electron-packager . --overwrite --out packages --ignore packages --build-version ${BUILD_NUMBER} --platform=win32 --arch=ia32  --icon=icon_beta.ico --tmpdir=false"
+        sh "electron-packager . --overwrite --out packages --ignore packages --build-version ${BUILD_NUMBER} --platform=win32 --arch=ia32  --icon=${ICON_WINDOWS} --tmpdir=false"
     },
     "Win64": {
-        sh "electron-packager . --overwrite --out packages --ignore packages --build-version ${BUILD_NUMBER} --platform=win32 --arch=x64  --icon=icon_beta.ico --tmpdir=false"
+        sh "electron-packager . --overwrite --out packages --ignore packages --build-version ${BUILD_NUMBER} --platform=win32 --arch=x64  --icon=${ICON_WINDOWS} --tmpdir=false"
     })            
     stage "Create Installers"
             parallel(
@@ -80,8 +92,8 @@ node("master") {
      }
     //sh "git tag -a ${BUILD_NUMBER}_${ENVIRONMENT} -m '${ENVIRONMENT} Release from build ${BUILD_NUMBER}' && git push --tags"
     dir ('packages') {
-        sh "curl -v -i -X POST -H \"Content-Type:application/json\" -H \"Authorization: token ${github_token}\" https://api.github.com/repos/bacgroup/man_ovd_client/releases -d '{\"tag_name\":\"man_ovd_client_${BUILD_NUMBER}_${STAGE}\",\"target_commitish\": \"develop\",\"name\": \"MAN OVD Client Build ${BUILD_NUMBER} ${STAGE}\",\"body\": \"MAN Consulting Software\",\"draft\": false,\"prerelease\": true}'"
-        sh "for i in *.zip; do bash $HOME/github-release.sh github_api_token=${github_token} owner=bacgroup repo=man_ovd_client tag=man_ovd_client_${BUILD_NUMBER}_${STAGE} filename=./$i; done"
+        sh "curl -v -i -X POST -H \"Content-Type:application/json\" -H \"Authorization: token ${github_token}\" https://api.github.com/repos/bacgroup/man_ovd_client/releases -d '{\"tag_name\":\"man_ovd_client_${BUILD_NUMBER}_${STAGE}\",\"target_commitish\": \"${BRANCH_NAME}\",\"name\": \"MAN OVD Client Build ${BUILD_NUMBER} ${STAGE}\",\"body\": \"MAN Consulting Software\",\"draft\": false,\"prerelease\": ${PRERELEASE}}'"
+        sh "for i in *.zip; do bash $HOME/github-release.sh github_api_token=${github_token} owner=bacgroup repo=man_ovd_client tag=man_ovd_client_${BUILD_NUMBER}_${STAGE} filename=./\$i; done"
     }
     deleteDir()
 }
