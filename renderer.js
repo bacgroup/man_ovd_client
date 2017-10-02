@@ -169,13 +169,19 @@ function get_ovd_credentials(xml) {
          $.each($xml.find('server'), function() {
            params.login = $(this).attr("login");
            params.fqdn = $(this).attr("fqdn");
-           params.port = $(this).attr("port");
-           if(params.port == "undefined")
+           try
            {
-               params.port = 3389;
+               params.port = $(this).attr("port");
+           }
+           catch(err) {
+               console.log("No hay puerto");
            }
            params.password = $(this).attr("password");
          });
+           if(params.port == null || params.port == undefined || params.port == "undefined")
+           {
+               params.port = 3389;
+           }
         res(params);
     }
     catch(err)
