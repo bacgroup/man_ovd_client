@@ -169,10 +169,8 @@ function get_ovd_credentials(xml) {
          $.each($xml.find('server'), function() {
            params.login = $(this).attr("login");
            params.fqdn = $(this).attr("fqdn");
-           try{
            params.port = $(this).attr("port");
-           }
-           catch(err)
+           if(params.port == "undefined")
            {
                params.port = 3389;
            }
