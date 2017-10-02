@@ -66,7 +66,7 @@ function check_ovd_status(ovd_data) {
         
         options = {
             method: 'POST',
-            headers: {'x-ovd-service': 'session_status', 'Cookie': 'PHPSESSID'+$("#login").val()}
+            headers: {'x-ovd-service': 'session_status', 'Cookie': 'PHPSESSID='+$("#login").val()}
         };
 
         client = request.createClient(options);
