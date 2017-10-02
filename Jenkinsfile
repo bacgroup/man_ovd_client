@@ -1,14 +1,14 @@
-if (env.BRANCH_NAME == 'master') {
-    def STAGE='STABLE'
-}
-else if (env.BRANCH_NAME == 'develop') {
-    def STAGE='BETA'
-}
-else {
-    def STAGE='ALPHA'
-}
 node("master") {
-    echo ${env.STAGE}
+    if (env.BRANCH_NAME == 'master') {
+        STAGE='STABLE'
+    }
+    else if (env.BRANCH_NAME == 'develop') {
+        STAGE='BETA'
+    }
+    else {
+        STAGE='ALPHA'
+    }
+    echo ${STAGE}
     stage "Pepare to Build Packages"    
     deleteDir()
     checkout scm
