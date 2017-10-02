@@ -3,13 +3,13 @@ node("master") {
     deleteDir()
     checkout scm
     if (env.BRANCH_NAME == 'master') {
-        ENVIRONMENT = 'STABLE'
+        ENVIRONMENT='STABLE'
     }
     else if (env.BRANCH_NAME == 'develop') {
-        ENVIRONMENT = 'BETA'
+        ENVIRONMENT='BETA'
     }
     else {
-        ENVIRONMENT = 'ALPHA'
+        ENVIRONMENT='ALPHA'
     }
     sh "npm install"
     sh 'npm install electron-squirrel-startup'
