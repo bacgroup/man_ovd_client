@@ -23,6 +23,7 @@
   },
   "dependencies": {
     "jquery": "^3.2.1",
+    "request-with-cookies": "^1.1.0",
     "node-notifier": "^5.1.2"
   }
 }
