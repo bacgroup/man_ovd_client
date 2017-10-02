@@ -8,7 +8,7 @@ else {
     def STAGE='ALPHA'
 }
 node("master") {
-    echo ${STAGE}
+    echo ${env.STAGE}
     stage "Pepare to Build Packages"    
     deleteDir()
     checkout scm
