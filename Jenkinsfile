@@ -46,7 +46,7 @@ node("master") {
         dir ('packages') {
             sh 'sudo chown jenkins:jenkins * -R'
             //sh 'for i in */; do mv $i $i_build-${BUILD_NUMBER}_${STAGE} ; done"
-            sh "rename 's/(.*)\$/\$1._build-${BUILD_NUMBER}_${STAGE}/' *"
+            sh "rename 's/(.*)\$/\$1_build-${BUILD_NUMBER}_${STAGE}/' *"
         }
      stage "Zip Packages"
             dir ('packages') {
