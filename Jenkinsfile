@@ -45,7 +45,7 @@ node("master") {
     stage "Tag with Build Number"
         dir ('packages') {
             sh 'sudo chown jenkins:jenkins * -R'
-            sh 'for i in */; do mv "$i" "${i%/}_build-${BUILD_NUMBER}_${STAGE}" ; done'
+            sh "for i in */; do mv $i $i\"_build-${BUILD_NUMBER}_${STAGE}\" ; done"
         }
      stage "Zip Packages"
             dir ('packages') {
