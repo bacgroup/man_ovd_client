@@ -1,5 +1,5 @@
 node("master") {
-    stage "Pepare to Build Packages"
+    environment {
     if (env.BRANCH_NAME == 'master') {
         ENVIRONMENT = 'STABLE'
     }
@@ -9,7 +9,8 @@ node("master") {
     else {
         ENVIRONMENT = 'ALPHA'
     }
-    
+    }
+    stage "Pepare to Build Packages"    
     deleteDir()
     
     checkout scm
