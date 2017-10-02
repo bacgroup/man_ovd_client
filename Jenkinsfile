@@ -8,7 +8,7 @@ node("master") {
     else {
         STAGE='ALPHA'
     }
-    echo ${STAGE}
+    echo "${STAGE}"
     stage "Pepare to Build Packages"    
     deleteDir()
     checkout scm
