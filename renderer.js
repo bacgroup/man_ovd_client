@@ -308,5 +308,5 @@ $("#connect").click(function() {
      document.cookie = "PHPSESSID="+$("#login").val();
      start_session()
      .then(ovd_data => check_ovd_status(ovd_data))
-    .catch(rejection => notify(__dirname+"/warning.png","Please contact your OVD Session Manager", "Reason for Rejection: "+rejection));
+    .catch(rejection => notify(__dirname+"/warning.png","Please contact your OVD Session Manager", "Reason for Rejection.: "+rejection));
 });
