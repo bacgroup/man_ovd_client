@@ -8,8 +8,8 @@ node("master") {
     else {
         STAGE='ALPHA'
     }
+    stage "Pepare to Build Packages"
     echo "${STAGE}"
-    stage "Pepare to Build Packages"    
     deleteDir()
     checkout scm
     sh "npm install"
