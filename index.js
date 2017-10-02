@@ -25,9 +25,8 @@ $(document).ready(function() {
             })
             .then(function() {
                 return db.get('34');
-            }).then(function(doc) {
-                console.log(doc);
-            });
+            })
+            .catch()
 
     });
 
@@ -38,9 +37,7 @@ $(document).ready(function() {
             $("#sm").val(doc["sm"]);
 
         })
-        .catch(function(err) {
-            console.log(err)
-        })
+        .catch()
 
 
 });

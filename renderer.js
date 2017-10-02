@@ -1,4 +1,5 @@
 child = require('child_process').exec
+request = require("request-with-cookies");
 window.$ = window.jQuery = require('jquery');
 
 const notifier = require('node-notifier');
@@ -20,28 +21,203 @@ function notify(icon, title, msj) {
     'message': msj
 });
 }
+function wait_for_ready_state()
+{
+        sm = $("#sm").val()
+        
+        options = {
+            method: 'POST',
+            headers: {'x-ovd-service': 'session_status', 'Cookie': 'PHPSESSID=ooddfdfdf34'}
+        };
+
+        client = request.createClient(options);
+        client(sm+"/ovd/proxy.php",function (error, response, body) {
+            if (!error && response.statusCode == 200) {
+                console.log(response.body)
+                setTimeout(function() {
+                xmlDoc = $.parseXML(response.body);
+                $xml = $(xmlDoc);
+                try {
+                $.each($xml.find('session'), function() {
+                    status = $(this).attr("status");
+                });
+                }
+                catch(err)
+                {
+                    return "None"
+                }
+                console.log(status);
+                return(status);
+                }, 2000);
+            }
+            else {
+                return "None"
+            }
+        });
+}
+
+
+function check_ovd_status(ovd_data) {
+    	return new Promise (function (res,rej) {
+            
+        //~ for (i = 0;  wait_for_ready_state() != "ready"; i++) {
+            //~ console.log("Waiting Ready");
+        //~ }
+        
+        //~ console.log("OVD is Ready");
+        //~ res(ovd_data);
+            
+        login = $("#login").val()
+        pwd = $("#pwd").val()
+        sm = $("#sm").val()
+        
+        options = {
+            method: 'POST',
+            headers: {'x-ovd-service': 'session_status', 'Cookie': 'PHPSESSID=pokemon2'}
+        };
+
+        client = request.createClient(options);
+        client(sm+"/ovd/proxy.php",function (error, response, body) {
+            if (!error && response.statusCode == 200) {
+                console.log(response.body)
+                setTimeout(function() {
+                xmlDoc = $.parseXML(response.body);
+                $xml = $(xmlDoc);
+                try {
+                $.each($xml.find('session'), function() {
+                    status = $(this).attr("status");
+                });
+                }
+                catch(err)
+                {
+                    status = "None"
+                }
+                if(status == "init")
+                {   
+                    console.log(status);
+                    check_ovd_status(ovd_data);
+                    //notify(__dirname+"/conecting.png","Waiting when your OVD Session is Ready", "Please wait for a while...");
+                }
+                else if (status == "ready") {
+                    console.log(response.body);
+                    //ovd_data
+                    validate_xml_response(ovd_data)
+                    .then(xml => get_ovd_credentials(xml))
+                    .then(params => create_os_command(params))
+                    .then(command => run_rdp(command))
+                   .catch(rejection => notify(__dirname+"/warning.png","Please contact your OVD Session Manager", "Reason for Rejection: "+rejection));
+                }
+                else {
+                    console.log(status);
+                    rej("Cant to connect");
+                }
+                }, 2000);
+                //~ if (status == "ready") {
+                    //~ console.log(status);
+                    //~ res(ovd_data);
+                //~ }
+            }
+            else {
+                $("#connect").animateCss('wobble');
+                rej("Unable to connect to OVD server");
+            }
+        });
+
+        //~ $.ajax({
+            //~ url: sm + "/ovd/proxy.php",
+            //~ type: "POST",
+            //~ async: true,
+            //~ headers: {
+                //~ "x-ovd-service": "session_status",
+                //~ 'Cookie': 'PHPSESSID=Pokemon'
+            //~ },
+            //~ data: '<session mode="desktop"><user login="' + login + '" password="' + pwd + '"/></session>',
+            //~ dataType: "text",
+            //~ success: function(response) {
+                //~ setTimeout(function() {
+                //~ xmlDoc = $.parseXML(response);
+                //~ $xml = $(xmlDoc);
+                //~ try {
+                //~ $.each($xml.find('session'), function() {
+                    //~ response = $(this).attr("status");
+                //~ });
+                //~ }
+                //~ catch(err)
+                //~ {
+                    //~ response = "None"
+                //~ }
+                //~ if(response == "init")
+                //~ {   
+                    //~ console.log(response);
+                    //~ check_ovd_status(ovd_data);
+                    //~ //notify(__dirname+"/conecting.png","Waiting when your OVD Session is Ready", "Please wait for a while...");
+                //~ }
+                //~ else if (response == "ready") {
+                    //~ console.log(response);
+                    //~ //res(ovd_data);
+                //~ }
+                //~ else {
+                    //~ console.log(response);
+                    //~ rej("Cant to connect");
+                //~ }
+                //~ }, 2000);
+                //~ if (response == "ready") {
+                    //~ console.log(response);
+                    //~ res(ovd_data);
+                //~ }
+                //~ },
+            //~ error: function(data) {
+                //~ $("#connect").animateCss('wobble');
+                //~ rej("Unable to connect to OVD server");
+            //~ },
+        //~ });
+});
+}
 
 function start_session() {
     	return new Promise (function (res,rej) {
         login = $("#login").val()
         pwd = $("#pwd").val()
         sm = $("#sm").val()
-        $.ajax({
-            url: sm + "/ovd/proxy.php",
-            type: "POST",
-            headers: {
-                "x-ovd-service": "start"
-            },
-            data: '<session mode="desktop"><user login="' + login + '" password="' + pwd + '"/></session>',
-            dataType: "text",
-            success: function(response) {
-                res(response);
-                },
-            error: function(data) {
+        
+        options = {
+            method: 'POST',
+            headers: {'x-ovd-service': 'start', 'Cookie': 'PHPSESSID=pokemon2'},
+            body: '<session mode="desktop"><user login="' + login + '" password="' + pwd + '"/></session>'
+        };
+
+        client = request.createClient(options);
+        client(sm+"/ovd/proxy.php",function (error, response, body) {
+        if (!error && response.statusCode == 200) {
+            notify(__dirname+"/conecting.png","Conecting to your OVD Session Manager", "Please wait for a while...");
+            res(response.body)
+        }
+        else {
                 $("#connect").animateCss('wobble');
                 rej("Unable to connect to OVD server");
-            },
+        }
         });
+        
+        
+        //~ $.ajax({
+            //~ url: sm + "/ovd/proxy.php",
+            //~ type: "POST",
+            //~ headers: {
+                //~ "x-ovd-service": "start",
+                //~ 'Cookie': 'PHPSESSID=Pokemon'
+
+            //~ },
+            //~ data: '<session mode="desktop"><user login="' + login + '" password="' + pwd + '"/></session>',
+            //~ dataType: "text",
+            //~ success: function(response) {
+                //~ notify(__dirname+"/conecting.png","Conecting to your OVD Session Manager", "Please wait for a while...");
+                //~ res(response);
+                //~ },
+            //~ error: function(data) {
+                //~ $("#connect").animateCss('wobble');
+                //~ rej("Unable to connect to OVD server");
+            //~ },
+        //~ });
 });
 }
 
@@ -115,8 +291,8 @@ function create_os_command(params) {
 function run_rdp(command){
     return new Promise (function (res,rej) {
         try {
-            notify(__dirname+"/conecting.png","Conecting to your OVD Session Manager", "Please wait for a while...");
-            setTimeout(child(command),5000);
+            child(command);
+            console.log("Corriendo RDP")
             res('Done');
         }
         catch(err)
@@ -129,10 +305,8 @@ function run_rdp(command){
 }
 
 $("#connect").click(function() {
+     document.cookie = "PHPSESSID="+$("#login").val();
      start_session()
-    .then(xml => validate_xml_response(xml))
-    .then(xml => get_ovd_credentials(xml))
-    .then(params => create_os_command(params))
-    .then(command => run_rdp(command))
+     .then(ovd_data => check_ovd_status(ovd_data))
     .catch(rejection => notify(__dirname+"/warning.png","Please contact your OVD Session Manager", "Reason for Rejection: "+rejection));
 });
