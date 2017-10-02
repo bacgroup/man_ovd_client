@@ -1,8 +1,8 @@
-child = require('child_process').exec
+child = require('child_process').exec;
 request = require("request-with-cookies");
 window.$ = window.jQuery = require('jquery');
 
-const notifier = require('node-notifier');
+notifier = require('node-notifier');
 
 $.fn.extend({
     animateCss: function (animationName) {
@@ -23,7 +23,7 @@ function notify(icon, title, msj) {
 }
 function wait_for_ready_state()
 {
-        sm = $("#sm").val()
+        sm = $("#sm").val();
         
         options = {
             method: 'POST',
@@ -33,7 +33,7 @@ function wait_for_ready_state()
         client = request.createClient(options);
         client(sm+"/ovd/proxy.php",function (error, response, body) {
             if (!error && response.statusCode == 200) {
-                console.log(response.body)
+                console.log(response.body);
                 setTimeout(function() {
                 xmlDoc = $.parseXML(response.body);
                 $xml = $(xmlDoc);
@@ -44,14 +44,14 @@ function wait_for_ready_state()
                 }
                 catch(err)
                 {
-                    return "None"
+                    return "None";
                 }
                 console.log(status);
                 return(status);
                 }, 2000);
             }
             else {
-                return "None"
+                return "None";
             }
         });
 }
@@ -60,16 +60,9 @@ function wait_for_ready_state()
 function check_ovd_status(ovd_data) {
     	return new Promise (function (res,rej) {
             
-        //~ for (i = 0;  wait_for_ready_state() != "ready"; i++) {
-            //~ console.log("Waiting Ready");
-        //~ }
-        
-        //~ console.log("OVD is Ready");
-        //~ res(ovd_data);
-            
-        login = $("#login").val()
-        pwd = $("#pwd").val()
-        sm = $("#sm").val()
+        login = $("#login").val();
+        pwd = $("#pwd").val();
+        sm = $("#sm").val();
         
         options = {
             method: 'POST',
@@ -79,7 +72,7 @@ function check_ovd_status(ovd_data) {
         client = request.createClient(options);
         client(sm+"/ovd/proxy.php",function (error, response, body) {
             if (!error && response.statusCode == 200) {
-                console.log(response.body)
+                console.log(response.body);
                 setTimeout(function() {
                 xmlDoc = $.parseXML(response.body);
                 $xml = $(xmlDoc);
@@ -90,17 +83,16 @@ function check_ovd_status(ovd_data) {
                 }
                 catch(err)
                 {
-                    status = "None"
+                    status = "None";
                 }
                 if(status == "init")
                 {   
                     console.log(status);
                     check_ovd_status(ovd_data);
-                    //notify(__dirname+"/conecting.png","Waiting when your OVD Session is Ready", "Please wait for a while...");
                 }
                 else if (status == "ready") {
                     console.log(response.body);
-                    //ovd_data
+                    
                     validate_xml_response(ovd_data)
                     .then(xml => get_ovd_credentials(xml))
                     .then(params => create_os_command(params))
@@ -112,73 +104,20 @@ function check_ovd_status(ovd_data) {
                     rej("Cant to connect");
                 }
                 }, 2000);
-                //~ if (status == "ready") {
-                    //~ console.log(status);
-                    //~ res(ovd_data);
-                //~ }
             }
             else {
                 $("#connect").animateCss('wobble');
                 rej("Unable to connect to OVD server");
             }
         });
-
-        //~ $.ajax({
-            //~ url: sm + "/ovd/proxy.php",
-            //~ type: "POST",
-            //~ async: true,
-            //~ headers: {
-                //~ "x-ovd-service": "session_status",
-                //~ 'Cookie': 'PHPSESSID=Pokemon'
-            //~ },
-            //~ data: '<session mode="desktop"><user login="' + login + '" password="' + pwd + '"/></session>',
-            //~ dataType: "text",
-            //~ success: function(response) {
-                //~ setTimeout(function() {
-                //~ xmlDoc = $.parseXML(response);
-                //~ $xml = $(xmlDoc);
-                //~ try {
-                //~ $.each($xml.find('session'), function() {
-                    //~ response = $(this).attr("status");
-                //~ });
-                //~ }
-                //~ catch(err)
-                //~ {
-                    //~ response = "None"
-                //~ }
-                //~ if(response == "init")
-                //~ {   
-                    //~ console.log(response);
-                    //~ check_ovd_status(ovd_data);
-                    //~ //notify(__dirname+"/conecting.png","Waiting when your OVD Session is Ready", "Please wait for a while...");
-                //~ }
-                //~ else if (response == "ready") {
-                    //~ console.log(response);
-                    //~ //res(ovd_data);
-                //~ }
-                //~ else {
-                    //~ console.log(response);
-                    //~ rej("Cant to connect");
-                //~ }
-                //~ }, 2000);
-                //~ if (response == "ready") {
-                    //~ console.log(response);
-                    //~ res(ovd_data);
-                //~ }
-                //~ },
-            //~ error: function(data) {
-                //~ $("#connect").animateCss('wobble');
-                //~ rej("Unable to connect to OVD server");
-            //~ },
-        //~ });
 });
 }
 
 function start_session() {
     	return new Promise (function (res,rej) {
-        login = $("#login").val()
-        pwd = $("#pwd").val()
-        sm = $("#sm").val()
+        login = $("#login").val();
+        pwd = $("#pwd").val();
+        sm = $("#sm").val();
         
         options = {
             method: 'POST',
@@ -190,34 +129,13 @@ function start_session() {
         client(sm+"/ovd/proxy.php",function (error, response, body) {
         if (!error && response.statusCode == 200) {
             notify(__dirname+"/conecting.png","Conecting to your OVD Session Manager", "Please wait for a while...");
-            res(response.body)
+            res(response.body);
         }
         else {
                 $("#connect").animateCss('wobble');
                 rej("Unable to connect to OVD server");
         }
         });
-        
-        
-        //~ $.ajax({
-            //~ url: sm + "/ovd/proxy.php",
-            //~ type: "POST",
-            //~ headers: {
-                //~ "x-ovd-service": "start",
-                //~ 'Cookie': 'PHPSESSID=Pokemon'
-
-            //~ },
-            //~ data: '<session mode="desktop"><user login="' + login + '" password="' + pwd + '"/></session>',
-            //~ dataType: "text",
-            //~ success: function(response) {
-                //~ notify(__dirname+"/conecting.png","Conecting to your OVD Session Manager", "Please wait for a while...");
-                //~ res(response);
-                //~ },
-            //~ error: function(data) {
-                //~ $("#connect").animateCss('wobble');
-                //~ rej("Unable to connect to OVD server");
-            //~ },
-        //~ });
 });
 }
 
@@ -249,16 +167,16 @@ function get_ovd_credentials(xml) {
         $xml = $(xmlDoc);
         params = {};
          $.each($xml.find('server'), function() {
-           params['login'] = $(this).attr("login");
-           params['fqdn'] = $(this).attr("fqdn");
+           params.login = $(this).attr("login");
+           params.fqdn = $(this).attr("fqdn");
            try{
-           params['port'] = $(this).attr("port");
+           params.port = $(this).attr("port");
            }
            catch(err)
            {
-               params[port] = 3389
+               params.port = 3389;
            }
-           params['password'] = $(this).attr("password");
+           params.password = $(this).attr("password");
          });
         res(params);
     }
@@ -275,24 +193,24 @@ function create_os_command(params) {
     return new Promise (function (res,rej) {
     try {    
         os_rdp_exe = {
-            linux: "xfreerdp /v:" + params['fqdn'] + ":" + params['port'] + " /u:" + params['login'] + " /p:'" + params['password'] + "' /sec:rdp /drive:home,$HOME /printer +clipboard /jpeg /parent-window:`xwininfo -name 'MAN OVD Client' | grep 'Window id' | cut -d' ' -f4` /size:`xwininfo -name 'MAN OVD Client' | grep 'Width' | tr -s ' '|cut -d' ' -f3`x`xwininfo -name 'MAN OVD Client' | grep 'Height' | tr -s ' '|cut -d' ' -f3`",
-            win32: "resources\\app\\rdp.exe /v:" + params['fqdn'] + ":" + params['port'] + " /u:" + params['login'] + " /p:" + params['password'] + " /printers /drives /max",
-            darwin: "open "+__dirname+"/MacFreeRDP/MacFreeRDP.app --args /f /v:" + params['fqdn'] + ":" + params['port'] + " /u:" + params['login'] + " /p:'" + params['password'] + "' /sec:rdp /drive:home,$HOME /printer +clipboard"
-        }
+            linux: "xfreerdp /v:" + params.fqdn + ":" + params.port + " /u:" + params.login + " /p:'" + params.password + "' /sec:rdp /drive:home,$HOME /printer +clipboard /jpeg /parent-window:`xwininfo -name 'MAN OVD Client' | grep 'Window id' | cut -d' ' -f4` /size:`xwininfo -name 'MAN OVD Client' | grep 'Width' | tr -s ' '|cut -d' ' -f3`x`xwininfo -name 'MAN OVD Client' | grep 'Height' | tr -s ' '|cut -d' ' -f3`",
+            win32: "resources\\app\\rdp.exe /v:" + params.fqdn + ":" + params.port + " /u:" + params.login + " /p:" + params.password + " /printers /drives /max",
+            darwin: "open "+__dirname+"/MacFreeRDP/MacFreeRDP.app --args /f /v:" + params.fqdn + ":" + params.port + " /u:" + params.login + " /p:'" + params.password + "' /sec:rdp /drive:home,$HOME /printer +clipboard"
+        };
         res(os_rdp_exe[process.platform]);
     }
     catch(err) {
         rej(err);
     }
         
-    })    
+    });
 }
 
 function run_rdp(command){
     return new Promise (function (res,rej) {
         try {
             child(command);
-            console.log("Corriendo RDP")
+            console.log("Corriendo RDP");
             res('Done');
         }
         catch(err)
