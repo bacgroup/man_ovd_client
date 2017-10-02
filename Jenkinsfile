@@ -3,10 +3,10 @@ node("master") {
     if (env.BRANCH_NAME == 'master') {
         ENVIRONMENT = 'STABLE'
     }
-    else if {
+    else if (env.BRANCH_NAME == 'develop') {
         ENVIRONMENT = 'BETA'
     }
-    else if {
+    else {
         ENVIRONMENT = 'ALPHA'
     }
     
