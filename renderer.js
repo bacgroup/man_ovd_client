@@ -1,3 +1,4 @@
+/*jshint esversion: 6 */
 child = require('child_process').exec;
 request = require("request-with-cookies");
 window.$ = window.jQuery = require('jquery');
