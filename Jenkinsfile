@@ -2,15 +2,23 @@ node("master") {
     if (env.BRANCH_NAME == 'master') {
         STAGE='STABLE'
         PRERELEASE='false'
-        
+        ICON_STD="icon.png"
+        ICON_DARWIN="icon.icns"
+        ICON_WINDOWS="icon.ico"
     }
     else if (env.BRANCH_NAME == 'develop') {
         STAGE='BETA'
         PRERELEASE='true'
-
+        ICON_STD="icon_beta.png"
+        ICON_DARWIN="icon_beta.icns"
+        ICON_WINDOWS="icon_beta.ico"
     }
     else {
         STAGE='ALPHA'
+        PRERELEASE='true'
+        ICON_STD="icon_alpha.png"
+        ICON_DARWIN="icon_alpha.icns"
+        ICON_WINDOWS="icon_alpha.ico"
     }
     stage "Pepare to Build Packages"
     echo "${STAGE}"
@@ -23,19 +31,19 @@ node("master") {
     //sh 'npm install -g electron-installer-windows'
     stage "Create Packages"
     parallel("Linux32": {
-        sh "electron-packager . --overwrite --out packages --ignore packages --build-version ${BUILD_NUMBER} --platform=linux --arch=ia32  --icon=icon_beta.png --tmpdir=false"
+        sh "electron-packager . --overwrite --out packages --ignore packages --build-version ${BUILD_NUMBER} --platform=linux --arch=ia32  --icon=${ICON_STD} --tmpdir=false"
     },
     "Linux64": {
-        sh "electron-packager . --overwrite --out packages --ignore packages --build-version ${BUILD_NUMBER} --platform=linux --arch=x64  --icon=icon_beta.png --tmpdir=false"
+        sh "electron-packager . --overwrite --out packages --ignore packages --build-version ${BUILD_NUMBER} --platform=linux --arch=x64  --icon=${ICON_STD} --tmpdir=false"
     },
     "Darwin": {
-        sh "electron-packager . --overwrite --out packages --ignore packages --build-version ${BUILD_NUMBER} --platform=darwin  --icon=icon_beta.icns --tmpdir=false"
+        sh "electron-packager . --overwrite --out packages --ignore packages --build-version ${BUILD_NUMBER} --platform=darwin  --icon=${ICON_DARWIN} --tmpdir=false"
     },
     "Win32": {
-        sh "electron-packager . --overwrite --out packages --ignore packages --build-version ${BUILD_NUMBER} --platform=win32 --arch=ia32  --icon=icon_beta.ico --tmpdir=false"
+        sh "electron-packager . --overwrite --out packages --ignore packages --build-version ${BUILD_NUMBER} --platform=win32 --arch=ia32  --icon=${ICON_WINDOWS} --tmpdir=false"
     },
     "Win64": {
-        sh "electron-packager . --overwrite --out packages --ignore packages --build-version ${BUILD_NUMBER} --platform=win32 --arch=x64  --icon=icon_beta.ico --tmpdir=false"
+        sh "electron-packager . --overwrite --out packages --ignore packages --build-version ${BUILD_NUMBER} --platform=win32 --arch=x64  --icon=${ICON_WINDOWS} --tmpdir=false"
     })            
     stage "Create Installers"
             parallel(
