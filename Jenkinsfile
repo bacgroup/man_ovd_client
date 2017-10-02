@@ -47,31 +47,31 @@ node("master") {
     stage "Tag with Build Number"
         dir ('packages') {
             sh 'sudo chown jenkins:jenkins * -R'
-            sh 'for i in */; do mv "$i" "${i%/}_build-${BUILD_NUMBER}_${ENVIRONMENT}" ; done'
+            sh 'for i in */; do mv "$i" "${i%/}_build-${BUILD_NUMBER}_${env.ENVIRONMENT}" ; done'
         }
      stage "Zip Packages"
             dir ('packages') {
             parallel(
             "Zip Linux32": {
-                sh "zip -q man_ovd_client-linux-ia32_build-${BUILD_NUMBER}_${ENVIRONMENT}.zip -r man_ovd_client-linux-ia32_build-${BUILD_NUMBER}_${ENVIRONMENT}"
+                sh "zip -q man_ovd_client-linux-ia32_build-${BUILD_NUMBER}_${env.ENVIRONMENT}.zip -r man_ovd_client-linux-ia32_build-${BUILD_NUMBER}_${env.ENVIRONMENT}"
             },
              "Zip Linux64": {
-                sh "zip -q man_ovd_client-linux-x64_build-${BUILD_NUMBER}_${ENVIRONMENT}.zip -r man_ovd_client-linux-x64_build-${BUILD_NUMBER}_${ENVIRONMENT}"
+                sh "zip -q man_ovd_client-linux-x64_build-${BUILD_NUMBER}_${env.ENVIRONMENT}.zip -r man_ovd_client-linux-x64_build-${BUILD_NUMBER}_${env.ENVIRONMENT}"
             },
             "Zip Darwin": {
-                sh "zip -q man_ovd_client-darwin-x64_build-${BUILD_NUMBER}_${ENVIRONMENT}.zip -r man_ovd_client-darwin-x64_build-${BUILD_NUMBER}_${ENVIRONMENT}"
+                sh "zip -q man_ovd_client-darwin-x64_build-${BUILD_NUMBER}_${env.ENVIRONMENT}.zip -r man_ovd_client-darwin-x64_build-${BUILD_NUMBER}_${env.ENVIRONMENT}"
             },
             "Zip Win32": {
-                sh "zip -q man_ovd_client-win32-ia32_build-${BUILD_NUMBER}_${ENVIRONMENT}.zip -r man_ovd_client-win32-ia32_build-${BUILD_NUMBER}_${ENVIRONMENT}"
+                sh "zip -q man_ovd_client-win32-ia32_build-${BUILD_NUMBER}_${env.ENVIRONMENT}.zip -r man_ovd_client-win32-ia32_build-${BUILD_NUMBER}_${env.ENVIRONMENT}"
             },
              "Zip Win32 Installer": {
-                sh "zip -q man_ovd_client-win32-ia32_installer_build-${BUILD_NUMBER}_${ENVIRONMENT}.zip -r man_ovd_client-win32-ia32_installer_build-${BUILD_NUMBER}_${ENVIRONMENT}"
+                sh "zip -q man_ovd_client-win32-ia32_installer_build-${BUILD_NUMBER}_${env.ENVIRONMENT}.zip -r man_ovd_client-win32-ia32_installer_build-${BUILD_NUMBER}_${env.ENVIRONMENT}"
             },
             "Zip Win64": {
-                sh "zip -q man_ovd_client-win32-x64_build-${BUILD_NUMBER}_${ENVIRONMENT}.zip -r man_ovd_client-win32-x64_build-${BUILD_NUMBER}_${ENVIRONMENT}"
+                sh "zip -q man_ovd_client-win32-x64_build-${BUILD_NUMBER}_${env.ENVIRONMENT}.zip -r man_ovd_client-win32-x64_build-${BUILD_NUMBER}_${env.ENVIRONMENT}"
             },
             "Zip Win64 Installer": {
-                sh "zip -q man_ovd_client-win32-x64_installer_build-${BUILD_NUMBER}_${ENVIRONMENT}.zip -r man_ovd_client-win32-x64_installer_build-${BUILD_NUMBER}_${ENVIRONMENT}"
+                sh "zip -q man_ovd_client-win32-x64_installer_build-${BUILD_NUMBER}_${env.ENVIRONMENT}.zip -r man_ovd_client-win32-x64_installer_build-${BUILD_NUMBER}_${env.ENVIRONMENT}"
             }
             )
     }
