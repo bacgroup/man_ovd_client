@@ -210,6 +210,7 @@ function run_rdp(command){
     return new Promise (function (res,rej) {
         try {
             child(command);
+            console.log(command);
             console.log("Corriendo RDP");
             res('Done');
         }
