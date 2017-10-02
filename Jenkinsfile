@@ -1,16 +1,16 @@
+if (env.BRANCH_NAME == 'master') {
+    STAGE='STABLE'
+}
+else if (env.BRANCH_NAME == 'develop') {
+    STAGE='BETA'
+}
+else {
+    STAGE='ALPHA'
+}
 node("master") {
     stage "Pepare to Build Packages"    
     deleteDir()
     checkout scm
-    if (env.BRANCH_NAME == 'master') {
-        STAGE='STABLE'
-    }
-    else if (env.BRANCH_NAME == 'develop') {
-        STAGE='BETA'
-    }
-    else {
-        STAGE='ALPHA'
-    }
     sh "npm install"
     sh 'npm install electron-squirrel-startup'
     //sh 'npm install --save-dev electron-installer-windows'
