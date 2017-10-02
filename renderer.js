@@ -27,7 +27,7 @@ function wait_for_ready_state()
         
         options = {
             method: 'POST',
-            headers: {'x-ovd-service': 'session_status', 'Cookie': 'PHPSESSID=ooddfdfdf34'}
+            headers: {'x-ovd-service': 'session_status', 'Cookie': 'PHPSESSID='+$("#login").val()}
         };
 
         client = request.createClient(options);
@@ -66,7 +66,7 @@ function check_ovd_status(ovd_data) {
         
         options = {
             method: 'POST',
-            headers: {'x-ovd-service': 'session_status', 'Cookie': 'PHPSESSID=pokemon2'}
+            headers: {'x-ovd-service': 'session_status', 'Cookie': 'PHPSESSID'+$("#login").val()}
         };
 
         client = request.createClient(options);
@@ -121,7 +121,7 @@ function start_session() {
         
         options = {
             method: 'POST',
-            headers: {'x-ovd-service': 'start', 'Cookie': 'PHPSESSID=pokemon2'},
+            headers: {'x-ovd-service': 'start', 'Cookie': 'PHPSESSID='+$("#login").val()},
             body: '<session mode="desktop"><user login="' + login + '" password="' + pwd + '"/></session>'
         };
 
