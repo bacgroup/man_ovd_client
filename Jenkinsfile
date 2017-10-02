@@ -1,11 +1,11 @@
 if (env.BRANCH_NAME == 'master') {
-    STAGE='STABLE'
+    def STAGE='STABLE'
 }
 else if (env.BRANCH_NAME == 'develop') {
-    STAGE='BETA'
+    def STAGE='BETA'
 }
 else {
-    STAGE='ALPHA'
+    def STAGE='ALPHA'
 }
 node("master") {
     stage "Pepare to Build Packages"    
