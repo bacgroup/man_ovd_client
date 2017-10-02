@@ -1,9 +1,13 @@
 node("master") {
     if (env.BRANCH_NAME == 'master') {
         STAGE='STABLE'
+        PRERELEASE='false'
+        
     }
     else if (env.BRANCH_NAME == 'develop') {
         STAGE='BETA'
+        PRERELEASE='true'
+
     }
     else {
         STAGE='ALPHA'
@@ -80,7 +84,7 @@ node("master") {
      }
     //sh "git tag -a ${BUILD_NUMBER}_${ENVIRONMENT} -m '${ENVIRONMENT} Release from build ${BUILD_NUMBER}' && git push --tags"
     dir ('packages') {
-        sh "curl -v -i -X POST -H \"Content-Type:application/json\" -H \"Authorization: token ${github_token}\" https://api.github.com/repos/bacgroup/man_ovd_client/releases -d '{\"tag_name\":\"man_ovd_client_${BUILD_NUMBER}_${STAGE}\",\"target_commitish\": \"develop\",\"name\": \"MAN OVD Client Build ${BUILD_NUMBER} ${STAGE}\",\"body\": \"MAN Consulting Software\",\"draft\": false,\"prerelease\": true}'"
+        sh "curl -v -i -X POST -H \"Content-Type:application/json\" -H \"Authorization: token ${github_token}\" https://api.github.com/repos/bacgroup/man_ovd_client/releases -d '{\"tag_name\":\"man_ovd_client_${BUILD_NUMBER}_${STAGE}\",\"target_commitish\": \"${BRANCH_NAME}\",\"name\": \"MAN OVD Client Build ${BUILD_NUMBER} ${STAGE}\",\"body\": \"MAN Consulting Software\",\"draft\": false,\"prerelease\": ${PRERELEASE}}'"
         sh "for i in *.zip; do bash $HOME/github-release.sh github_api_token=${github_token} owner=bacgroup repo=man_ovd_client tag=man_ovd_client_${BUILD_NUMBER}_${STAGE} filename=./\$i; done"
     }
     deleteDir()
