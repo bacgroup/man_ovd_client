@@ -28,6 +28,7 @@ node("master") {
     sh 'npm install electron-squirrel-startup'
     //sh 'npm install --save-dev electron-installer-windows'
     sh 'npm install --save-dev electron-winstaller'
+    sh 'sudo npm install -g electron-installer-debian'
     //sh 'npm install -g electron-installer-windows'
     stage "Create Packages"
     parallel("Linux32": {
