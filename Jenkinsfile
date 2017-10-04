@@ -56,12 +56,12 @@ node("master") {
             },
             "Ubuntu / Debian amd64 Packages": {
                 dir ('packages') {
-                sh "electron-installer-debian --src man_ovd_client-linux-x64 --dest . --arch amd64"
+                sh "electron-installer-debian --src MANOVDClient-linux-x64 --dest . --arch amd64"
             }
             },
             "Ubutntu / Debian i386 Packages": {
                 dir ('packages') {
-                sh "electron-installer-debian --src man_ovd_client-linux-ia32 --dest . --arch i386"
+                sh "electron-installer-debian --src MANOVDClient-linux-ia32 --dest . --arch i386"
             }
             }  
             )
@@ -75,25 +75,25 @@ node("master") {
             dir ('packages') {
             parallel(
             "Zip Linux32": {
-                sh "zip -q man_ovd_client-linux-ia32_build-${BUILD_NUMBER}_${STAGE}.zip -r man_ovd_client-linux-ia32_build-${BUILD_NUMBER}_${STAGE}"
+                sh "zip -q MANOVDClient-linux-ia32_build-${BUILD_NUMBER}_${STAGE}.zip -r MANOVDClient-linux-ia32_build-${BUILD_NUMBER}_${STAGE}"
             },
              "Zip Linux64": {
-                sh "zip -q man_ovd_client-linux-x64_build-${BUILD_NUMBER}_${STAGE}.zip -r man_ovd_client-linux-x64_build-${BUILD_NUMBER}_${STAGE}"
+                sh "zip -q MANOVDClient-linux-x64_build-${BUILD_NUMBER}_${STAGE}.zip -r MANOVDClient-linux-x64_build-${BUILD_NUMBER}_${STAGE}"
             },
             "Zip Darwin": {
-                sh "zip -q man_ovd_client-darwin-x64_build-${BUILD_NUMBER}_${STAGE}.zip -r man_ovd_client-darwin-x64_build-${BUILD_NUMBER}_${STAGE}"
+                sh "zip -q MANOVDClient-darwin-x64_build-${BUILD_NUMBER}_${STAGE}.zip -r MANOVDClient-darwin-x64_build-${BUILD_NUMBER}_${STAGE}"
             },
             "Zip Win32": {
-                sh "zip -q man_ovd_client-win32-ia32_build-${BUILD_NUMBER}_${STAGE}.zip -r man_ovd_client-win32-ia32_build-${BUILD_NUMBER}_${STAGE}"
+                sh "zip -q MANOVDClient-win32-ia32_build-${BUILD_NUMBER}_${STAGE}.zip -r MANOVDClient-win32-ia32_build-${BUILD_NUMBER}_${STAGE}"
             },
              "Zip Win32 Installer": {
-                sh "zip -q man_ovd_client-win32-ia32_installer_build-${BUILD_NUMBER}_${STAGE}.zip -r man_ovd_client-win32-ia32_installer_build-${BUILD_NUMBER}_${STAGE}"
+                sh "zip -q MANOVDClient-win32-ia32_installer_build-${BUILD_NUMBER}_${STAGE}.zip -r MANOVDClient-win32-ia32_installer_build-${BUILD_NUMBER}_${STAGE}"
             },
             "Zip Win64": {
-                sh "zip -q man_ovd_client-win32-x64_build-${BUILD_NUMBER}_${STAGE}.zip -r man_ovd_client-win32-x64_build-${BUILD_NUMBER}_${STAGE}"
+                sh "zip -q MANOVDClient-win32-x64_build-${BUILD_NUMBER}_${STAGE}.zip -r MANOVDClient-win32-x64_build-${BUILD_NUMBER}_${STAGE}"
             },
             "Zip Win64 Installer": {
-                sh "zip -q man_ovd_client-win32-x64_installer_build-${BUILD_NUMBER}_${STAGE}.zip -r man_ovd_client-win32-x64_installer_build-${BUILD_NUMBER}_${STAGE}"
+                sh "zip -q MANOVDClient-win32-x64_installer_build-${BUILD_NUMBER}_${STAGE}.zip -r MANOVDClient-win32-x64_installer_build-${BUILD_NUMBER}_${STAGE}"
             }
             )
     }
@@ -105,6 +105,8 @@ node("master") {
     dir ('packages') {
         sh "curl -v -i -X POST -H \"Content-Type:application/json\" -H \"Authorization: token ${github_token}\" https://api.github.com/repos/bacgroup/man_ovd_client/releases -d '{\"tag_name\":\"man_ovd_client_${BUILD_NUMBER}_${STAGE}\",\"target_commitish\": \"${BRANCH_NAME}\",\"name\": \"MAN OVD Client Build ${BUILD_NUMBER} ${STAGE}\",\"body\": \"MAN Consulting Software\",\"draft\": false,\"prerelease\": ${PRERELEASE}}'"
         sh "for i in *.zip; do bash $HOME/github-release.sh github_api_token=${github_token} owner=bacgroup repo=man_ovd_client tag=man_ovd_client_${BUILD_NUMBER}_${STAGE} filename=./\$i; done"
+        sh "for i in *.deb; do bash $HOME/github-release.sh github_api_token=${github_token} owner=bacgroup repo=man_ovd_client tag=man_ovd_client_${BUILD_NUMBER}_${STAGE} filename=./\$i; done"
+
     }
     deleteDir()
 }
