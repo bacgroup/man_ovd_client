@@ -52,7 +52,17 @@ node("master") {
             },
              "Windows x64 Installer": {
                 sh "node createwindows64installer.js"
+            },
+            "Ubuntu / Debian amd64 Packages": {
+                dir ('packages') {
+                sh "electron-installer-debian --src man_ovd_client-linux-x64 --dest . --arch amd64"
             }
+            },
+            "Ubutntu / Debian i386 Packages": {
+                dir ('packages') {
+                sh "electron-installer-debian --src man_ovd_client-linux-ia32 --dest . --arch i386"
+            }
+            }  
             )
     stage "Tag with Build Number"
         dir ('packages') {
