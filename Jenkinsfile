@@ -24,6 +24,7 @@ node("master") {
     echo "${STAGE}"
     deleteDir()
     checkout scm
+    sh "cp ${ICON_STD} app_icon.png"
     sh "npm install"
     sh 'npm install electron-squirrel-startup'
     //sh 'npm install --save-dev electron-installer-windows'
