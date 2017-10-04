@@ -56,12 +56,12 @@ node("master") {
             },
             "Ubuntu / Debian amd64 Packages": {
                 dir ('packages') {
-                sh "electron-installer-debian --src MANOVDClient-linux-x64 --dest . --arch amd64"
+                sh "electron-installer-debian --src MANOVDClient-linux-x64 --dest .. --arch amd64"
             }
             },
             "Ubuntu / Debian i386 Packages": {
                 dir ('packages') {
-                sh "electron-installer-debian --src MANOVDClient-linux-ia32 --dest . --arch i386"
+                sh "electron-installer-debian --src MANOVDClient-linux-ia32 --dest .. --arch i386"
             }
             }  
             )
@@ -70,6 +70,7 @@ node("master") {
             sh 'sudo chown jenkins:jenkins * -R'
             //sh 'for i in */; do mv $i $i_build-${BUILD_NUMBER}_${STAGE} ; done"
             sh "rename 's/(.*)\$/\$1_build-${BUILD_NUMBER}_${STAGE}/' *"
+            sh 'mv ../*.deb .'
         }
      stage "Zip Packages"
             dir ('packages') {
