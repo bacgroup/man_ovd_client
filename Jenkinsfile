@@ -59,7 +59,7 @@ node("master") {
                 sh "electron-installer-debian --src MANOVDClient-linux-x64 --dest . --arch amd64"
             }
             },
-            "Ubutntu / Debian i386 Packages": {
+            "Ubuntu / Debian i386 Packages": {
                 dir ('packages') {
                 sh "electron-installer-debian --src MANOVDClient-linux-ia32 --dest . --arch i386"
             }
