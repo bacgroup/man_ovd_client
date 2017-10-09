@@ -14,7 +14,7 @@ node("master") {
         ICON_WINDOWS="icon_beta.ico"
     }
     else {
-        STAGE='ALPHA'
+        STAGE="ALPHA-"+"${BRANCH_NAME}"
         PRERELEASE='true'
         ICON_STD="icon_alpha.png"
         ICON_DARWIN="icon_alpha.icns"
