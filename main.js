@@ -19,6 +19,7 @@ function createWindow() {
         /*     width: 300,
              height: 485,
              resizable: false,*/
+	icon: path.join(__dirname, 'app_icon.png'),
         backgroundColor: '#000511'
     })
     mainWindow.maximize()
