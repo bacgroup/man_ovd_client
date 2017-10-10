@@ -27,6 +27,6 @@
 #define FREERDP_API_VERSION "2"
 #define FREERDP_VERSION "2.0.0"
 #define FREERDP_VERSION_FULL "2.0.0-dev"
-#define GIT_REVISION "50d324655"
+#define GIT_REVISION "0d53b2d1f"
 
 #endif /* FREERDP_VERSION_H */
