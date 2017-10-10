@@ -1,11 +1,11 @@
 #ifndef FREERDP_BUILD_CONFIG_H
 #define FREERDP_BUILD_CONFIG_H
 
-#define FREERDP_DATA_PATH "/Users/jet/Desktop/FreeRDP-2.0.0-rc0/darwin_xfreerdp/share/freerdp2"
+#define FREERDP_DATA_PATH "/Users/jet/Desktop/FreeRDP/darwin_xfreerdp/share/freerdp2"
 #define FREERDP_KEYMAP_PATH ""
 #define FREERDP_PLUGIN_PATH "lib/freerdp2"
 
-#define FREERDP_INSTALL_PREFIX "/Users/jet/Desktop/FreeRDP-2.0.0-rc0/darwin_xfreerdp"
+#define FREERDP_INSTALL_PREFIX "/Users/jet/Desktop/FreeRDP/darwin_xfreerdp"
 
 #define FREERDP_LIBRARY_PATH "lib"
 

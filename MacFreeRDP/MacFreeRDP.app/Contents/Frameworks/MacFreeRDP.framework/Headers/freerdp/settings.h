@@ -662,6 +662,8 @@ typedef struct _RDPDR_PARALLEL RDPDR_PARALLEL;
 #define FreeRDP_YPan						1553
 #define FreeRDP_SmartSizingWidth				1554
 #define FreeRDP_SmartSizingHeight				1555
+#define FreeRDP_PercentScreenUseWidth				1556
+#define FreeRDP_PercentScreenUseHeight				1557
 #define FreeRDP_SoftwareGdi					1601
 #define FreeRDP_LocalConnection					1602
 #define FreeRDP_AuthenticationOnly				1603
@@ -1098,7 +1100,9 @@ struct rdp_settings
 	ALIGN64 int YPan; /* 1553 */
 	ALIGN64 UINT32 SmartSizingWidth; /* 1554 */
 	ALIGN64 UINT32 SmartSizingHeight; /* 1555 */
-	UINT64 padding1601[1601 - 1556]; /* 1556 */
+	ALIGN64 BOOL PercentScreenUseWidth; /* 1556 */
+	ALIGN64 BOOL PercentScreenUseHeight; /* 1557 */
+	UINT64 padding1601[1601 - 1558]; /* 1558 */
 
 	/* Miscellaneous */
 	ALIGN64 BOOL SoftwareGdi; /* 1601 */
@@ -1238,7 +1242,8 @@ struct rdp_settings
 	ALIGN64 BOOL MultiTouchGestures; /* 2632 */
 	ALIGN64 UINT32 KeyboardHook; /* 2633 */
 	ALIGN64 BOOL HasHorizontalWheel; /* 2634 */
-	UINT64 padding2688[2688 - 2635]; /* 2635 */
+	ALIGN64 BOOL HasExtendedMouseEvent; /* 2635 */
+	UINT64 padding2688[2688 - 2636]; /* 2636 */
 
 	/* Brush Capabilities */
 	ALIGN64 UINT32 BrushSupportLevel; /* 2688 */
