@@ -1,8 +1,8 @@
 var electronInstaller = require('electron-winstaller');
 
 resultPromise = electronInstaller.createWindowsInstaller({
-    appDirectory: 'packages/man_ovd_client-win32-ia32',
-    outputDirectory: 'packages/man_ovd_client-win32-ia32_installer',
+    appDirectory: 'packages/MANOVDClient-win32-ia32',
+    outputDirectory: 'packages/MANOVDClient-win32-ia32_installer',
     authors: 'MAN Consulting',
     //exe: 'man_ovd_client.exe',
     setupIcon: "icon.ico",

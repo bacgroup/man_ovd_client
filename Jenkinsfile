@@ -14,7 +14,7 @@ node("master") {
         ICON_WINDOWS="icon_beta.ico"
     }
     else {
-        STAGE='ALPHA'
+        STAGE="ALPHA-"+"${BRANCH_NAME}"
         PRERELEASE='true'
         ICON_STD="icon_alpha.png"
         ICON_DARWIN="icon_alpha.icns"
@@ -24,10 +24,12 @@ node("master") {
     echo "${STAGE}"
     deleteDir()
     checkout scm
+    sh "cp ${ICON_STD} app_icon.png"
     sh "npm install"
     sh 'npm install electron-squirrel-startup'
     //sh 'npm install --save-dev electron-installer-windows'
     sh 'npm install --save-dev electron-winstaller'
+    sh 'sudo npm install -g electron-installer-debian'
     //sh 'npm install -g electron-installer-windows'
     stage "Create Packages"
     parallel("Linux32": {
@@ -52,37 +54,48 @@ node("master") {
             },
              "Windows x64 Installer": {
                 sh "node createwindows64installer.js"
+            },
+            "Ubuntu / Debian amd64 Packages": {
+                dir ('packages') {
+                sh "electron-installer-debian --src MANOVDClient-linux-x64 --dest .. --arch amd64"
             }
+            },
+            "Ubuntu / Debian i386 Packages": {
+                dir ('packages') {
+                sh "electron-installer-debian --src MANOVDClient-linux-ia32 --dest .. --arch i386"
+            }
+            }  
             )
     stage "Tag with Build Number"
         dir ('packages') {
             sh 'sudo chown jenkins:jenkins * -R'
             //sh 'for i in */; do mv $i $i_build-${BUILD_NUMBER}_${STAGE} ; done"
             sh "rename 's/(.*)\$/\$1_build-${BUILD_NUMBER}_${STAGE}/' *"
+            sh 'mv ../*.deb .'
         }
      stage "Zip Packages"
             dir ('packages') {
             parallel(
             "Zip Linux32": {
-                sh "zip -q man_ovd_client-linux-ia32_build-${BUILD_NUMBER}_${STAGE}.zip -r man_ovd_client-linux-ia32_build-${BUILD_NUMBER}_${STAGE}"
+                sh "zip -q MANOVDClient-linux-ia32_build-${BUILD_NUMBER}_${STAGE}.zip -r MANOVDClient-linux-ia32_build-${BUILD_NUMBER}_${STAGE}"
             },
              "Zip Linux64": {
-                sh "zip -q man_ovd_client-linux-x64_build-${BUILD_NUMBER}_${STAGE}.zip -r man_ovd_client-linux-x64_build-${BUILD_NUMBER}_${STAGE}"
+                sh "zip -q MANOVDClient-linux-x64_build-${BUILD_NUMBER}_${STAGE}.zip -r MANOVDClient-linux-x64_build-${BUILD_NUMBER}_${STAGE}"
             },
             "Zip Darwin": {
-                sh "zip -q man_ovd_client-darwin-x64_build-${BUILD_NUMBER}_${STAGE}.zip -r man_ovd_client-darwin-x64_build-${BUILD_NUMBER}_${STAGE}"
+                sh "zip -q MANOVDClient-darwin-x64_build-${BUILD_NUMBER}_${STAGE}.zip -r MANOVDClient-darwin-x64_build-${BUILD_NUMBER}_${STAGE}"
             },
             "Zip Win32": {
-                sh "zip -q man_ovd_client-win32-ia32_build-${BUILD_NUMBER}_${STAGE}.zip -r man_ovd_client-win32-ia32_build-${BUILD_NUMBER}_${STAGE}"
+                sh "zip -q MANOVDClient-win32-ia32_build-${BUILD_NUMBER}_${STAGE}.zip -r MANOVDClient-win32-ia32_build-${BUILD_NUMBER}_${STAGE}"
             },
              "Zip Win32 Installer": {
-                sh "zip -q man_ovd_client-win32-ia32_installer_build-${BUILD_NUMBER}_${STAGE}.zip -r man_ovd_client-win32-ia32_installer_build-${BUILD_NUMBER}_${STAGE}"
+                sh "zip -q MANOVDClient-win32-ia32_installer_build-${BUILD_NUMBER}_${STAGE}.zip -r MANOVDClient-win32-ia32_installer_build-${BUILD_NUMBER}_${STAGE}"
             },
             "Zip Win64": {
-                sh "zip -q man_ovd_client-win32-x64_build-${BUILD_NUMBER}_${STAGE}.zip -r man_ovd_client-win32-x64_build-${BUILD_NUMBER}_${STAGE}"
+                sh "zip -q MANOVDClient-win32-x64_build-${BUILD_NUMBER}_${STAGE}.zip -r MANOVDClient-win32-x64_build-${BUILD_NUMBER}_${STAGE}"
             },
             "Zip Win64 Installer": {
-                sh "zip -q man_ovd_client-win32-x64_installer_build-${BUILD_NUMBER}_${STAGE}.zip -r man_ovd_client-win32-x64_installer_build-${BUILD_NUMBER}_${STAGE}"
+                sh "zip -q MANOVDClient-win32-x64_installer_build-${BUILD_NUMBER}_${STAGE}.zip -r MANOVDClient-win32-x64_installer_build-${BUILD_NUMBER}_${STAGE}"
             }
             )
     }
@@ -94,6 +107,8 @@ node("master") {
     dir ('packages') {
         sh "curl -v -i -X POST -H \"Content-Type:application/json\" -H \"Authorization: token ${github_token}\" https://api.github.com/repos/bacgroup/man_ovd_client/releases -d '{\"tag_name\":\"man_ovd_client_${BUILD_NUMBER}_${STAGE}\",\"target_commitish\": \"${BRANCH_NAME}\",\"name\": \"MAN OVD Client Build ${BUILD_NUMBER} ${STAGE}\",\"body\": \"MAN Consulting Software\",\"draft\": false,\"prerelease\": ${PRERELEASE}}'"
         sh "for i in *.zip; do bash $HOME/github-release.sh github_api_token=${github_token} owner=bacgroup repo=man_ovd_client tag=man_ovd_client_${BUILD_NUMBER}_${STAGE} filename=./\$i; done"
+        sh "for i in *.deb; do bash $HOME/github-release.sh github_api_token=${github_token} owner=bacgroup repo=man_ovd_client tag=man_ovd_client_${BUILD_NUMBER}_${STAGE} filename=./\$i; done"
+
     }
     deleteDir()
 }
