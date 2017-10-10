@@ -35,101 +35,42 @@
 #include <freerdp/types.h>
 #include <freerdp/peer.h>
 
-typedef struct WTSVirtualChannelManager WTSVirtualChannelManager;
-
-#define WTS_CHANNEL_OPTION_DYNAMIC 0x00000001
-
-typedef enum _WTS_VIRTUAL_CLASS
-{
-	WTSVirtualClientData,
-	WTSVirtualFileHandle,
-	WTSVirtualChannelReady
-} WTS_VIRTUAL_CLASS;
+#include <winpr/winpr.h>
+#include <winpr/wtypes.h>
+#include <winpr/wtsapi.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
+enum
+{
+	DRDYNVC_STATE_NONE = 0,
+	DRDYNVC_STATE_INITIALIZED = 1,
+	DRDYNVC_STATE_READY = 2,
+	DRDYNVC_STATE_FAILED = 3
+};
+
 /**
  * WTSVirtualChannelManager functions are FreeRDP extensions to the API.
  */
-FREERDP_API WTSVirtualChannelManager* WTSCreateVirtualChannelManager(freerdp_peer* client);
-FREERDP_API void WTSDestroyVirtualChannelManager(WTSVirtualChannelManager* vcm);
-FREERDP_API void WTSVirtualChannelManagerGetFileDescriptor(WTSVirtualChannelManager* vcm,
-	void** fds, int* fds_count);
-FREERDP_API BOOL WTSVirtualChannelManagerCheckFileDescriptor(WTSVirtualChannelManager* vcm);
+
+FREERDP_API void WTSVirtualChannelManagerGetFileDescriptor(HANDLE hServer, void** fds, int* fds_count);
+FREERDP_API BOOL WTSVirtualChannelManagerCheckFileDescriptor(HANDLE hServer);
+FREERDP_API HANDLE WTSVirtualChannelManagerGetEventHandle(HANDLE hServer);
+FREERDP_API BOOL WTSVirtualChannelManagerIsChannelJoined(HANDLE hServer, const char* name);
+FREERDP_API BYTE WTSVirtualChannelManagerGetDrdynvcState(HANDLE hServer);
 
 /**
- * Opens a static or dynamic virtual channel and return the handle. If the
- * operation fails, a NULL handle is returned.
- * 
- * The original MS API has 'DWORD SessionId' as the first argument, while we
- * use our WTSVirtualChannelManager object instead.
- *
- * Static virtual channels must be opened from the main thread. Dynamic virtual channels
- * can be opened from any thread.
+ * Extended FreeRDP WTS functions for channel handling
  */
-FREERDP_API void* WTSVirtualChannelOpenEx(
-	/* __in */ WTSVirtualChannelManager* vcm,
-	/* __in */ const char* pVirtualName,
-	/* __in */ UINT32 flags);
-
-/**
- * Returns information about a specified virtual channel.
- *
- * Servers use this function to gain access to a virtual channel file handle
- * that can be used for asynchronous I/O.
- */
-FREERDP_API BOOL WTSVirtualChannelQuery(
-	/* __in */  void* hChannelHandle,
-	/* __in */  WTS_VIRTUAL_CLASS WtsVirtualClass,
-	/* __out */ void** ppBuffer,
-	/* __out */ UINT32* pBytesReturned);
-
-/**
- * Frees memory allocated by WTSVirtualChannelQuery
- */
-FREERDP_API void WTSFreeMemory(
-	/* __in */ void* pMemory);
-
-/**
- * Reads data from the server end of a virtual channel.
- *
- * FreeRDP behavior:
- *
- * This function will always return a complete channel data packet, i.e. chunks
- * are already assembled. If BufferSize argument is smaller than the packet
- * size, it will set the desired size in pBytesRead and return FALSE. The
- * caller should allocate a large enough buffer and call this function again.
- * Returning FALSE with pBytesRead set to zero indicates an error has occurred.
- * If no pending packet to be read, it will set pBytesRead to zero and return
- * TRUE.
- *
- * TimeOut is not supported, and this function will always return immediately.
- * The caller should use the file handle returned by WTSVirtualChannelQuery to
- * determine whether a packet has arrived.
- */
-FREERDP_API BOOL WTSVirtualChannelRead(
-	/* __in */  void* hChannelHandle,
-	/* __in */  UINT32 TimeOut,
-	/* __out */ BYTE* Buffer,
-	/* __in */  UINT32 BufferSize,
-	/* __out */ UINT32* pBytesRead);
-
-/**
- * Writes data to the server end of a virtual channel.
- */
-FREERDP_API BOOL WTSVirtualChannelWrite(
-	/* __in */  void* hChannelHandle,
-	/* __in */  BYTE* Buffer,
-	/* __in */  UINT32 Length,
-	/* __out */ UINT32* pBytesWritten);
-
-/**
- * Closes an open virtual channel handle.
- */
-FREERDP_API BOOL WTSVirtualChannelClose(
-	/* __in */ void* hChannelHandle);
+FREERDP_API UINT16 WTSChannelGetId(freerdp_peer *client, const char *channel_name);
+FREERDP_API BOOL WTSIsChannelJoinedByName(freerdp_peer *client, const char *channel_name);
+FREERDP_API BOOL WTSIsChannelJoinedById(freerdp_peer *client, const UINT16 channel_id);
+FREERDP_API BOOL WTSChannelSetHandleByName(freerdp_peer *client, const char *channel_name, void *handle);
+FREERDP_API BOOL WTSChannelSetHandleById(freerdp_peer *client, const UINT16 channel_id, void *handle);
+FREERDP_API void *WTSChannelGetHandleByName(freerdp_peer *client, const char *channel_name);
+FREERDP_API void *WTSChannelGetHandleById(freerdp_peer *client, const UINT16 channel_id);
 
 #ifdef __cplusplus
 }

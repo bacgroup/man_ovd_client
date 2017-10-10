@@ -3,6 +3,8 @@
  * Server Audio Virtual Channel
  *
  * Copyright 2012 Vic Lee
+ * Copyright 2015 Thincast Technologies GmbH
+ * Copyright 2015 DI (FH) Martin Haimberger <martin.haimberger@thincast.com>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,19 +25,31 @@
 #include <freerdp/channels/wtsvc.h>
 #include <freerdp/channels/rdpsnd.h>
 
+typedef struct _rdpsnd_server_context RdpsndServerContext;
 typedef struct _rdpsnd_server_context rdpsnd_server_context;
+typedef struct _rdpsnd_server_private RdpsndServerPrivate;
 
-typedef BOOL (*psRdpsndServerInitialize)(rdpsnd_server_context* context);
-typedef void (*psRdpsndServerSelectFormat)(rdpsnd_server_context* context, int client_format_index);
-typedef BOOL (*psRdpsndServerSendSamples)(rdpsnd_server_context* context, const void* buf, int nframes);
-typedef BOOL (*psRdpsndServerSetVolume)(rdpsnd_server_context* context, int left, int right);
-typedef BOOL (*psRdpsndServerClose)(rdpsnd_server_context* context);
+typedef UINT (*psRdpsndStart)(RdpsndServerContext* context);
+typedef UINT (*psRdpsndStop)(RdpsndServerContext* context);
 
-typedef void (*psRdpsndServerActivated)(rdpsnd_server_context* context);
+typedef UINT (*psRdpsndServerInitialize)(RdpsndServerContext* context, BOOL ownThread);
+typedef UINT (*psRdpsndServerSelectFormat)(RdpsndServerContext* context, int client_format_index);
+typedef UINT (*psRdpsndServerSendSamples)(RdpsndServerContext* context, const void* buf, int nframes, UINT16 wTimestamp);
+typedef UINT (*psRdpsndServerConfirmBlock)(RdpsndServerContext* context, BYTE confirmBlockNum, UINT16 wtimestamp);
+typedef UINT (*psRdpsndServerSetVolume)(RdpsndServerContext* context, int left, int right);
+typedef UINT (*psRdpsndServerClose)(RdpsndServerContext* context);
+
+
+typedef void (*psRdpsndServerActivated)(RdpsndServerContext* context);
 
 struct _rdpsnd_server_context
 {
-	WTSVirtualChannelManager* vcm;
+	HANDLE vcm;
+
+	psRdpsndStart Start;
+	psRdpsndStop Stop;
+
+	RdpsndServerPrivate* priv;
 
 	/* Server self-defined pointer. */
 	void* data;
@@ -46,6 +60,9 @@ struct _rdpsnd_server_context
 
 	/* Server source PCM audio format. Set by server. */
 	AUDIO_FORMAT src_format;
+
+	/* Server audio latency, or buffer size, in milli-seconds. Set by server. */
+	int latency;
 
 	/* Client supported formats. */
 	AUDIO_FORMAT* client_formats;
@@ -73,6 +90,10 @@ struct _rdpsnd_server_context
 	 */
 	psRdpsndServerSendSamples SendSamples;
 	/**
+	 * Called when block confirm is received from the client
+	 */
+	psRdpsndServerConfirmBlock ConfirmBlock;
+	/**
 	 * Set the volume level of the client. Valid range is between 0 and 0xFFFF.
 	 */
 	psRdpsndServerSetVolume SetVolume;
@@ -89,14 +110,26 @@ struct _rdpsnd_server_context
 	 * synchronization.
 	 */
 	psRdpsndServerActivated Activated;
+
+	/**
+	 *  MS-RDPEA channel version the client announces
+	 */
+	UINT16 clientVersion;
+
+	rdpContext* rdpcontext;
 };
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-FREERDP_API rdpsnd_server_context* rdpsnd_server_context_new(WTSVirtualChannelManager* vcm);
-FREERDP_API void rdpsnd_server_context_free(rdpsnd_server_context* context);
+FREERDP_API RdpsndServerContext* rdpsnd_server_context_new(HANDLE vcm);
+FREERDP_API void rdpsnd_server_context_reset(RdpsndServerContext *);
+FREERDP_API void rdpsnd_server_context_free(RdpsndServerContext* context);
+FREERDP_API HANDLE rdpsnd_server_get_event_handle(RdpsndServerContext *context);
+FREERDP_API UINT rdpsnd_server_handle_messages(RdpsndServerContext *context);
+FREERDP_API UINT rdpsnd_server_send_formats(RdpsndServerContext* context, wStream* s);
+
 
 #ifdef __cplusplus
 }

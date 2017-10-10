@@ -19,14 +19,16 @@
  * limitations under the License.
  */
 
-#ifndef __MF_CLIENT_H
-#define __MF_CLIENT_H
+#ifndef FREERDP_CLIENT_MAC_CLIENT_H
+#define FREERDP_CLIENT_MAC_CLIENT_H
 
 #include <freerdp/client.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+FREERDP_API void mf_scale_mouse_event(void* context, rdpInput* input, UINT16 flags, UINT16 x, UINT16 y);
 
 /**
  * Client Interface
@@ -38,4 +40,4 @@ FREERDP_API int RdpClientEntry(RDP_CLIENT_ENTRY_POINTS* pEntryPoints);
 }
 #endif
 
-#endif
+#endif /* FREERDP_CLIENT_MAC_CLIENT_H */
