@@ -23,6 +23,25 @@
 #include <freerdp/api.h>
 #include <freerdp/freerdp.h>
 
+#define RDP_FILE_LINE_FLAG_FORMATTED		0x00000001
+#define RDP_FILE_LINE_FLAG_STANDARD		0x00000002
+#define RDP_FILE_LINE_FLAG_TYPE_STRING		0x00000010
+#define RDP_FILE_LINE_FLAG_TYPE_INTEGER		0x00000020
+#define RDP_FILE_LINE_FLAG_TYPE_BINARY		0x00000040
+
+struct rdp_file_line
+{
+	int index;
+	char* text;
+	DWORD flags;
+	char* name;
+	LPSTR sValue;
+	DWORD iValue;
+	PBYTE bValue;
+	int valueLength;
+};
+typedef struct rdp_file_line rdpFileLine;
+
 struct rdp_file
 {
 	DWORD UseMultiMon; /* use multimon */
@@ -70,6 +89,7 @@ struct rdp_file
 
 	LPSTR Username; /* username */
 	LPSTR Domain; /* domain */
+	LPSTR Password; /*password*/
 	PBYTE Password51; /* password 51 */
 
 	LPSTR FullAddress; /* full address */
@@ -129,6 +149,14 @@ struct rdp_file
 	LPSTR DrivesToRedirect; /* drivestoredirect */
 	LPSTR DevicesToRedirect; /* devicestoredirect */
 	LPSTR WinPosStr; /* winposstr */
+
+	int lineCount;
+	int lineSize;
+	rdpFileLine* lines;
+
+	int argc;
+	char** argv;
+	int argSize;
 };
 
 typedef struct rdp_file rdpFile;
@@ -138,12 +166,18 @@ extern "C" {
 #endif
 
 FREERDP_API BOOL freerdp_client_parse_rdp_file(rdpFile* file, const char* name);
-FREERDP_API BOOL freerdp_client_parse_rdp_file_buffer(rdpFile* file, BYTE* buffer, size_t size);
+FREERDP_API BOOL freerdp_client_parse_rdp_file_buffer(rdpFile* file, const BYTE* buffer, size_t size);
 FREERDP_API BOOL freerdp_client_populate_settings_from_rdp_file(rdpFile* file, rdpSettings* settings);
 
-FREERDP_API BOOL freerdp_client_populate_rdp_file_from_settings(rdpFile* file, rdpSettings* settings);
-FREERDP_API BOOL freerdp_client_write_rdp_file(rdpFile* file, const char* name, BOOL unicode);
-FREERDP_API size_t freerdp_client_write_rdp_file_buffer(rdpFile* file, char* buffer, size_t size);
+FREERDP_API BOOL freerdp_client_populate_rdp_file_from_settings(rdpFile* file, const rdpSettings* settings);
+FREERDP_API BOOL freerdp_client_write_rdp_file(const rdpFile* file, const char* name, BOOL unicode);
+FREERDP_API size_t freerdp_client_write_rdp_file_buffer(const rdpFile* file, char* buffer, size_t size);
+
+FREERDP_API int freerdp_client_rdp_file_set_string_option(rdpFile* file, const char* name, const char* value);
+FREERDP_API const char* freerdp_client_rdp_file_get_string_option(rdpFile* file, const char* name);
+
+FREERDP_API int freerdp_client_rdp_file_set_integer_option(rdpFile* file, const char* name, int value);
+FREERDP_API int freerdp_client_rdp_file_get_integer_option(rdpFile* file, const char* name);
 
 FREERDP_API rdpFile* freerdp_client_rdp_file_new(void);
 FREERDP_API void freerdp_client_rdp_file_free(rdpFile* file);
