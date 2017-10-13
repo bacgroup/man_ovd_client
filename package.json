@@ -1,5 +1,5 @@
 {
-  "name": "man_ovd_client",
+  "name": "MANOVDClient",
   "version": "1.0.0",
   "description": "MAN OVD Client",
   "main": "main.js",

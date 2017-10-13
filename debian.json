@@ -1,0 +1,10 @@
+{
+  "dest": "..",
+  "icon": "../app_icon.png",
+  "categories": [
+    "Internet"
+  ],
+  "lintianOverrides": [
+    "changelog-file-missing-in-native-package"
+  ]
+}

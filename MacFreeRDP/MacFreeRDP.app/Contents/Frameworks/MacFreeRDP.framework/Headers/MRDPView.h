@@ -1,3 +1,6 @@
+#ifndef FREERDP_CLIENT_MAC_MRDPVIEW_H
+#define FREERDP_CLIENT_MAC_MRDPVIEW_H
+
 /**
  * FreeRDP: A Remote Desktop Protocol Implementation
  * MacFreeRDP
@@ -19,84 +22,51 @@
 
 #import <Cocoa/Cocoa.h>
 
-/*
- #import "freerdp/freerdp.h"
-#import "freerdp/types.h"
-#import "freerdp/channels/channels.h"
-#import "freerdp/gdi/gdi.h"
-#import "freerdp/graphics.h"
-#import "freerdp/utils/event.h"
-#import "freerdp/client/cliprdr.h"
-#import "freerdp/client/file.h"
-#import "freerdp/client/cmdline.h"
-#import "freerdp/rail/rail.h"
-#import "freerdp/rail.h"
-#import "freerdp/utils/rail.h"
-
-#import "mf_interface.h"
-*/
-
 #import "mfreerdp.h"
 #import "mf_client.h"
+#import "Keyboard.h"
 
 @interface MRDPView : NSView
 {
-	CFRunLoopSourceRef run_loop_src_channels;
-	CFRunLoopSourceRef run_loop_src_update;
-	CFRunLoopSourceRef run_loop_src_input;
-
+	mfContext* mfc;
 	NSBitmapImageRep* bmiRep;
 	NSMutableArray* cursors;
 	NSMutableArray* windows;
 	NSTimer* pasteboard_timer;
+	NSCursor* currentCursor;
 	NSRect prevWinPosition;
-	int titleBarHeight;
 	freerdp* instance;
 	rdpContext* context;
 	CGContextRef bitmap_context;
 	char* pixel_data;
-	int width;
-	int height;
 	int argc;
 	char** argv;
-    
+	DWORD kbdModFlags;
+	BOOL initialized;
 	NSPoint savedDragLocation;
-	BOOL mouseInClientArea;
 	BOOL firstCreateWindow;
 	BOOL isMoveSizeInProgress;
 	BOOL skipResizeOnce;
 	BOOL saveInitialDragLoc;
 	BOOL skipMoveWindowOnce;
-
-	/* store state info for some keys */
-	int kdlshift;
-	int kdrshift;
-	int kdlctrl;
-	int kdrctrl;
-	int kdlalt;
-	int kdralt;
-	int kdlmeta;
-	int kdrmeta;
-	int kdcapslock;
-
-    BOOL initialized;
-	
 @public
-	NSPasteboard* pasteboard_rd; /* for reading from clipboard */
-	NSPasteboard* pasteboard_wr; /* for writing to clipboard */
+	NSPasteboard* pasteboard_rd;
+	NSPasteboard* pasteboard_wr;
 	int pasteboard_changecount;
 	int pasteboard_format;
 	int is_connected;
 }
 
 - (int)  rdpStart :(rdpContext*) rdp_context;
-- (void) rdpConnectError;
-- (void) rdpRemoteAppError;
-- (void) onPasteboardTimerFired :(NSTimer *) timer;
-- (void) releaseResources;
-- (void) setViewSize : (int) width : (int) height;
+- (void) setCursor: (NSCursor*) cursor;
+- (void) setScrollOffset:(int)xOffset y:(int)yOffset w:(int)width h:(int)height;
 
-@property (assign) int is_connected;
+- (void) onPasteboardTimerFired :(NSTimer*) timer;
+- (void) pause;
+- (void) resume;
+- (void) releaseResources;
+
+@property(assign) int is_connected;
 
 @end
 
@@ -112,5 +82,7 @@
 
 BOOL mac_pre_connect(freerdp* instance);
 BOOL mac_post_connect(freerdp*	instance);
-BOOL mac_authenticate(freerdp* instance, char** username, char** password, char** domain);
-int mac_receive_channel_data(freerdp* instance, int chan_id, BYTE* data, int size, int flags, int total_size);
+BOOL mac_authenticate(freerdp* instance, char** username, char** password,
+                      char** domain);
+
+#endif /* FREERDP_CLIENT_MAC_MRDPVIEW_H */
