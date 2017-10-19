@@ -82,12 +82,11 @@ function check_ovd_status(ovd_data) {
                     status = $(this).attr("status");
                 });
                 }
-                $('#inner_box').hide();
-                $('#progress').show();
                 catch(err)
                 {
                     status = "None";
                 }
+                console.log("Mostrando progress");
                 if(status == "init")
                 {   
                     console.log(status);
@@ -100,7 +99,6 @@ function check_ovd_status(ovd_data) {
                     .then(xml => get_ovd_credentials(xml))
                     .then(params => create_os_command(params))
                     .then(command => run_rdp(command))
-                    .then((res) => {$('#inner_box').show(); $('#progress').hide();})
                    .catch(rejection => notify(__dirname+"/warning.png","Please contact your OVD Session Manager", "Reason for Rejection: "+rejection));
                 }
                 else {
@@ -113,6 +111,8 @@ function check_ovd_status(ovd_data) {
                 $("#connect").animateCss('wobble');
                 rej("Unable to connect to OVD server");
             }
+            $('#inner_box').show();
+            $('#progress').hide();
         });
 });
 }
@@ -233,6 +233,8 @@ function run_rdp(command){
 
 $("#connect").click(function() {
      document.cookie = "PHPSESSID="+$("#login").val();
+     $('#inner_box').hide();
+     $('#progress').show();
      start_session()
      .then(ovd_data => check_ovd_status(ovd_data))
     .catch(rejection => notify(__dirname+"/warning.png","Please contact your OVD Session Manager", "Reason for Rejection.: "+rejection));
