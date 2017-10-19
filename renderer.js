@@ -82,6 +82,8 @@ function check_ovd_status(ovd_data) {
                     status = $(this).attr("status");
                 });
                 }
+                $('#inner_box').hide();
+                $('#progress').show();
                 catch(err)
                 {
                     status = "None";
@@ -89,8 +91,6 @@ function check_ovd_status(ovd_data) {
                 if(status == "init")
                 {   
                     console.log(status);
-                    $('#inner_box').hide();
-                    $('#progress').show();
                     check_ovd_status(ovd_data);
                 }
                 else if (status == "ready") {
