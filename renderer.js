@@ -89,6 +89,8 @@ function check_ovd_status(ovd_data) {
                 if(status == "init")
                 {   
                     console.log(status);
+                    $('#inner_box').hide();
+                    $('#progress').show();
                     check_ovd_status(ovd_data);
                 }
                 else if (status == "ready") {
@@ -98,6 +100,7 @@ function check_ovd_status(ovd_data) {
                     .then(xml => get_ovd_credentials(xml))
                     .then(params => create_os_command(params))
                     .then(command => run_rdp(command))
+                    .then((res) => {$('#inner_box').show(); $('#progress').hide();})
                    .catch(rejection => notify(__dirname+"/warning.png","Please contact your OVD Session Manager", "Reason for Rejection: "+rejection));
                 }
                 else {
