@@ -86,18 +86,25 @@ function check_ovd_status(ovd_data) {
                 {
                     status = "None";
                 }
-                console.log("Mostrando progress");
-                if(status == "init")
+                if(status == "logged")
+                {   
+                    console.log(status);
+                    $('#inner_box').show();
+                    $('#progress').hide();
+                }
+                else if(status == "init")
                 {   
                     console.log(status);
                     check_ovd_status(ovd_data);
                 }
                 else if (status == "ready") {
                     console.log(response.body);
+                    
                     validate_xml_response(ovd_data)
                     .then(xml => get_ovd_credentials(xml))
                     .then(params => create_os_command(params))
                     .then(command => run_rdp(command))
+                    .then(check_ovd_status(ovd_data))
                    .catch(rejection => notify(__dirname+"/warning.png","Please contact your OVD Session Manager", "Reason for Rejection: "+rejection));
                 }
                 else {
@@ -110,8 +117,6 @@ function check_ovd_status(ovd_data) {
                 $("#connect").animateCss('wobble');
                 rej("Unable to connect to OVD server");
             }
-            $('#inner_box').show();
-            $('#progress').hide();
         });
 });
 }
@@ -121,9 +126,6 @@ function start_session() {
         login = $("#login").val();
         pwd = $("#pwd").val();
         sm = $("#sm").val();
-
-        $('#inner_box').hide();
-        $('#progress').show();
         
         options = {
             method: 'POST',
@@ -134,7 +136,7 @@ function start_session() {
         client = request.createClient(options);
         client(sm+"/ovd/proxy.php",function (error, response, body) {
         if (!error && response.statusCode == 200) {
-            notify(__dirname+"/conecting.png","OVD Session Manager Create Session", "Please wait...");
+            notify(__dirname+"/conecting.png","Create your session", "Please wait...");
             res(response.body);
         }
         else {
@@ -234,8 +236,11 @@ function run_rdp(command){
 }
 
 $("#connect").click(function() {
+	
      document.cookie = "PHPSESSID="+$("#login").val();
-     notify(__dirname+"/conecting.png","Conecting to your OVD Session Manager", " ");
+     notify(__dirname+"/conecting.png","Conecting to your OVD Session Manager", "Please wait...");
+     $('#inner_box').hide();
+     $('#progress').show();
      start_session()
      .then(ovd_data => check_ovd_status(ovd_data))
     .catch(rejection => notify(__dirname+"/warning.png","Please contact your OVD Session Manager", "Reason for Rejection.: "+rejection));
