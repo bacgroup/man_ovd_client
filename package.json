@@ -23,7 +23,8 @@
   },
   "dependencies": {
     "jquery": "^3.2.1",
-    "request-with-cookies": "^0.0.5",
-    "node-notifier": "^5.1.2"
+    "moment": "^2.19.1",
+    "node-notifier": "^5.1.2",
+    "request-with-cookies": "^0.0.5"
   }
 }
