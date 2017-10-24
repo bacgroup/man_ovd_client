@@ -26,6 +26,13 @@ function notify(icon, title, msj) {
     'message': msj
 });
 }
+
+$(".logo").click(function() {
+    //$(this).animateCss('wobble');
+    window.open("https://manconsulting.co.uk","MAN Consulting", "width=1280,height=600")
+});
+
+
 function wait_for_ready_state()
 {
         sm = $("#sm").val();
