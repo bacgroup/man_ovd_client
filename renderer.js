@@ -5,6 +5,8 @@ window.$ = window.jQuery = require('jquery');
 
 notifier = require('node-notifier');
 
+var ready = false;
+
 $.fn.extend({
     animateCss: function (animationName) {
         var animationEnd = 'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend';
@@ -220,23 +222,25 @@ function create_os_command(params) {
 
 function run_rdp(command){
     return new Promise (function (res,rej) {
-        try {
-            child(command);
-            console.log(command);
-            console.log("Corriendo RDP");
-            res('Done');
-        }
-        catch(err)
-        {
-            rej(err);
-        }
-        
+	if (ready = true) {
+            try {
+                child(command);
+                console.log(command);
+                console.log("Corriendo RDP");
+                res('Done');
+            }
+            catch(err)
+            {
+                rej(err);
+            }
+	}
+	ready = false;
     });
     
 }
 
 $("#connect").click(function() {
-	
+     ready = true;
      document.cookie = "PHPSESSID="+$("#login").val();
      notify(__dirname+"/conecting.png","Conecting to your OVD Session Manager", "Please wait...");
      $('#inner_box').hide();
