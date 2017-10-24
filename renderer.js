@@ -1,9 +1,13 @@
 /*jshint esversion: 6 */
 child = require('child_process').exec;
+moment = require('moment');
+
 request = require("request-with-cookies");
 window.$ = window.jQuery = require('jquery');
 
 notifier = require('node-notifier');
+
+var ready = false;
 
 $.fn.extend({
     animateCss: function (animationName) {
@@ -58,9 +62,19 @@ function wait_for_ready_state()
 }
 
 
+function set_status(status, init=false) {
+    if (init != false) {
+        $(".status").empty();
+    }
+    now = moment().format('YYYY-MM-DD hh:mm:ss');
+    height = $(".status")[0].scrollHeight;
+    $(".status").html("<div class=\"col-xs-12\">"+status+"</div>");
+    $(".status").scrollTop(height);
+
+}
+
 function check_ovd_status(ovd_data) {
     	return new Promise (function (res,rej) {
-            
         login = $("#login").val();
         pwd = $("#pwd").val();
         sm = $("#sm").val();
@@ -81,12 +95,19 @@ function check_ovd_status(ovd_data) {
                 $.each($xml.find('session'), function() {
                     status = $(this).attr("status");
                 });
+                set_status("Checking OVD Server Status...");
                 }
                 catch(err)
                 {
                     status = "None";
                 }
-                if(status == "init")
+                if(status == "logged")
+                {   
+                    console.log(status);
+                    $('#inner_box').show();
+                    $('#progress').hide();
+                }
+                else if(status == "init")
                 {   
                     console.log(status);
                     check_ovd_status(ovd_data);
@@ -98,6 +119,7 @@ function check_ovd_status(ovd_data) {
                     .then(xml => get_ovd_credentials(xml))
                     .then(params => create_os_command(params))
                     .then(command => run_rdp(command))
+                    .then(check_ovd_status(ovd_data))
                    .catch(rejection => notify(__dirname+"/warning.png","Please contact your OVD Session Manager", "Reason for Rejection: "+rejection));
                 }
                 else {
@@ -119,7 +141,7 @@ function start_session() {
         login = $("#login").val();
         pwd = $("#pwd").val();
         sm = $("#sm").val();
-        
+             set_status("Starting OVD Session...");
         options = {
             method: 'POST',
             headers: {'x-ovd-service': 'start', 'Cookie': 'PHPSESSID='+$("#login").val()},
@@ -129,7 +151,7 @@ function start_session() {
         client = request.createClient(options);
         client(sm+"/ovd/proxy.php",function (error, response, body) {
         if (!error && response.statusCode == 200) {
-            notify(__dirname+"/conecting.png","Conecting to your OVD Session Manager", "Please wait for a while...");
+            notify(__dirname+"/conecting.png","Create your session", "Please wait...");
             res(response.body);
         }
         else {
@@ -142,6 +164,7 @@ function start_session() {
 
 function validate_xml_response(xml) {
     return new Promise (function (res,rej) {
+     set_status("Validate reponse");
     try {
         xmlDoc = $.parseXML(xml);
         $xml = $(xmlDoc);
@@ -213,23 +236,31 @@ function create_os_command(params) {
 
 function run_rdp(command){
     return new Promise (function (res,rej) {
-        try {
-            child(command);
-            console.log(command);
-            console.log("Corriendo RDP");
-            res('Done');
-        }
-        catch(err)
-        {
-            rej(err);
-        }
-        
+	if (ready == true) {
+            try {
+                set_status("Starting Session...");
+                child(command);
+                console.log(command);
+                console.log("Corriendo RDP");
+                res('Done');
+            }
+            catch(err)
+            {
+                rej(err);
+            }
+	}
+	ready = false;
     });
     
 }
 
 $("#connect").click(function() {
+     ready = true;
+     set_status("Connecting to OVD...", true);
      document.cookie = "PHPSESSID="+$("#login").val();
+     notify(__dirname+"/conecting.png","Conecting to your OVD Session Manager", "Please wait...");
+     $('#inner_box').hide();
+     $('#progress').show();
      start_session()
      .then(ovd_data => check_ovd_status(ovd_data))
     .catch(rejection => notify(__dirname+"/warning.png","Please contact your OVD Session Manager", "Reason for Rejection.: "+rejection));
