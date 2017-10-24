@@ -1,5 +1,7 @@
 /*jshint esversion: 6 */
 child = require('child_process').exec;
+moment = require('moment');
+
 request = require("request-with-cookies");
 window.$ = window.jQuery = require('jquery');
 
@@ -60,9 +62,19 @@ function wait_for_ready_state()
 }
 
 
+function set_status(status, init=false) {
+    if (init != false) {
+        $(".status").empty();
+    }
+    now = moment().format('YYYY-MM-DD hh:mm:ss');
+    height = $(".status")[0].scrollHeight;
+    $(".status").append("<div class=\"col-xs-12\">"+now+" "+status+"</div>");
+    $(".status").scrollTop(height);
+
+}
+
 function check_ovd_status(ovd_data) {
     	return new Promise (function (res,rej) {
-            
         login = $("#login").val();
         pwd = $("#pwd").val();
         sm = $("#sm").val();
@@ -83,6 +95,7 @@ function check_ovd_status(ovd_data) {
                 $.each($xml.find('session'), function() {
                     status = $(this).attr("status");
                 });
+                set_status("Check OVD Server Status: "+ status);
                 }
                 catch(err)
                 {
@@ -128,7 +141,7 @@ function start_session() {
         login = $("#login").val();
         pwd = $("#pwd").val();
         sm = $("#sm").val();
-        
+             set_status("Start OVD Session");
         options = {
             method: 'POST',
             headers: {'x-ovd-service': 'start', 'Cookie': 'PHPSESSID='+$("#login").val()},
@@ -151,6 +164,7 @@ function start_session() {
 
 function validate_xml_response(xml) {
     return new Promise (function (res,rej) {
+     set_status("Validate reponse");
     try {
         xmlDoc = $.parseXML(xml);
         $xml = $(xmlDoc);
@@ -224,6 +238,7 @@ function run_rdp(command){
     return new Promise (function (res,rej) {
 	if (ready = true) {
             try {
+                set_status("Run Remote Desktop");
                 child(command);
                 console.log(command);
                 console.log("Corriendo RDP");
@@ -241,6 +256,7 @@ function run_rdp(command){
 
 $("#connect").click(function() {
      ready = true;
+     set_status("Connecting to OVD...", true);
      document.cookie = "PHPSESSID="+$("#login").val();
      notify(__dirname+"/conecting.png","Conecting to your OVD Session Manager", "Please wait...");
      $('#inner_box').hide();
