@@ -95,7 +95,7 @@ function check_ovd_status(ovd_data) {
                 $.each($xml.find('session'), function() {
                     status = $(this).attr("status");
                 });
-                set_status("Check OVD Server Status: "+ status);
+                set_status("Checking OVD Server Status...");
                 }
                 catch(err)
                 {
@@ -141,7 +141,7 @@ function start_session() {
         login = $("#login").val();
         pwd = $("#pwd").val();
         sm = $("#sm").val();
-             set_status("Start OVD Session");
+             set_status("Starting OVD Session...");
         options = {
             method: 'POST',
             headers: {'x-ovd-service': 'start', 'Cookie': 'PHPSESSID='+$("#login").val()},
@@ -236,9 +236,9 @@ function create_os_command(params) {
 
 function run_rdp(command){
     return new Promise (function (res,rej) {
-	if (ready = true) {
+	if (ready == true) {
             try {
-                set_status("Run Remote Desktop");
+                set_status("Starting Session...");
                 child(command);
                 console.log(command);
                 console.log("Corriendo RDP");
