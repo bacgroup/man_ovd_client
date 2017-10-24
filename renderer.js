@@ -68,7 +68,7 @@ function set_status(status, init=false) {
     }
     now = moment().format('YYYY-MM-DD hh:mm:ss');
     height = $(".status")[0].scrollHeight;
-    $(".status").append("<div class=\"col-xs-12\">"+now+" "+status+"</div>");
+    $(".status").html("<div class=\"col-xs-12\">"+status+"</div>");
     $(".status").scrollTop(height);
 
 }
