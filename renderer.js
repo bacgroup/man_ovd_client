@@ -26,6 +26,18 @@ function notify(icon, title, msj) {
     'message': msj
 });
 }
+
+function show_login(){
+    $('#inner_box').show();
+    $('#progress').hide();
+}
+
+$(".logo").click(function() {
+    //$(this).animateCss('wobble');
+    window.open("https://manconsulting.co.uk","MAN Consulting", "width=1280,height=600")
+});
+
+
 function wait_for_ready_state()
 {
         sm = $("#sm").val();
@@ -120,7 +132,10 @@ function check_ovd_status(ovd_data) {
                     .then(params => create_os_command(params))
                     .then(command => run_rdp(command))
                     .then(check_ovd_status(ovd_data))
-                   .catch(rejection => notify(__dirname+"/warning.png","Please contact your OVD Session Manager", "Reason: "+rejection));
+                   .catch(rejection => {
+			    notify(__dirname+"/warning.png","Please contact your OVD Session Manager", "Reason: "+rejection);
+			    show_login();
+		            });
                 }
                 else {
                     console.log(status);
@@ -130,7 +145,9 @@ function check_ovd_status(ovd_data) {
             }
             else {
                 $("#connect").animateCss('wobble');
+		show_login();
                 rej("Unable to connect to OVD server");
+		
             }
         });
 });
@@ -156,6 +173,7 @@ function start_session() {
         }
         else {
                 $("#connect").animateCss('wobble');
+		show_login();
                 rej("Unable to connect to OVD server");
         }
         });
@@ -211,6 +229,7 @@ function get_ovd_credentials(xml) {
     catch(err)
     {
         $("#connect").animateCss('wobble');
+	show_login();
         rej("Unable to Login, OVD Server provides wrong Credential Data, "+err);
     }
 });
@@ -263,5 +282,8 @@ $("#connect").click(function() {
      $('#progress').show();
      start_session()
      .then(ovd_data => check_ovd_status(ovd_data))
-    .catch(rejection => notify(__dirname+"/warning.png","Please contact your OVD Session Manager", "Reason: "+rejection));
+    .catch(rejection => { 
+	     notify(__dirname+"/warning.png","Please contact your OVD Session Manager", "Reason: "+rejection);
+	     show_login();
+	      });
 });
