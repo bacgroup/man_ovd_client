@@ -26,17 +26,10 @@ function notify(icon, title, msj) {
     'message': msj
 });
 }
-
-$(".logo").click(function() {
-    //$(this).animateCss('wobble');
-    window.open("https://manconsulting.co.uk","MAN Consulting", "width=1280,height=600")
-});
-
-
 function wait_for_ready_state()
 {
         sm = $("#sm").val();
-        
+
         options = {
             method: 'POST',
             headers: {'x-ovd-service': 'session_status', 'Cookie': 'PHPSESSID='+$("#login").val()}
@@ -85,7 +78,7 @@ function check_ovd_status(ovd_data) {
         login = $("#login").val();
         pwd = $("#pwd").val();
         sm = $("#sm").val();
-        
+
         options = {
             method: 'POST',
             headers: {'x-ovd-service': 'session_status', 'Cookie': 'PHPSESSID='+$("#login").val()}
@@ -102,36 +95,36 @@ function check_ovd_status(ovd_data) {
                 $.each($xml.find('session'), function() {
                     status = $(this).attr("status");
                 });
-                set_status("Checking OVD Server Status...");
+                set_status("Preparing session settings...");
                 }
                 catch(err)
                 {
                     status = "None";
                 }
                 if(status == "logged")
-                {   
+                {
                     console.log(status);
                     $('#inner_box').show();
                     $('#progress').hide();
                 }
                 else if(status == "init")
-                {   
+                {
                     console.log(status);
                     check_ovd_status(ovd_data);
                 }
                 else if (status == "ready") {
                     console.log(response.body);
-                    
+
                     validate_xml_response(ovd_data)
                     .then(xml => get_ovd_credentials(xml))
                     .then(params => create_os_command(params))
                     .then(command => run_rdp(command))
                     .then(check_ovd_status(ovd_data))
-                   .catch(rejection => notify(__dirname+"/warning.png","Please contact your OVD Session Manager", "Reason for Rejection: "+rejection));
+                   .catch(rejection => notify(__dirname+"/warning.png","Please contact your OVD Session Manager", "Reason: "+rejection));
                 }
                 else {
                     console.log(status);
-                    rej("Cant to connect");
+                    rej("Failed to connect");
                 }
                 }, 2000);
             }
@@ -158,7 +151,7 @@ function start_session() {
         client = request.createClient(options);
         client(sm+"/ovd/proxy.php",function (error, response, body) {
         if (!error && response.statusCode == 200) {
-            notify(__dirname+"/conecting.png","Create your session", "Please wait...");
+            notify(__dirname+"/conecting.png","Preparing session", "Please wait...");
             res(response.body);
         }
         else {
@@ -218,15 +211,15 @@ function get_ovd_credentials(xml) {
     catch(err)
     {
         $("#connect").animateCss('wobble');
-        rej("Unable to Login, OVD Server provides wrong Credential Data, "+err); 
+        rej("Unable to Login, OVD Server provides wrong Credential Data, "+err);
     }
 });
-    
+
 }
 
 function create_os_command(params) {
     return new Promise (function (res,rej) {
-    try {    
+    try {
         os_rdp_exe = {
             linux: "xfreerdp /v:" + params.fqdn + ":" + params.port + " /u:" + params.login + " /p:'" + params.password + "' /sec:rdp /drive:home,$HOME /printer +clipboard /jpeg /parent-window:`xwininfo -name 'MAN OVD Client' | grep 'Window id' | cut -d' ' -f4` /size:`xwininfo -name 'MAN OVD Client' | grep 'Width' | tr -s ' '|cut -d' ' -f3`x`xwininfo -name 'MAN OVD Client' | grep 'Height' | tr -s ' '|cut -d' ' -f3`",
             win32: "resources\\app\\rdp.exe /v:" + params.fqdn + ":" + params.port + " /u:" + params.login + " /p:" + params.password + " /printers /drives /max",
@@ -237,7 +230,7 @@ function create_os_command(params) {
     catch(err) {
         rej(err);
     }
-        
+
     });
 }
 
@@ -258,7 +251,7 @@ function run_rdp(command){
 	}
 	ready = false;
     });
-    
+
 }
 
 $("#connect").click(function() {
@@ -270,5 +263,5 @@ $("#connect").click(function() {
      $('#progress').show();
      start_session()
      .then(ovd_data => check_ovd_status(ovd_data))
-    .catch(rejection => notify(__dirname+"/warning.png","Please contact your OVD Session Manager", "Reason for Rejection.: "+rejection));
+    .catch(rejection => notify(__dirname+"/warning.png","Please contact your OVD Session Manager", "Reason: "+rejection));
 });
