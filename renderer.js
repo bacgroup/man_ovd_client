@@ -9,12 +9,6 @@ notifier = require('node-notifier');
 
 var ready = false;
 
-$("#sm").change(function() {
-  alert("cambio");
-  sm=$(this).val();
-  $(this).val(sm.replace(/(^\w+:|^)\/\//, ''));
-});
-
 $.fn.extend({
     animateCss: function (animationName) {
         var animationEnd = 'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend';
@@ -46,7 +40,7 @@ $(".logo").click(function() {
 
 function wait_for_ready_state()
 {
-        sm = $("#sm").val();
+        sm = "http://"+$("#sm").val();
 
         options = {
             method: 'POST',
@@ -95,7 +89,7 @@ function check_ovd_status(ovd_data) {
     	return new Promise (function (res,rej) {
         login = $("#login").val();
         pwd = $("#pwd").val();
-        sm = $("#sm").val();
+        sm = "http://"+$("#sm").val();
 
         options = {
             method: 'POST',
@@ -113,7 +107,7 @@ function check_ovd_status(ovd_data) {
                 $.each($xml.find('session'), function() {
                     status = $(this).attr("status");
                 });
-                set_status("Preparing session settings...");
+                set_status("Preparing session settings");
                 }
                 catch(err)
                 {
@@ -163,8 +157,8 @@ function start_session() {
     	return new Promise (function (res,rej) {
         login = $("#login").val();
         pwd = $("#pwd").val();
-        sm = $("#sm").val();
-             set_status("Starting OVD Session...");
+        sm = "http://"+$("#sm").val();
+             set_status("Starting OVD Session");
         options = {
             method: 'POST',
             headers: {'x-ovd-service': 'start', 'Cookie': 'PHPSESSID='+$("#login").val()},
@@ -246,9 +240,9 @@ function create_os_command(params) {
     return new Promise (function (res,rej) {
     try {
         os_rdp_exe = {
-            linux: "xfreerdp /v:" + params.fqdn + ":" + params.port + " /u:" + params.login + " /p:'" + params.password + "' /sec:rdp /drive:home,$HOME /printer +clipboard /jpeg /parent-window:`xwininfo -name 'MAN OVD Client' | grep 'Window id' | cut -d' ' -f4` /size:`xwininfo -name 'MAN OVD Client' | grep 'Width' | tr -s ' '|cut -d' ' -f3`x`xwininfo -name 'MAN OVD Client' | grep 'Height' | tr -s ' '|cut -d' ' -f3`",
+            linux: "java -jar  "+__dirname+"/OVDNativeClient/OVDNativeClient.jar -s "+$("#sm").val()+" -u "+$("#login").val()+" -p "+$("#pwd").val()+" -m desktop --progress-bar hide --auto-start",
             win32: "resources\\app\\rdp.exe /v:" + params.fqdn + ":" + params.port + " /u:" + params.login + " /p:" + params.password + " /printers /drives /max",
-            darwin: "java -jar  "+__dirname+"/OVDNativeClient/OVDNativeClient.jar -s "+$("#sm").val()+" -u "+$("#login").val()+" -p "+$("#pwd").val()+" -m desktop --auto-start"
+            darwin: "java -jar  "+__dirname+"/OVDNativeClient/OVDNativeClient.jar -s "+$("#sm").val()+" -u "+$("#login").val()+" -p "+$("#pwd").val()+" -m desktop --progress-bar hide --auto-start"
         };
         //alert(os_rdp_exe[process.platform])
         res(os_rdp_exe[process.platform]);
@@ -264,7 +258,7 @@ function run_rdp(command){
     return new Promise (function (res,rej) {
 	if (ready == true) {
             try {
-                set_status("Starting Session...");
+                set_status("Starting Session");
                 child(command);
                 console.log(command);
                 console.log("Corriendo RDP");
@@ -282,7 +276,7 @@ function run_rdp(command){
 
 $("#connect").click(function() {
      ready = true;
-     set_status("Connecting to OVD...", true);
+     set_status("Connecting to OVD", true);
      document.cookie = "PHPSESSID="+$("#login").val();
      notify(__dirname+"/conecting.png","Conecting to your OVD Session Manager", "Please wait...");
      $('#inner_box').hide();
@@ -293,4 +287,9 @@ $("#connect").click(function() {
 	     notify(__dirname+"/warning.png","Please contact your OVD Session Manager", "Reason: "+rejection);
 	     show_login();
 	      });
+});
+
+$("#sm").change(function() {
+  sm=$(this).val();
+  $(this).val(sm.replace(/(^\w+:|^)\/\//, ''));
 });
