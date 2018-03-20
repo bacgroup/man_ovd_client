@@ -107,7 +107,7 @@ function check_ovd_status(ovd_data) {
                 $.each($xml.find('session'), function() {
                     status = $(this).attr("status");
                 });
-                set_status("Preparing session settings");
+                set_status("PREPARING SESSION SETTINGS");
                 }
                 catch(err)
                 {
@@ -139,7 +139,8 @@ function check_ovd_status(ovd_data) {
                 }
                 else {
                     console.log(status);
-                    rej("Failed to connect");
+                    //rej("Failed to connect");
+                    
                 }
                 }, 2000);
             }
@@ -158,7 +159,7 @@ function start_session() {
         login = $("#login").val();
         pwd = $("#pwd").val();
         sm = "http://"+$("#sm").val();
-             set_status("Starting OVD Session");
+             set_status("STARTING OVD SESSION");
         options = {
             method: 'POST',
             headers: {'x-ovd-service': 'start', 'Cookie': 'PHPSESSID='+$("#login").val()},
@@ -182,7 +183,7 @@ function start_session() {
 
 function validate_xml_response(xml) {
     return new Promise (function (res,rej) {
-     set_status("Validate reponse");
+     set_status("VALIDATE RESPONSE");
     try {
         xmlDoc = $.parseXML(xml);
         $xml = $(xmlDoc);
@@ -258,7 +259,7 @@ function run_rdp(command){
     return new Promise (function (res,rej) {
 	if (ready == true) {
             try {
-                set_status("Starting Session");
+                set_status("STARTING SESSION");
                 child(command);
                 console.log(command);
                 console.log("Corriendo RDP");
@@ -276,7 +277,7 @@ function run_rdp(command){
 
 $("#connect").click(function() {
      ready = true;
-     set_status("Connecting to OVD", true);
+     set_status("CONNECTING TO OVD", true);
      document.cookie = "PHPSESSID="+$("#login").val();
      notify(__dirname+"/conecting.png","Conecting to your OVD Session Manager", "Please wait...");
      $('#inner_box').hide();
