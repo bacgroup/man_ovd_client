@@ -9,6 +9,12 @@ notifier = require('node-notifier');
 
 var ready = false;
 
+$("#sm").change(function() {
+  alert("cambio");
+  sm=$(this).val();
+  $(this).val(sm.replace(/(^\w+:|^)\/\//, ''));
+});
+
 $.fn.extend({
     animateCss: function (animationName) {
         var animationEnd = 'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend';
@@ -242,8 +248,9 @@ function create_os_command(params) {
         os_rdp_exe = {
             linux: "xfreerdp /v:" + params.fqdn + ":" + params.port + " /u:" + params.login + " /p:'" + params.password + "' /sec:rdp /drive:home,$HOME /printer +clipboard /jpeg /parent-window:`xwininfo -name 'MAN OVD Client' | grep 'Window id' | cut -d' ' -f4` /size:`xwininfo -name 'MAN OVD Client' | grep 'Width' | tr -s ' '|cut -d' ' -f3`x`xwininfo -name 'MAN OVD Client' | grep 'Height' | tr -s ' '|cut -d' ' -f3`",
             win32: "resources\\app\\rdp.exe /v:" + params.fqdn + ":" + params.port + " /u:" + params.login + " /p:" + params.password + " /printers /drives /max",
-            darwin: "open "+__dirname+"/MacFreeRDP/MacFreeRDP.app --args /f /v:" + params.fqdn + ":" + params.port + " /u:" + params.login + " /p:'" + params.password + "' /sec:tls /cert-ignore  /drive:home,$HOME /printer +clipboard"
+            darwin: "java -jar  "+__dirname+"/OVDNativeClient/OVDNativeClient.jar -s "+$("#sm").val()+" -u "+$("#login").val()+" -p "+$("#pwd").val()+" -m desktop --auto-start"
         };
+        //alert(os_rdp_exe[process.platform])
         res(os_rdp_exe[process.platform]);
     }
     catch(err) {
