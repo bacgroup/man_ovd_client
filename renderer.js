@@ -289,7 +289,7 @@ $("#connect").click(function() {
 	      });
 });
 
-$("#sm").change(function() {
+$("input").change(function() {
   sm=$(this).val();
   $(this).val(sm.replace(/(^\w+:|^)\/\//, ''));
 });
