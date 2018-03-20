@@ -238,11 +238,13 @@ function get_ovd_credentials(xml) {
 
 function create_os_command(params) {
     return new Promise (function (res,rej) {
+    st=$('select[name=st]').val();
+    sm=$("#sm").val();
     try {
         os_rdp_exe = {
-            linux: "java -jar  "+__dirname+"/OVDNativeClient/OVDNativeClient.jar -s "+$("#sm").val()+" -u "+$("#login").val()+" -p "+$("#pwd").val()+" -m desktop --progress-bar hide --auto-start",
+            linux: "java -jar  "+__dirname+"/OVDNativeClient/OVDNativeClient.jar -s "+sm+" -u "+$("#login").val()+" -p "+$("#pwd").val()+" -m "+st+" --progress-bar hide --auto-start",
             win32: "resources\\app\\rdp.exe /v:" + params.fqdn + ":" + params.port + " /u:" + params.login + " /p:" + params.password + " /printers /drives /max",
-            darwin: "java -jar  "+__dirname+"/OVDNativeClient/OVDNativeClient.jar -s "+$("#sm").val()+" -u "+$("#login").val()+" -p "+$("#pwd").val()+" -m desktop --progress-bar hide --auto-start"
+            darwin: "java -jar  "+__dirname+"/OVDNativeClient/OVDNativeClient.jar -s "+sm+" -u "+$("#login").val()+" -p "+$("#pwd").val()+" -m "+st+" --progress-bar hide"
         };
         //alert(os_rdp_exe[process.platform])
         res(os_rdp_exe[process.platform]);

@@ -17,7 +17,7 @@ function createWindow() {
     mainWindow = new BrowserWindow({
         //titleBarStyle: 'hidden',
              width: 800,
-             height: 600,
+             height: 660,
              resizable: false,
              maximizable: false,
 	icon: path.join(__dirname, 'app_icon.png'),
