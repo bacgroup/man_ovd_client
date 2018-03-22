@@ -45,10 +45,10 @@ function create_os_command() {
     try {
         os_rdp_exe = {
             linux: "java -jar  "+__dirname+"/OVDNativeClient/OVDNativeClient.jar -s "+sm+" -u "+$("#login").val()+" -p "+$("#pwd").val(),
-            win32: "java.exe -jar  "+__dirname+"/OVDNativeClient/OVDNativeClient.jar -s "+sm+" -u "+$("#login").val()+" -p "+$("#pwd").val(),
+            win32: "java.exe -jar  "+__dirname+"\OVDNativeClient\OVDNativeClient.jar -s "+sm+" -u "+$("#login").val()+" -p "+$("#pwd").val(),
             darwin: "java -jar  "+__dirname+"/OVDNativeClient/OVDNativeClient.jar -s "+sm+" -u "+$("#login").val()+" -p "+$("#pwd").val()
         };
-        //alert(os_rdp_exe[process.platform])
+        alert(os_rdp_exe[process.platform])
         res(os_rdp_exe[process.platform]);
     }
     catch(err) {
@@ -61,7 +61,16 @@ function create_os_command() {
 function run_rdp(command){
     return new Promise (function (res,rej) {
            try {
-                child(command);
+
+                   child(command, function(error, stdout, stderr) {
+                   console.log('stdout: ' + stdout);
+                   console.log('stderr: ' + stderr);
+                   if (stderr != "") {
+                       //console.log('exec error: ' + error);
+                       reject("Jar Error");
+                   }
+                   });
+
                 console.log(command);
                 console.log("Corriendo RDP");
                 res('Done');
@@ -95,7 +104,7 @@ $("#connect").click(function() {
      .then(command => run_rdp(command))
      .then(result => close_window(result))
     .catch(rejection => { 
-	     notify(__dirname+"/warning.png","Please contact your OVD Session Manager", "Reason: "+rejection);
+	     notify(__dirname+"/warning.png","Please install Java JRE 8 or better.", "Reason: "+rejection);
 	     show_login();
      });
 });
