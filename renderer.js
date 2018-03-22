@@ -45,7 +45,7 @@ function create_os_command() {
     try {
         os_rdp_exe = {
             linux: "java -jar  "+__dirname+"/OVDNativeClient/OVDNativeClient.jar -s "+sm+" -u "+$("#login").val()+" -p "+$("#pwd").val(),
-            //win32: "resources\\app\\rdp.exe /v:" + params.fqdn + ":" + params.port + " /u:" + params.login + " /p:" + params.password + " /printers /drives /max",
+            win32: "java.exe -jar  "+__dirname+"/OVDNativeClient/OVDNativeClient.jar -s "+sm+" -u "+$("#login").val()+" -p "+$("#pwd").val(),
             darwin: "java -jar  "+__dirname+"/OVDNativeClient/OVDNativeClient.jar -s "+sm+" -u "+$("#login").val()+" -p "+$("#pwd").val()
         };
         //alert(os_rdp_exe[process.platform])
