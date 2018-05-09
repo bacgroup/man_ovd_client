@@ -16,10 +16,11 @@ let mainWindow
 function createWindow() {
     mainWindow = new BrowserWindow({
         //titleBarStyle: 'hidden',
-             width: 800,
-             height: 660,
+             width: 600,
+             height: 220,
              resizable: false,
              maximizable: false,
+             frame: false,
 	icon: path.join(__dirname, 'app_icon.png'),
         backgroundColor: '#eddb16'
     })
