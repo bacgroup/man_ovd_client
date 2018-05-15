@@ -14,11 +14,14 @@ let w = remote.getCurrentWindow()
 $( document ).ready(function() {
 
 os = {
-    darwin: "JAVA=`echo \"$(java -version 2>&1)\" | grep \"java version\"`;echo ${JAVA:14:9}"
+    darwin: "JAVA=`echo \"$(java -version 2>&1)\" | grep \"java version\"`;echo ${JAVA:14:9}",
+    linux: "JAVA=`echo \"$(java -version 2>&1)\" | grep \"java version\"`;echo ${JAVA:14:9}"
+
 }
 
 os_run = {
-    darwin: "java -jar  "+__dirname+"/OVDNativeClient/OVDNativeClient.jar"
+    darwin: "java -jar  "+__dirname+"/OVDNativeClient/OVDNativeClient.jar",
+    linux: "java -jar  "+__dirname+"/OVDNativeClient/OVDNativeClient.jar"
 }
 
 child(os[process.platform], function(error, stdout, stderr) {
