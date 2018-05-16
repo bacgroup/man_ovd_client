@@ -15,7 +15,7 @@ $( document ).ready(function() {
 
 os = {
     darwin: "JAVA=`echo \"$(java -version 2>&1)\" | grep \"java version\"`;echo ${JAVA:14:9}",
-    linux: "JAVA=`echo \"$(java -version 2>&1)\" | grep \"java version\"`;echo ${JAVA:14:9}"
+    linux: 'bash -c \'JAVA=`echo "$(java -version 2>&1)" | grep "java version"`;echo ${JAVA:14:9}\''
 
 }
 
