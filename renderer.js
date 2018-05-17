@@ -94,7 +94,7 @@ function check_java() {
             try {
                 $("#msj").html("Checking Java version...");
                 java_version = parseFloat(child_sync(java_check_os[process.platform]));
-                if (java_version <= 1.8 || java_version == 0) {
+                if (java_version < 1.8 || java_version == 0) {
                 rej("JAVA")
                 }
                 res('Java version "'+java_version+'" is OK');
@@ -105,6 +105,21 @@ function check_java() {
             }
     });
 }
+
+function run_ads_client() {
+    return new Promise (function (res,rej) {
+            try {
+                child(os_run[process.platform]);
+                res('DONE');
+            }
+            catch(err)
+            {
+                rej("SOME_THING");
+            }
+    });
+}
+
+
 
 function show_result(result) {
     return new Promise (function (res,rej) {
@@ -131,6 +146,10 @@ $( document ).ready(function() {
      .then(result => check_java(result))
      .delay(500)
      .then(result => show_result(result))
+     .delay(500)
+     .then(result => run_ads_client(result))
+     .delay(2000)
+     .then( result => { w.close() })
      .catch(error => {
      error_msj={
      JAVA: "Man Application Delivery System requires Java JRE/JDK 1.8 or above.\nPlease install or upgrade your Java.",
