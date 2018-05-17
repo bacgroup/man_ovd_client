@@ -14,7 +14,7 @@ $( document ).ready(function() {
 
 var java_check_os = {
     darwin: "JAVA=`echo \"$(java -version 2>&1)\" | grep \"java version\"`;echo ${JAVA:14:9}",
-    linux: 'bash -c \'JAVA=`echo "$(java -version 2>&1)" | grep "java version"`; echo ${JAVA:14:9}\''
+    linux: 'bash -c \'JAVA=`echo "$(java -XshowSettings:properties -version 2>&1)" | grep "java.specification.version"`; echo ${JAVA:32}\''
 }
 
 os_run = {
@@ -80,7 +80,6 @@ function check_os() {
                 run["ubuntu"] = "18.04"
                 }
                 res(os+" "+status);
-
             }
             catch(err)
             {
@@ -93,16 +92,18 @@ function check_os() {
 function check_java() {
     return new Promise (function (res,rej) {
             try {
-                $("#msj").html("Checking JAVA version...");
-                java_version = child_sync(java_check_os[process.platform]);
-                res('Java version "'+java_version+'" OK');
+                $("#msj").html("Checking Java version...");
+                java_version = parseFloat(child_sync(java_check_os[process.platform]));
+                if (java_version <= 1.8 || java_version == 0) {
+                rej("JAVA")
+                }
+                res('Java version "'+java_version+'" is OK');
             }
             catch(err)
             {
-                rej(err);
+                rej("SOME_THING");
             }
     });
-
 }
 
 function show_result(result) {
@@ -130,7 +131,14 @@ $( document ).ready(function() {
      .then(result => check_java(result))
      .delay(500)
      .then(result => show_result(result))
-
+     .catch(error => {
+     error_msj={
+     JAVA: "Man Application Delivery System requires Java JRE/JDK 1.8 or above.\nPlease install or upgrade your Java.",
+     SOME_THING: "Something went wrong."
+     }
+     alert(error_msj[error]);
+     w.close()
+     })
 });
 
 });
