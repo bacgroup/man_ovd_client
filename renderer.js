@@ -76,7 +76,7 @@ function check_java() {
             try {
                 $("#msj").html("Checking Java version...");
                 java_version = parseFloat(child_sync(java_check_os[process.platform]));
-                if (java_version < 1.8 || java_version == 0) {
+                if (java_version < 1.8 || java_version == 0 || isNaN(java_version) {
                 rej("JAVA")
                 }
                 res('Java version "'+java_version+'" is OK');
