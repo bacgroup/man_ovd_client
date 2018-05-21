@@ -24,25 +24,7 @@ os_run = {
 
 var run = {}
 
-/*
-child(os[process.platform], function(error, stdout, stderr) {
-    if(stdout.includes("1.8."))
-    {
-        child_run(os_run[process.platform], function(error, stdout, stderr) {
-        console.log('stdout: ' + stdout);
-        console.log('stderr: ' + stderr);
-        if (error !== null) {
-        console.log('exec error: ' + error);
-        }
-        });
-        setTimeout(function(){ w.close(); }, 3000);
-    }
-    console.log('stdout: ' + stdout);
-    console.log('stderr: ' + stderr);
-    if (error !== null) {
-        console.log('exec error: ' + error);
-    }
-}); */
+var ubuntu = ""
 
 function delay(t, v) {
    return new Promise(function(resolve) {
@@ -66,7 +48,7 @@ function start_up() {
             {
                 rej(err);
             }
-c    });
+    });
 }
 
 function check_os() {
@@ -74,10 +56,10 @@ function check_os() {
             try {
                 $("#msj").html("Checking OS compatibility...");
                 os = child_sync("cat /etc/*release|grep 'DISTRIB_DESCRIPTION'| cut -d'=' -f2 | sed 's/\"//g'");
-                //if os.includes("ubuntu");
                 status = "Detected"
                 if (os.includes("Ubuntu") && os.includes("18.04")) {
                 run["ubuntu"] = "18.04"
+                os_run[process.platform].replace("OVDNativeClient.jar", "OVDNativeClient_18.04.jar");
                 }
                 res(os+" "+status);
             }
@@ -109,8 +91,15 @@ function check_java() {
 function run_ads_client() {
     return new Promise (function (res,rej) {
             try {
-                child(os_run[process.platform]);
+
+
+                os = child_sync("cat /etc/*release|grep 'DISTRIB_DESCRIPTION'| cut -d'=' -f2 | sed 's/\"//g'");
+                if (os.includes("Ubuntu") && os.includes("18.04")) {
+                run["ubuntu"] = "18.04"
+                    os_run[process.platform] = os_run[process.platform].replace("OVDNativeClient.jar", "OVDNativeClient_18.04.jar");
+                    child(os_run[process.platform]);
                 res('DONE');
+                }
             }
             catch(err)
             {
