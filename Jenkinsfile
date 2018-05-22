@@ -50,7 +50,14 @@ node("master") {
     stage "Create Installers"
             dir ('packages') {
     sh """cat <<EOF > config.json
-
+{
+  "categories": [
+    "Utility"
+  ],
+  "depends": [
+    "openjdk-8-jdk",
+  ]
+}
 EOF"""
 }
             parallel(
@@ -62,12 +69,12 @@ EOF"""
             },
             "Ubuntu / Debian amd64 Packages": {
                 dir ('packages') {
-                sh "electron-installer-debian --src MANOVDClient-linux-x64 --dest .. --arch amd64"
+                sh "electron-installer-debian --src MANOVDClient-linux-x64 --dest .. --arch amd64 --config config.json"
             }
             },
             "Ubuntu / Debian i386 Packages": {
                 dir ('packages') {
-                sh "electron-installer-debian --src MANOVDClient-linux-ia32 --dest .. --arch i386"
+                sh "electron-installer-debian --src MANOVDClient-linux-ia32 --dest .. --arch i386 --config config.json"
             }
             }  
             )
