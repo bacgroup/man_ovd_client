@@ -48,6 +48,11 @@ node("master") {
         sh "electron-packager . --overwrite --out packages --ignore packages --build-version ${BUILD_NUMBER} --platform=win32 --arch=x64  --icon=${ICON_WINDOWS} --tmpdir=false"
     })            
     stage "Create Installers"
+            dir ('packages') {
+    sh """cat <<EOF > config.json
+
+EOF"""
+}
             parallel(
             "Windows ia32 Installer": {
                 sh "node createwindows32installer.js"
