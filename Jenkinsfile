@@ -52,7 +52,7 @@ node("master") {
     sh """cat <<EOF > config.json
 {
   "dest": "..",
-  "icon": "${ICON_STD}",
+  "icon": "../${ICON_STD}",
   "categories": [
     "Utility"
   ],
