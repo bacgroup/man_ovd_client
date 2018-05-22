@@ -51,11 +51,16 @@ node("master") {
             dir ('packages') {
     sh """cat <<EOF > config.json
 {
+  "dest": "..",
+  "icon": "${ICON_STD}",
   "categories": [
     "Utility"
   ],
   "depends": [
-    "openjdk-8-jdk",
+    "openjdk-8-jdk"
+  ],
+  "lintianOverrides": [
+    "changelog-file-missing-in-native-package"
   ]
 }
 EOF"""
@@ -69,12 +74,12 @@ EOF"""
             },
             "Ubuntu / Debian amd64 Packages": {
                 dir ('packages') {
-                sh "electron-installer-debian --src MANOVDClient-linux-x64 --dest .. --arch amd64 --config config.json"
+                sh "electron-installer-debian --src MANOVDClient-linux-x64 --arch amd64 --config config.json"
             }
             },
             "Ubuntu / Debian i386 Packages": {
                 dir ('packages') {
-                sh "electron-installer-debian --src MANOVDClient-linux-ia32 --dest .. --arch i386 --config config.json"
+                sh "electron-installer-debian --src MANOVDClient-linux-ia32 --arch i386 --config config.json"
             }
             }  
             )
