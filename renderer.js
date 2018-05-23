@@ -41,7 +41,6 @@ Promise.prototype.delay = function(t) {
 function start_up() {
     return new Promise (function (res,rej) {
             try {
-                //$("#msj").html("Initiating system checks");
                 res("Initiating system checks...");
             }
             catch(err)
@@ -53,10 +52,11 @@ function start_up() {
 
 function check_os() {
     return new Promise (function (res,rej) {
+        $("#msj").html("Checking OS compatibility...");
+        status = "Detected"
+        if(process.platform != "win32") {
             try {
-                $("#msj").html("Checking OS compatibility...");
                 os = child_sync("cat /etc/*release|grep 'DISTRIB_DESCRIPTION'| cut -d'=' -f2 | sed 's/\"//g'");
-                status = "Detected"
                 if (os.includes("Ubuntu") && os.includes("18.04")) {
                 run["ubuntu"] = "18.04"
                 os_run[process.platform].replace("OVDNativeClient.jar", "OVDNativeClient_18.04.jar");
@@ -67,6 +67,20 @@ function check_os() {
             {
                 rej(err);
             }
+       }
+       else
+       {
+           try {
+              osc = child_sync("ver").toString();
+              os = osc.split("[");
+              res(os[0]+" "+status);
+           }
+           catch(err)
+           {
+               rej(err);
+           }
+
+       }
     });
 
 }
@@ -76,7 +90,7 @@ function check_java() {
             try {
                 $("#msj").html("Checking Java version...");
                 java_version = parseFloat(child_sync(java_check_os[process.platform]));
-                if (java_version < 1.8 || java_version == 0 || isNaN(java_version)) {
+                if (java_version != 1.8 || java_version == 0 || isNaN(java_version)) {
                 rej("JAVA")
                 }
                 res('Java version "'+java_version+'" is OK');
@@ -91,8 +105,6 @@ function check_java() {
 function run_ads_client() {
     return new Promise (function (res,rej) {
             try {
-
-
                 os = child_sync("cat /etc/*release|grep 'DISTRIB_DESCRIPTION'| cut -d'=' -f2 | sed 's/\"//g'");
                 if (os.includes("Ubuntu") && os.includes("18.04")) {
                 run["ubuntu"] = "18.04"
@@ -132,21 +144,21 @@ $( document ).ready(function() {
      .delay(500)
      .then(result => show_result(result))
      .delay(500)
-     .then(result => check_java(result))
-     .delay(500)
-     .then(result => show_result(result))
-     .delay(500)
-     .then(result => run_ads_client(result))
-     .delay(2000)
-     .then( result => { w.close() })
-     .catch(error => {
+//    .then(result => check_java(result))
+//    .delay(500)
+//    .then(result => show_result(result))
+//    .delay(500)
+//    .then(result => run_ads_client(result))
+//   .delay(2000)
+//    .then( result => { w.close() })
+/*     .catch(error => {
      error_msj={
      JAVA: "Man Application Delivery System requires Java JRE/JDK 1.8 or above.\nPlease install or upgrade your Java.",
      SOME_THING: "Something went wrong."
      }
      alert(error_msj[error]);
      w.close()
-     })
+     })*/
 });
 
 });
