@@ -24,6 +24,7 @@ node("master") {
     echo "${STAGE}"
     deleteDir()
     checkout scm
+    sh "sed -i \"s/MANBUILD/MAN Application Delivery System Build 2 ${BUILD_NUMBER} Release ${STAGE}/g\" index.html"
     sh "cp ${ICON_STD} app_icon.png"
     sh "npm install"
     sh 'npm install electron-squirrel-startup'
