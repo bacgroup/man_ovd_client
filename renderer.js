@@ -21,7 +21,7 @@ var java_check_os = {
 os_run = {
     darwin: "java -jar  "+__dirname+"/OVDNativeClient/OVDNativeClient.jar",
     linux: "java -jar  "+__dirname+"/OVDNativeClient/OVDNativeClient.jar",
-    win32: "cd resources\\app\\OVDNativeClient && java -jar OVDNativeClient.jar"
+    win32: "cd resources\\app\\OVDNativeClient && javaw -jar OVDNativeClient.jar"
 }
 
 var run = {}
