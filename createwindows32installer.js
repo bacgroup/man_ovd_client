@@ -6,6 +6,7 @@ resultPromise = electronInstaller.createWindowsInstaller({
     authors: 'MAN Consulting',
     //exe: 'man_ovd_client.exe',
     setupIcon: "icon.ico",
+    loadingGif:"installing_splash.png",
     skipUpdateIcon: true,
     setupExe: 'Install.exe'
   });
