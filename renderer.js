@@ -133,6 +133,10 @@ function run_ads_client() {
                         child(os_run[process.platform]);
                     res('DONE');
                     }
+                    else {
+                        child(os_run[process.platform]);
+                    res('DONE');
+                    }
                 }
                 catch(err)
                 {
