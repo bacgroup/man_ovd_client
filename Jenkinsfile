@@ -96,10 +96,10 @@ EOF"""
             parallel(
             /* "Zip Linux32": {
                 sh "zip -q MANOVDClient-linux-ia32_build-${BUILD_NUMBER}_${STAGE}.zip -r MANOVDClient-linux-ia32_build-${BUILD_NUMBER}_${STAGE}"
-            },*/
-             "Zip Linux64": {
-                sh "zip -q MANOVDClient-linux-x64_build-${BUILD_NUMBER}_${STAGE}.zip -r MANOVDClient-linux-x64_build-${BUILD_NUMBER}_${STAGE}"
             },
+            "Zip Linux64": {
+                sh "zip -q MANOVDClient-linux-x64_build-${BUILD_NUMBER}_${STAGE}.zip -r MANOVDClient-linux-x64_build-${BUILD_NUMBER}_${STAGE}"
+            },*/
             "Zip Darwin": {
                 sh "zip -q MANOVDClient-darwin-x64_build-${BUILD_NUMBER}_${STAGE}.zip -r MANOVDClient-darwin-x64_build-${BUILD_NUMBER}_${STAGE}"
             },
