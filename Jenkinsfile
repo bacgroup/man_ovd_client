@@ -81,8 +81,8 @@ EOF"""
             "Ubuntu / Debian i386 Packages": {
                 dir ('packages') {
                 sh "electron-installer-debian --src MANOVDClient-linux-ia32 --arch i386 --config config.json"
-            }*/
-            }  
+            }
+            }*/  
             )
     stage "Tag with Build Number"
         dir ('packages') {
