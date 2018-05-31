@@ -6,6 +6,7 @@ resultPromise1 = electronInstaller.createWindowsInstaller({
     outputDirectory: 'packages/MANOVDClient-win32-x64_installer',
     authors: 'MAN Consulting',
     //exe: 'man_ovd_client.exe',
+    skipUpdateIcon: true,
     setupIcon: "icon.ico",
     setupExe: 'Install.exe'
   });

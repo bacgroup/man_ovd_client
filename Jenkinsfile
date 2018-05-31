@@ -24,6 +24,7 @@ node("master") {
     echo "${STAGE}"
     deleteDir()
     checkout scm
+    sh "sed -i \"s/MANBUILD/MAN Application Delivery System V2.0 Build ${BUILD_NUMBER} (${STAGE} Release) /g\" index.html"
     sh "cp ${ICON_STD} app_icon.png"
     sh "npm install"
     sh 'npm install electron-squirrel-startup'
@@ -48,6 +49,23 @@ node("master") {
         sh "electron-packager . --overwrite --out packages --ignore packages --build-version ${BUILD_NUMBER} --platform=win32 --arch=x64  --icon=${ICON_WINDOWS} --tmpdir=false"
     })
     stage "Create Installers"
+            dir ('packages') {
+    sh """cat <<EOF > config.json
+{
+  "dest": "..",
+  "icon": "../${ICON_STD}",
+  "categories": [
+    "Utility"
+  ],
+  "depends": [
+    "openjdk-8-jdk"
+  ],
+  "lintianOverrides": [
+    "changelog-file-missing-in-native-package"
+  ]
+}
+EOF"""
+}
             parallel(
             "Windows ia32 Installer": {
                 sh "node createwindows32installer.js"
@@ -57,12 +75,12 @@ node("master") {
             },
             "Ubuntu / Debian amd64 Packages": {
                 dir ('packages') {
-                sh "electron-installer-debian --src MANOVDClient-linux-x64 --dest .. --arch amd64"
+                sh "electron-installer-debian --src MANOVDClient-linux-x64 --arch amd64 --config config.json"
             }
             },
             "Ubuntu / Debian i386 Packages": {
                 dir ('packages') {
-                sh "electron-installer-debian --src MANOVDClient-linux-ia32 --dest .. --arch i386"
+                sh "electron-installer-debian --src MANOVDClient-linux-ia32 --arch i386 --config config.json"
             }
             }  
             )

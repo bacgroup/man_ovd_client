@@ -1,295 +1,202 @@
 /*jshint esversion: 6 */
+const remote = require('electron').remote
 child = require('child_process').exec;
+child_sync = require('child_process').execSync;
 moment = require('moment');
-
 request = require("request-with-cookies");
 window.$ = window.jQuery = require('jquery');
 
 notifier = require('node-notifier');
 
-var ready = false;
+let w = remote.getCurrentWindow();
 
-$.fn.extend({
-    animateCss: function (animationName) {
-        var animationEnd = 'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend';
-        this.addClass('animated ' + animationName).one(animationEnd, function() {
-            $(this).removeClass('animated ' + animationName);
-        });
-        return this;
-    }
-});
+$( document ).ready(function() {
 
-function notify(icon, title, msj) {
-    notifier.notify({
-    'icon': icon,
-    'title': title,
-    'message': msj
-});
+var java_check_os = {
+    darwin: "JAVA=`echo \"$(java -version 2>&1)\" | grep \"java version\"`;echo ${JAVA:14:9}",
+    linux: 'bash -c \'JAVA=`echo "$(java -XshowSettings:properties -version 2>&1)" | grep "java.specification.version"`; echo ${JAVA:32}\'',
+    win32: { tmp_java_version: "java -XshowSettings:properties -version 2> win.tmp", get_version: "type win.tmp" }
 }
 
-function show_login(){
-    $('#inner_box').show();
-    $('#progress').hide();
+os_run = {
+    darwin: "java -jar  "+__dirname+"/OVDNativeClient/OVDNativeClient.jar",
+    linux: "java -jar  "+__dirname+"/OVDNativeClient/OVDNativeClient.jar",
+    win32: "cd resources\\app\\OVDNativeClient && javaw -jar OVDNativeClient.jar"
 }
 
-$(".logo").click(function() {
-    //$(this).animateCss('wobble');
-    window.open("https://manconsulting.co.uk","MAN Consulting", "width=1280,height=600")
-});
+var run = {}
 
+var ubuntu = ""
 
-function wait_for_ready_state()
-{
-        sm = "http://"+$("#sm").val();
-
-        options = {
-            method: 'POST',
-            headers: {'x-ovd-service': 'session_status', 'Cookie': 'PHPSESSID='+$("#login").val()}
-        };
-
-        client = request.createClient(options);
-        client(sm+"/ovd/proxy.php",function (error, response, body) {
-            if (!error && response.statusCode == 200) {
-                console.log(response.body);
-                setTimeout(function() {
-                xmlDoc = $.parseXML(response.body);
-                $xml = $(xmlDoc);
-                try {
-                $.each($xml.find('session'), function() {
-                    status = $(this).attr("status");
-                });
-                }
-                catch(err)
-                {
-                    return "None";
-                }
-                console.log(status);
-                return(status);
-                }, 2000);
-            }
-            else {
-                return "None";
-            }
-        });
+function delay(t, v) {
+   return new Promise(function(resolve) {
+       setTimeout(resolve.bind(null, v), t)
+   });
 }
 
-
-function set_status(status, init=false) {
-    if (init != false) {
-        $(".status").empty();
-    }
-    now = moment().format('YYYY-MM-DD hh:mm:ss');
-    height = $(".status")[0].scrollHeight;
-    $(".status").html("<div class=\"col-xs-12\">"+status+"</div>");
-    $(".status").scrollTop(height);
-
-}
-
-function check_ovd_status(ovd_data) {
-    	return new Promise (function (res,rej) {
-        login = $("#login").val();
-        pwd = $("#pwd").val();
-        sm = "http://"+$("#sm").val();
-
-        options = {
-            method: 'POST',
-            headers: {'x-ovd-service': 'session_status', 'Cookie': 'PHPSESSID='+$("#login").val()}
-        };
-
-        client = request.createClient(options);
-        client(sm+"/ovd/proxy.php",function (error, response, body) {
-            if (!error && response.statusCode == 200) {
-                console.log(response.body);
-                setTimeout(function() {
-                xmlDoc = $.parseXML(response.body);
-                $xml = $(xmlDoc);
-                try {
-                $.each($xml.find('session'), function() {
-                    status = $(this).attr("status");
-                });
-                set_status("Preparing session settings");
-                }
-                catch(err)
-                {
-                    status = "None";
-                }
-                if(status == "logged")
-                {
-                    console.log(status);
-                    $('#inner_box').show();
-                    $('#progress').hide();
-                }
-                else if(status == "init")
-                {
-                    console.log(status);
-                    check_ovd_status(ovd_data);
-                }
-                else if (status == "ready") {
-                    console.log(response.body);
-
-                    validate_xml_response(ovd_data)
-                    .then(xml => get_ovd_credentials(xml))
-                    .then(params => create_os_command(params))
-                    .then(command => run_rdp(command))
-                    .then(check_ovd_status(ovd_data))
-                   .catch(rejection => {
-			    notify(__dirname+"/warning.png","Please contact your OVD Session Manager", "Reason: "+rejection);
-			    show_login();
-		            });
-                }
-                else {
-                    console.log(status);
-                    rej("Failed to connect");
-                }
-                }, 2000);
-            }
-            else {
-                $("#connect").animateCss('wobble');
-		show_login();
-                rej("Unable to connect to OVD server");
-		
-            }
-        });
-});
-}
-
-function start_session() {
-    	return new Promise (function (res,rej) {
-        login = $("#login").val();
-        pwd = $("#pwd").val();
-        sm = "http://"+$("#sm").val();
-             set_status("Starting OVD Session");
-        options = {
-            method: 'POST',
-            headers: {'x-ovd-service': 'start', 'Cookie': 'PHPSESSID='+$("#login").val()},
-            body: '<session mode="desktop"><user login="' + login + '" password="' + pwd + '"/></session>'
-        };
-
-        client = request.createClient(options);
-        client(sm+"/ovd/proxy.php",function (error, response, body) {
-        if (!error && response.statusCode == 200) {
-            notify(__dirname+"/conecting.png","Preparing session", "Please wait...");
-            res(response.body);
-        }
-        else {
-                $("#connect").animateCss('wobble');
-		show_login();
-                rej("Unable to connect to OVD server");
-        }
-        });
-});
-}
-
-function validate_xml_response(xml) {
-    return new Promise (function (res,rej) {
-     set_status("Validate reponse");
-    try {
-        xmlDoc = $.parseXML(xml);
-        $xml = $(xmlDoc);
-        $.each($xml.find('response'), function() {
-            response = $(this).attr("code");
-        });
-        if(response != undefined && response != 'ReferenceError: response is not defined')
-        {
-            $("#connect").animateCss('wobble');
-            rej(response);
-        }
-        }
-        catch(err)
-        {
-            res(xml);
-        }
+Promise.prototype.delay = function(t) {
+    return this.then(function(v) {
+        return delay(t, v);
     });
 }
 
-function get_ovd_credentials(xml) {
+function start_up() {
     return new Promise (function (res,rej) {
-    try {
-        xmlDoc = $.parseXML(xml);
-        $xml = $(xmlDoc);
-        params = {};
-         $.each($xml.find('server'), function() {
-           params.login = $(this).attr("login");
-           params.fqdn = $(this).attr("fqdn");
-           try
-           {
-               params.port = $(this).attr("port");
-           }
-           catch(err) {
-               console.log("No hay puerto");
-           }
-           params.password = $(this).attr("password");
-         });
-           if(params.port == null || params.port == undefined || params.port == "undefined")
-           {
-               params.port = 3389;
-           }
-        res(params);
-    }
-    catch(err)
-    {
-        $("#connect").animateCss('wobble');
-	show_login();
-        rej("Unable to Login, OVD Server provides wrong Credential Data, "+err);
-    }
-});
-
-}
-
-function create_os_command(params) {
-    return new Promise (function (res,rej) {
-    try {
-        os_rdp_exe = {
-            linux: "java -jar  "+__dirname+"/OVDNativeClient/OVDNativeClient.jar -s "+$("#sm").val()+" -u "+$("#login").val()+" -p "+$("#pwd").val()+" -m desktop --progress-bar hide --auto-start",
-            win32: "resources\\app\\rdp.exe /v:" + params.fqdn + ":" + params.port + " /u:" + params.login + " /p:" + params.password + " /printers /drives /max",
-            darwin: "java -jar  "+__dirname+"/OVDNativeClient/OVDNativeClient.jar -s "+$("#sm").val()+" -u "+$("#login").val()+" -p "+$("#pwd").val()+" -m desktop --progress-bar hide --auto-start"
-        };
-        //alert(os_rdp_exe[process.platform])
-        res(os_rdp_exe[process.platform]);
-    }
-    catch(err) {
-        rej(err);
-    }
-
-    });
-}
-
-function run_rdp(command){
-    return new Promise (function (res,rej) {
-	if (ready == true) {
             try {
-                set_status("Starting Session");
-                child(command);
-                console.log(command);
-                console.log("Corriendo RDP");
-                res('Done');
+                res("Initiating system checks...");
             }
             catch(err)
             {
                 rej(err);
             }
-	}
-	ready = false;
+    });
+}
+
+function check_os() {
+    return new Promise (function (res,rej) {
+        $("#msj").html("Checking OS compatibility...");
+        status = "Detected"
+        if(process.platform != "win32") {
+            try {
+                os = child_sync("cat /etc/*release|grep 'DISTRIB_DESCRIPTION'| cut -d'=' -f2 | sed 's/\"//g'");
+                if (os.includes("Ubuntu") && os.includes("18.04")) {
+                run["ubuntu"] = "18.04"
+                    os_run[process.platform].replace("OVDNativeClient.jar", "OVDNativeClient_18.04.jar");
+                }
+                res(os+" "+status);
+            }
+            catch(err)
+            {
+                rej(err);
+            }
+       }
+       else
+       {
+           try {
+              osc = child_sync("ver").toString();
+              os = osc.split("[");
+              res(os[0]+" "+status);
+           }
+           catch(err)
+           {
+               rej(err);
+           }
+
+       }
     });
 
 }
 
-$("#connect").click(function() {
-     ready = true;
-     set_status("Connecting to OVD", true);
-     document.cookie = "PHPSESSID="+$("#login").val();
-     notify(__dirname+"/conecting.png","Conecting to your OVD Session Manager", "Please wait...");
-     $('#inner_box').hide();
-     $('#progress').show();
-     start_session()
-     .then(ovd_data => check_ovd_status(ovd_data))
-    .catch(rejection => { 
-	     notify(__dirname+"/warning.png","Please contact your OVD Session Manager", "Reason: "+rejection);
-	     show_login();
-	      });
+function check_java() {
+    return new Promise (function (res,rej) {
+        $("#msj").html("Checking Java version...");
+        if(process.platform != "win32") {
+            try {
+                java_version = parseFloat(child_sync(java_check_os[process.platform]));
+                if (java_version != 1.8 || java_version == 0 || isNaN(java_version)) {
+                rej("JAVA")
+                }
+                res('Java version "'+java_version+'" is OK');
+            }
+            catch(err)
+            {
+                rej("SOME_THING");
+            }
+        }
+        else {
+            try {
+                java_version = child_sync(java_check_os[process.platform]["tmp_java_version"]);
+                java_version = child_sync(java_check_os[process.platform]["get_version"]);
+                if (java_version.includes("java.specification.version = 1.8") && java_version.includes("java.vendor = Oracle Corporation") && java_version.includes("os.arch = x86"))
+                {
+                    res('Java version 1.8 is OK');
+                }
+                else {
+                    rej("JAVA_WIN");
+                }
+            }
+            catch(err) {
+                    rej("JAVA_WIN");
+            }
+        }
+    });
+}
+
+function run_ads_client() {
+    return new Promise (function (res,rej) {
+        if(process.platform != "win32") {
+                try {
+                    os = child_sync("cat /etc/*release|grep 'DISTRIB_DESCRIPTION'| cut -d'=' -f2 | sed 's/\"//g'");
+                    if (os.includes("Ubuntu") && os.includes("18.04")) {
+                    run["ubuntu"] = "18.04"
+                        os_run[process.platform] = os_run[process.platform].replace("OVDNativeClient.jar", "OVDNativeClient_18.04.jar");
+                        child(os_run[process.platform]);
+                    res('DONE');
+                    }
+                    else {
+                        child(os_run[process.platform]);
+                    res('DONE');
+                    }
+                }
+                catch(err)
+                {
+                    rej("SOME_THING");
+                }
+          }
+          else {
+            try {
+                //res('DONE');
+                //x = child(os_run[process.platform], {cwd: 'resources\\app\\OVDNativeClient\\' });
+                x = child(os_run[process.platform]);
+                res(x);
+            }
+            catch(err)
+            {
+                rej("SOME_THING");
+            }
+          }
+    });
+}
+
+function show_result(result) {
+    return new Promise (function (res,rej) {
+            try {
+                $("#msj").html(result);
+                res("DONE");
+            }
+            catch(err)
+            {
+                rej(err);
+            }
+    });
+}
+
+$( document ).ready(function() {
+     start_up()
+     .delay(500)
+     .then(result => show_result(result))
+     .delay(500)
+     .then(result => check_os(result))
+     .delay(500)
+     .then(result => show_result(result))
+     .delay(500)
+     .then(result => check_java(result))
+     .delay(500)
+     .then(result => show_result(result))
+     .delay(500)
+     .then(result => run_ads_client(result))
+     .delay(2000)
+     .then( result => { w.close() })
+     .catch(error => {
+     error_msj={
+     JAVA: "Man Application Delivery System requires Java JRE/JDK 1.8.\nPlease install or upgrade your Java.",
+     SOME_THING: "Something went wrong.",
+     JAVA_WIN: "Man Application Delivery System requires 32bit Oracle Java JRE/JDK 1.8.\nPlease install or upgrade your Java.",
+     }
+     alert(error_msj[error]);
+     w.close()
+     })
 });
 
-$("#sm").change(function() {
-  sm=$(this).val();
-  $(this).val(sm.replace(/(^\w+:|^)\/\//, ''));
 });
+

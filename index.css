@@ -116,10 +116,13 @@ div.background {
 }
 
 .panel{
-    padding-top: 20px !important;    
-    background:rgba(255,255,255,0.8);
-    margin-top: 10% !important;
+    padding-top: 0px !important;    
+    background:rgba(255,255,255,0);
+    margin-top: 0px !important;
     -webkit-animation-delay: 0.5s;
+    font-weight: bold !important;
+    color: black;
+
 }
 
 .form-control {
@@ -143,8 +146,8 @@ div.background {
     text-shadow: 0px 0px 10px #000000;
     font-weight: bold;
     color: white;
-//    background:rgba(0,0,0,0.6);
-    font-size: 20px;
+    //background:rgba(0,0,0,0.6);
+    font-size: 16px;
     //max-height: 200px;
     //height: 200px;
     //overflow-y: hidden;
