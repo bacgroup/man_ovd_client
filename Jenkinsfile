@@ -119,9 +119,9 @@ EOF"""
     }
     stage "Archive Artifacts"
      dir ('packages') {
-        sh "mv *darwin*.zip MAN_ADS_Client_2.0-OSX.zip"
-        sh "mv *win32-ia32*.zip MAN_ADS_Client_2.0-Windows.zip"
-        sh "mv MANOVDClient_1.0.0_amd64.deb MAN_ADS_Client_2.0-Linux.deb"
+        sh "mv *darwin*.zip \"MAN_ADS_Client_2.0-OSX_Java_Client.zip\""
+        sh "mv *win32-ia32*.zip \"MAN_ADS_Client_2.0-Windows_Java_Client.zip\""
+        sh "mv MANOVDClient_1.0.0_amd64.deb \"MAN_ADS_Client_2.0-Linux_Java_Client.deb\""
         archiveArtifacts "*.zip"
         archiveArtifacts "*.deb"
      }
