@@ -16,13 +16,15 @@ let mainWindow
 function createWindow() {
     mainWindow = new BrowserWindow({
         //titleBarStyle: 'hidden',
-        /*     width: 300,
-             height: 485,
-             resizable: false,*/
+             width: 600,
+             height: 220,
+             resizable: false,
+             maximizable: false,
+             frame: false,
 	icon: path.join(__dirname, 'app_icon.png'),
-        backgroundColor: '#000511'
+        backgroundColor: '#eddb16'
     })
-    mainWindow.maximize()
+    //mainWindow.maximize()
 
     mainWindow.loadURL(url.format({
         pathname: path.join(__dirname, 'index.html'),

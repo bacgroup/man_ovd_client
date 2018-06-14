@@ -19,7 +19,7 @@
   "author": "salvatore.trimarchi@gmail.com",
   "license": "GNU GPLv3",
   "devDependencies": {
-    "electron": "~1.6.2"
+    "electron": "~2.0.1"
   },
   "dependencies": {
     "jquery": "^3.2.1",
