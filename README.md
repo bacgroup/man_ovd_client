@@ -1,4 +1,4 @@
-# MAN ADS Java Less Client
+# MAN ADS Java Client
 
 ![Man Consulting Logo](https://github.com/bacgroup/man_ovd_client/raw/develop/manconsultinglogo.png)
 
