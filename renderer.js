@@ -19,9 +19,9 @@ var java_check_os = {
 }
 
 os_run = {
-    darwin: "java -jar  "+__dirname+"/OVDNativeClient/OVDNativeClient_18.04.jar",
-    linux: "java -jar  "+__dirname+"/OVDNativeClient/OVDNativeClient.jar",
-    win32: "cd resources\\app\\OVDNativeClient && javaw -jar OVDNativeClient.jar"
+    darwin: "java -Dsun.java2d.d3d=false -jar "+__dirname+"/OVDNativeClient/OVDNativeClient_18.04.jar",
+    linux: "java -Dsun.java2d.d3d=false -jar "+__dirname+"/OVDNativeClient/OVDNativeClient.jar",
+    win32: "cd resources\\app\\OVDNativeClient && javaw -Dsun.java2d.d3d=false -jar OVDNativeClient.jar"
 }
 
 var run = {}
